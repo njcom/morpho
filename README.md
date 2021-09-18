@@ -1,2 +1,3 @@
 # morpho
-Site Management System/SMS
+
+Project, task and site management system.
