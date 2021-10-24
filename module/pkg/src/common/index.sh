@@ -1,0 +1,4 @@
+isLegacyBios() {
+    # todo
+    :
+}

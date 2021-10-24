@@ -1,0 +1,28 @@
+on:
+  schedule:
+    - cron:  '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-nftables-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check nftables updates
+        run: |
+          baseDirPath=$(pwd)/nftables-parser
+
+          tmpDirPath=$(mktemp -d ./tmp.XXXXXXXXX)
+          pushd "$tmpDirPath" > /dev/null
+          git clone --depth 1 --recursive git://git.netfilter.org/nftables
+          cp -v nftables/src/scanner.l "$baseDirPath"/rc/lexer.l
+          cp -v nftables/src/parser_bison.y "$baseDirPath"/rc/parser.y
+
+          cp -v nftables/files/{nftables,examples}/*.nft "$baseDirPath"/test
+          popd > /dev/null
+          rm -rf "$tmpDirPath"
+
+      - name: Create a Pull Request
+        uses: peter-evans/create-pull-request@v3.10.0
