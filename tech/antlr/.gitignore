@@ -1,0 +1,9 @@
+*.interp
+*.tokens
+*.class
+*.jar
+/vendor/
+.ipynb_checkpoints/
+**/bin/*
+!**/bin/*.java
+!**/bin/*.tokens
