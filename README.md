@@ -1,3 +1,3 @@
 # morpho
 
-Project, task and site management system.
+Organizer for developers: project, task and site management system.

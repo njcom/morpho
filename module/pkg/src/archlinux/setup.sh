@@ -9,10 +9,10 @@ readonly legacyBiosPkgs="grub"
 readonly uefiBiosPkgs="efibootmgr"
 readonly lvmPkgs="lvm2"
 readonly kernelPkgs="mkinitcpio linux-lts linux-firmware linux-lts-headers"
-readonly basePkgs="archlinux-keyring nftables vim tmux man-pages man-db texinfo mc lessi curl wget sudo"
-readonly desktopPkgs="netctl dialog wpa_supplicant openresolv dhcpcd gdisk xorg-server xorg-xinit xf86-video-intel plasma-desktop sddm konsole fish"
+readonly basePkgs="archlinux-keyring nftables vim tmux man-pages man-db texinfo mc less curl wget sudo gdisk"
+readonly desktopPkgs="netctl dialog wpa_supplicant openresolv dhcpcd xorg-server xorg-xinit xf86-video-intel plasma-desktop sddm konsole fish"
 readonly serverPkgs="openssh"
-readonly devPkgs="base-devel docker git jq"
+readonly devPkgs="base-devel git jq"
 readonly rePkgs="atop htop hdparm dstat ethtool perf iotop lsof nmap openbsd-netcat procps-ng net-tools iproute2 iputils strace"
 
 readonly hostname=lap
