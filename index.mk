@@ -5,13 +5,7 @@ MAKEFLAGS += --no-print-directory
 # Warning on undefined variables.
 MAKEFLAGS += --warn-undefined-variables
 
-distros := {debian,ubuntu,arch-linux,alpine,centos,amazon-linux,fedora,rhel,suse,open-suse,nix-os,common}
+unexport _JAVA_OPTIONS
 
-init:
-	mkdir -vp src/$(distros) rc/$(distros)/{home/user,etc} dst
-
-test:
-	for filePath in $$(echo $(CURDIR)/test/*); do $$filePath; done
-
-.PHONY: init test
-.SILENT:
+srcDirName := src
+dstDirName := dst
