@@ -70,10 +70,9 @@ init:
 setup:
 	test -e $(ANTLR_JAR_FILE_PATH) || curl -sSfL -o $(ANTLR_JAR_FILE_PATH) https://www.antlr.org/download/antlr-4.9.2-complete.jar
 	if ! command -v antlr4 > /dev/null; then\
-		echo -e '#!/bin/sh\njava -jar $(ANTLR_JAR_FILE_PATH) "$$@"' >> /usr/local/bin/antlr4;\
+		printf '#!/bin/sh\njava -jar $(ANTLR_JAR_FILE_PATH) "$$@"' >> /usr/local/bin/antlr4;\
 		chmod +x /usr/local/bin/antlr4;\
 	fi
-
 	cat /usr/local/bin/antlr4
 	exit 1
 
