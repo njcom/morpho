@@ -1,7 +1,4 @@
-unexport _JAVA_OPTIONS
-
-srcDirName := src
-dstDirName := dst
+# Common make targets for the all parsers.
 
 ANTLR_JAR_FILE_PATH := /usr/share/java/antlr-*-complete.jar
 
@@ -27,11 +24,15 @@ tokens: lexer
 valid-tokens:
 	$(MAKE) tokens 2>/dev/null
 invalid-tokens:
-	$(MAKE) tokens 2>&1 >/dev/null
+	$(MAKE) tokens >/dev/null 2>&1
 
-test: test-parser
-test-parser: #parser
+test: test-parser-all
+test-parser-all: #parser
 	$(binDirPath)/parser test-all
+
+test-parser: parser
+	echo "Input file: $(inFilePath):"
+	cd $(dstDirPath) && grun $(grammar) $(startRule) -Werror -tree "$(inFilePath)"
 
 test-parser-gui: compile-parser
 	cd $(dstDirPath) && grun $(grammar) $(startRule) -Werror -gui $(inFilePath)

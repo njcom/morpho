@@ -2,41 +2,35 @@ parser grammar MakeParser;
 
 options { tokenVocab = MakeLexer; }
 
-@members {
-
-}
-
 program: stmts* EOF;
 
 stmts: EOL* stmt (EOL+ stmt)* EOL*;
 
-stmt: (var | directive | ruleDef);
+stmt: (varDef | varRef | directiveCall | ruleDef);
 
-var: varDef | varRef;
 varDef: WORD ASSIGN WORD+;
-// E.g.: $(foo) or $(built-in-fn arg1,arg2,...) like $(call arg1,arg2,...). Function calls are also var references.
-varRef: (VAR_REF_LPAREN VAR_REF_WORD (varRef | VAR_REF_WORD_COMMA)* VAR_REF_RPAREN) | (VAR_REF_LBRACE VAR_REF_WORD (varRef | VAR_REF_WORD_COMMA)* VAR_REF_RBRACE);
-//DOLLAR ((LPAREN varName fnArgs? RPAREN) | (LBRACE varName fnArgs? RBRACE));
-fnArgs: fnArg (COMMA? fnArg)*;
-fnArg: varRef | WORD;
+varRef: (VAR_REF_LPAREN varRefText VAR_REF_RPAREN)
+        | (VAR_REF_LBRACE varRefText VAR_REF_RBRACE);
 
-directive: conditionalDirective | otherDirective;
+varRefText: (VAR_REF_TEXT | varRef)*;
 
-conditionalDirective: ifCondition elseClause* ENDIF;
+directiveCall: conditionalDirectiveCall | otherDirectiveCall;
+conditionalDirectiveCall: ifCondition elseClause* ENDIF;
 ifCondition: ifDefCondition | ifNdefCondition | ifEqCondition | ifNeqCondition;
 
-otherDirective: exportDirective
-    | unexportDirective
-    | vpathDirective
-    | includeDirective
-    | mincludeDirective
-    | sincludeDirective
-    | loadDirective
-    | mloadDirective
-    | defineDirective
-    | undefineDirective
-    | overrideDirective
-    | privateDirective;
+otherDirectiveCall:
+      exportDirectiveCall
+    | unexportDirectiveCall
+    | vpathDirectiveCall
+    | includeDirectiveCall
+    | mincludeDirectiveCall
+    | sincludeDirectiveCall
+    | loadDirectiveCall
+    | mloadDirectiveCall
+    | defineDirectiveCall
+    | undefineDirectiveCall
+    | overrideDirectiveCall
+    | privateDirectiveCall;
 
 // https://www.gnu.org/software/make/manual/make.html#Conditional-Syntax
 ifDefCondition: IFDEF (varRef | varName) stmts;
@@ -55,18 +49,18 @@ ifNeqCondition: IFNEQ (
 elseClause: ELSE (ifCondition? | stmts);
 varName: WORD;
 
-exportDirective: EXPORT/* todo */;
-unexportDirective: UNEXPORT/* todo */;
-vpathDirective: VPATH/* todo */;
-includeDirective: INCLUDE/* todo */;
-mincludeDirective: MINCLUDE/* todo */;
-sincludeDirective: SINCLUDE/* todo */;
-loadDirective: LOAD/* todo */;
-mloadDirective: MLOAD/* todo */;
-defineDirective: DEFINE /* todo */;
-undefineDirective: UNDEFINE /* todo */;
-overrideDirective: OVERRIDE /* todo */;
-privateDirective: PRIVATE /* todo */;
+exportDirectiveCall: EXPORT/* todo */;
+unexportDirectiveCall: UNEXPORT/* todo */;
+vpathDirectiveCall: VPATH/* todo */;
+includeDirectiveCall: INCLUDE/* todo */;
+mincludeDirectiveCall: MINCLUDE/* todo */;
+sincludeDirectiveCall: SINCLUDE/* todo */;
+loadDirectiveCall: LOAD/* todo */;
+mloadDirectiveCall: MLOAD/* todo */;
+defineDirectiveCall: DEFINE /* todo */;
+undefineDirectiveCall: UNDEFINE /* todo */;
+overrideDirectiveCall: OVERRIDE /* todo */;
+privateDirectiveCall: PRIVATE /* todo */;
 
 ruleDef: TARGET prerequisite* shellCmd*;
 prerequisite: varRef | targetRef;
