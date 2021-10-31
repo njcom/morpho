@@ -73,8 +73,6 @@ setup:
 		printf '#!/bin/sh\njava -jar $(ANTLR_JAR_FILE_PATH) "$$@"' >> /usr/local/bin/antlr4;\
 		chmod +x /usr/local/bin/antlr4;\
 	fi
-	cat /usr/local/bin/antlr4
-	exit 1
 
 .PHONY: test-lexer tokens valid-tokens invalid-tokens test test-parser test-parser-gui ci-test antlr-lexer antlr-parser lexer parser clean init setup
 .SILENT:
