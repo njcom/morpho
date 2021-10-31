@@ -1,0 +1,48 @@
+- name: Setup pacman keyring
+  ansible.builtin.shell:
+    cmd: |
+      set -eu
+      rm -rfv /root/.gnupg
+      gpgconf --kill all
+      dirmngr </dev/null
+      killall dirmngr || true
+      killall gpg-agent || true
+      pacman -Sy --noconfirm archlinux-keyring
+      pacman -Su --noconfirm
+
+- name: Install base packages
+  community.general.pacman:
+    name:
+      - atop
+      - base-devel
+      - curl
+      - dstat
+      - ethtool
+      - gdb
+      - gdisk
+      - git
+      - hdparm
+      - htop
+      - iotop
+      - iproute2
+      - iputils
+      - jq
+      - less
+      - lsof
+      - man-db
+      - man-pages
+      - mc
+      - net-tools
+      - nmap
+      - openbsd-netcat
+      - openssh
+      - perf
+      - procps-ng
+      - psmisc
+      - strace
+      - sudo
+      - tmux
+      - util-linux
+      - vim
+      - wget
+    update_cache: yes

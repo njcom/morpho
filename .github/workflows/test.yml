@@ -6,8 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Run tests
-        run: make ci-test
+      - name: module/parser: Run tests
+        run: make -C module/parser ci-test
