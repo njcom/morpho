@@ -4,8 +4,8 @@
 *.jar
 /vendor/
 .ipynb_checkpoints/
-**/bin/*
-!**/bin/*.java
-!**/bin/*.tokens
+**/dst/*
+!**/dst/*.java
+!**/dst/*.tokens
 # IDEA's generated:
 gen/
