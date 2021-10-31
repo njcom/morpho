@@ -68,11 +68,14 @@ init:
 	composer require antlr/antlr4-php-runtime
 
 setup:
-	test -e $(ANTLR_JAR_FILE_PATH) || curl -sSfL -o $(ANTLR_JAR_FILE_PATH) https://www.antlr.org/download/antlr-4.9.2-complete.jar;
+	test -e $(ANTLR_JAR_FILE_PATH) || curl -sSfL -o $(ANTLR_JAR_FILE_PATH) https://www.antlr.org/download/antlr-4.9.2-complete.jar
 	if ! command -v antlr4 > /dev/null; then\
-		echo -e '#!/bin/sh\njava -jar "$(ANTLR_JAR_FILE_PATH)" "$$@"' >> /usr/local/bin/antlr4;\
+		echo -e '#!/bin/sh\njava -jar $(ANTLR_JAR_FILE_PATH) "$$@"' >> /usr/local/bin/antlr4;\
 		chmod +x /usr/local/bin/antlr4;\
 	fi
+
+	cat /usr/local/bin/antlr4
+	exit 1
 
 .PHONY: test-lexer tokens valid-tokens invalid-tokens test test-parser test-parser-gui ci-test antlr-lexer antlr-parser lexer parser clean init setup
 .SILENT:
