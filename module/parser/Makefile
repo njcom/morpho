@@ -6,5 +6,5 @@ ci-test:
 	make -C nftables-parser ci-test
 	make -C make-parser ci-test
 
-.PHONY: ci-test
+.PHONY: all ci-test
 .SILENT:

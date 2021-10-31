@@ -37,13 +37,6 @@ public class MakeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVar(MakeParser.VarContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitVarDef(MakeParser.VarDefContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -58,21 +51,35 @@ public class MakeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDirective(MakeParser.DirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVarRefText(MakeParser.VarRefTextContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitConditionalDirective(MakeParser.ConditionalDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDirectiveCall(MakeParser.DirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitOtherDirective(MakeParser.OtherDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIfCondition(MakeParser.IfConditionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -142,84 +149,84 @@ public class MakeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExportDirective(MakeParser.ExportDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUnexportDirective(MakeParser.UnexportDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVpathDirective(MakeParser.VpathDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIncludeDirective(MakeParser.IncludeDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMincludeDirective(MakeParser.MincludeDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSincludeDirective(MakeParser.SincludeDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLoadDirective(MakeParser.LoadDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMloadDirective(MakeParser.MloadDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDefineDirective(MakeParser.DefineDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUndefineDirective(MakeParser.UndefineDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitOverrideDirective(MakeParser.OverrideDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPrivateDirective(MakeParser.PrivateDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

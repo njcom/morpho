@@ -28,12 +28,6 @@ public interface MakeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStmt(MakeParser.StmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#var}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVar(MakeParser.VarContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MakeParser#varDef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -46,23 +40,35 @@ public interface MakeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarRef(MakeParser.VarRefContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#directive}.
+	 * Visit a parse tree produced by {@link MakeParser#varRefText}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDirective(MakeParser.DirectiveContext ctx);
+	T visitVarRefText(MakeParser.VarRefTextContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#conditionalDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#directiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConditionalDirective(MakeParser.ConditionalDirectiveContext ctx);
+	T visitDirectiveCall(MakeParser.DirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#otherDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#conditionalDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOtherDirective(MakeParser.OtherDirectiveContext ctx);
+	T visitConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MakeParser#ifCondition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfCondition(MakeParser.IfConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MakeParser#otherDirectiveCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MakeParser#ifDefCondition}.
 	 * @param ctx the parse tree
@@ -118,77 +124,77 @@ public interface MakeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarName(MakeParser.VarNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#exportDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#exportDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExportDirective(MakeParser.ExportDirectiveContext ctx);
+	T visitExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#unexportDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#unexportDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnexportDirective(MakeParser.UnexportDirectiveContext ctx);
+	T visitUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#vpathDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#vpathDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVpathDirective(MakeParser.VpathDirectiveContext ctx);
+	T visitVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#includeDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#includeDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIncludeDirective(MakeParser.IncludeDirectiveContext ctx);
+	T visitIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#mincludeDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#mincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMincludeDirective(MakeParser.MincludeDirectiveContext ctx);
+	T visitMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#sincludeDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#sincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSincludeDirective(MakeParser.SincludeDirectiveContext ctx);
+	T visitSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#loadDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#loadDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLoadDirective(MakeParser.LoadDirectiveContext ctx);
+	T visitLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#mloadDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#mloadDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMloadDirective(MakeParser.MloadDirectiveContext ctx);
+	T visitMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#defineDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#defineDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefineDirective(MakeParser.DefineDirectiveContext ctx);
+	T visitDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#undefineDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#undefineDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUndefineDirective(MakeParser.UndefineDirectiveContext ctx);
+	T visitUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#overrideDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#overrideDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOverrideDirective(MakeParser.OverrideDirectiveContext ctx);
+	T visitOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MakeParser#privateDirective}.
+	 * Visit a parse tree produced by {@link MakeParser#privateDirectiveCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrivateDirective(MakeParser.PrivateDirectiveContext ctx);
+	T visitPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MakeParser#ruleDef}.
 	 * @param ctx the parse tree

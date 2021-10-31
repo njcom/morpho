@@ -51,18 +51,6 @@ public class MakeParserBaseListener implements MakeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVar(MakeParser.VarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVar(MakeParser.VarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterVarDef(MakeParser.VarDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -87,37 +75,61 @@ public class MakeParserBaseListener implements MakeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirective(MakeParser.DirectiveContext ctx) { }
+	@Override public void enterVarRefText(MakeParser.VarRefTextContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirective(MakeParser.DirectiveContext ctx) { }
+	@Override public void exitVarRefText(MakeParser.VarRefTextContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalDirective(MakeParser.ConditionalDirectiveContext ctx) { }
+	@Override public void enterDirectiveCall(MakeParser.DirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalDirective(MakeParser.ConditionalDirectiveContext ctx) { }
+	@Override public void exitDirectiveCall(MakeParser.DirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOtherDirective(MakeParser.OtherDirectiveContext ctx) { }
+	@Override public void enterConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOtherDirective(MakeParser.OtherDirectiveContext ctx) { }
+	@Override public void exitConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfCondition(MakeParser.IfConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfCondition(MakeParser.IfConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -231,145 +243,145 @@ public class MakeParserBaseListener implements MakeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExportDirective(MakeParser.ExportDirectiveContext ctx) { }
+	@Override public void enterExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExportDirective(MakeParser.ExportDirectiveContext ctx) { }
+	@Override public void exitExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnexportDirective(MakeParser.UnexportDirectiveContext ctx) { }
+	@Override public void enterUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnexportDirective(MakeParser.UnexportDirectiveContext ctx) { }
+	@Override public void exitUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVpathDirective(MakeParser.VpathDirectiveContext ctx) { }
+	@Override public void enterVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVpathDirective(MakeParser.VpathDirectiveContext ctx) { }
+	@Override public void exitVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIncludeDirective(MakeParser.IncludeDirectiveContext ctx) { }
+	@Override public void enterIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIncludeDirective(MakeParser.IncludeDirectiveContext ctx) { }
+	@Override public void exitIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMincludeDirective(MakeParser.MincludeDirectiveContext ctx) { }
+	@Override public void enterMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMincludeDirective(MakeParser.MincludeDirectiveContext ctx) { }
+	@Override public void exitMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSincludeDirective(MakeParser.SincludeDirectiveContext ctx) { }
+	@Override public void enterSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSincludeDirective(MakeParser.SincludeDirectiveContext ctx) { }
+	@Override public void exitSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLoadDirective(MakeParser.LoadDirectiveContext ctx) { }
+	@Override public void enterLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLoadDirective(MakeParser.LoadDirectiveContext ctx) { }
+	@Override public void exitLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMloadDirective(MakeParser.MloadDirectiveContext ctx) { }
+	@Override public void enterMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMloadDirective(MakeParser.MloadDirectiveContext ctx) { }
+	@Override public void exitMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDefineDirective(MakeParser.DefineDirectiveContext ctx) { }
+	@Override public void enterDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDefineDirective(MakeParser.DefineDirectiveContext ctx) { }
+	@Override public void exitDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUndefineDirective(MakeParser.UndefineDirectiveContext ctx) { }
+	@Override public void enterUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUndefineDirective(MakeParser.UndefineDirectiveContext ctx) { }
+	@Override public void exitUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOverrideDirective(MakeParser.OverrideDirectiveContext ctx) { }
+	@Override public void enterOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOverrideDirective(MakeParser.OverrideDirectiveContext ctx) { }
+	@Override public void exitOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrivateDirective(MakeParser.PrivateDirectiveContext ctx) { }
+	@Override public void enterPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrivateDirective(MakeParser.PrivateDirectiveContext ctx) { }
+	@Override public void exitPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -7,3 +7,5 @@
 **/bin/*
 !**/bin/*.java
 !**/bin/*.tokens
+# IDEA's generated:
+gen/

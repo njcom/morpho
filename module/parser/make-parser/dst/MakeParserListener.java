@@ -37,16 +37,6 @@ public interface MakeParserListener extends ParseTreeListener {
 	 */
 	void exitStmt(MakeParser.StmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#var}.
-	 * @param ctx the parse tree
-	 */
-	void enterVar(MakeParser.VarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MakeParser#var}.
-	 * @param ctx the parse tree
-	 */
-	void exitVar(MakeParser.VarContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MakeParser#varDef}.
 	 * @param ctx the parse tree
 	 */
@@ -67,35 +57,55 @@ public interface MakeParserListener extends ParseTreeListener {
 	 */
 	void exitVarRef(MakeParser.VarRefContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#directive}.
+	 * Enter a parse tree produced by {@link MakeParser#varRefText}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirective(MakeParser.DirectiveContext ctx);
+	void enterVarRefText(MakeParser.VarRefTextContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#directive}.
+	 * Exit a parse tree produced by {@link MakeParser#varRefText}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirective(MakeParser.DirectiveContext ctx);
+	void exitVarRefText(MakeParser.VarRefTextContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#conditionalDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#directiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalDirective(MakeParser.ConditionalDirectiveContext ctx);
+	void enterDirectiveCall(MakeParser.DirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#conditionalDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#directiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalDirective(MakeParser.ConditionalDirectiveContext ctx);
+	void exitDirectiveCall(MakeParser.DirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#otherDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#conditionalDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterOtherDirective(MakeParser.OtherDirectiveContext ctx);
+	void enterConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#otherDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#conditionalDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitOtherDirective(MakeParser.OtherDirectiveContext ctx);
+	void exitConditionalDirectiveCall(MakeParser.ConditionalDirectiveCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MakeParser#ifCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfCondition(MakeParser.IfConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MakeParser#ifCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfCondition(MakeParser.IfConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MakeParser#otherDirectiveCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MakeParser#otherDirectiveCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitOtherDirectiveCall(MakeParser.OtherDirectiveCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MakeParser#ifDefCondition}.
 	 * @param ctx the parse tree
@@ -187,125 +197,125 @@ public interface MakeParserListener extends ParseTreeListener {
 	 */
 	void exitVarName(MakeParser.VarNameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#exportDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#exportDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterExportDirective(MakeParser.ExportDirectiveContext ctx);
+	void enterExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#exportDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#exportDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitExportDirective(MakeParser.ExportDirectiveContext ctx);
+	void exitExportDirectiveCall(MakeParser.ExportDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#unexportDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#unexportDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnexportDirective(MakeParser.UnexportDirectiveContext ctx);
+	void enterUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#unexportDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#unexportDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnexportDirective(MakeParser.UnexportDirectiveContext ctx);
+	void exitUnexportDirectiveCall(MakeParser.UnexportDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#vpathDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#vpathDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterVpathDirective(MakeParser.VpathDirectiveContext ctx);
+	void enterVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#vpathDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#vpathDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitVpathDirective(MakeParser.VpathDirectiveContext ctx);
+	void exitVpathDirectiveCall(MakeParser.VpathDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#includeDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#includeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterIncludeDirective(MakeParser.IncludeDirectiveContext ctx);
+	void enterIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#includeDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#includeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitIncludeDirective(MakeParser.IncludeDirectiveContext ctx);
+	void exitIncludeDirectiveCall(MakeParser.IncludeDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#mincludeDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#mincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterMincludeDirective(MakeParser.MincludeDirectiveContext ctx);
+	void enterMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#mincludeDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#mincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitMincludeDirective(MakeParser.MincludeDirectiveContext ctx);
+	void exitMincludeDirectiveCall(MakeParser.MincludeDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#sincludeDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#sincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterSincludeDirective(MakeParser.SincludeDirectiveContext ctx);
+	void enterSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#sincludeDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#sincludeDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitSincludeDirective(MakeParser.SincludeDirectiveContext ctx);
+	void exitSincludeDirectiveCall(MakeParser.SincludeDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#loadDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#loadDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterLoadDirective(MakeParser.LoadDirectiveContext ctx);
+	void enterLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#loadDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#loadDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitLoadDirective(MakeParser.LoadDirectiveContext ctx);
+	void exitLoadDirectiveCall(MakeParser.LoadDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#mloadDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#mloadDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterMloadDirective(MakeParser.MloadDirectiveContext ctx);
+	void enterMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#mloadDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#mloadDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitMloadDirective(MakeParser.MloadDirectiveContext ctx);
+	void exitMloadDirectiveCall(MakeParser.MloadDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#defineDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#defineDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterDefineDirective(MakeParser.DefineDirectiveContext ctx);
+	void enterDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#defineDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#defineDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitDefineDirective(MakeParser.DefineDirectiveContext ctx);
+	void exitDefineDirectiveCall(MakeParser.DefineDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#undefineDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#undefineDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterUndefineDirective(MakeParser.UndefineDirectiveContext ctx);
+	void enterUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#undefineDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#undefineDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitUndefineDirective(MakeParser.UndefineDirectiveContext ctx);
+	void exitUndefineDirectiveCall(MakeParser.UndefineDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#overrideDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#overrideDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterOverrideDirective(MakeParser.OverrideDirectiveContext ctx);
+	void enterOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#overrideDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#overrideDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitOverrideDirective(MakeParser.OverrideDirectiveContext ctx);
+	void exitOverrideDirectiveCall(MakeParser.OverrideDirectiveCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MakeParser#privateDirective}.
+	 * Enter a parse tree produced by {@link MakeParser#privateDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrivateDirective(MakeParser.PrivateDirectiveContext ctx);
+	void enterPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MakeParser#privateDirective}.
+	 * Exit a parse tree produced by {@link MakeParser#privateDirectiveCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrivateDirective(MakeParser.PrivateDirectiveContext ctx);
+	void exitPrivateDirectiveCall(MakeParser.PrivateDirectiveCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MakeParser#ruleDef}.
 	 * @param ctx the parse tree
