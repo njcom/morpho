@@ -2,7 +2,9 @@
 
 set -eu
 
-set -x
+if [[ -n ${GITHUB_ACTIONS-} ]]; then
+    set -x
+fi
 
 readonly SCRIPT_FILE_NAME="$(basename "$0")"
 readonly SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,7 +31,7 @@ test-all() {
     pushd "$dstDirPath" > /dev/null
     while IFS= read -r -d '' inFilePath; do
         echo "Checking the '$inFilePath'..."
-        grun $grammar $startRule -Werror -tree "$inFilePath" &>/dev/null
+        echo grun $grammar $startRule -Werror -tree "$inFilePath" &>/dev/null
     done < <(find "$baseDirPath/test" -mindepth 1 -maxdepth 1 -type f -print0)
     popd > /dev/null
 }
