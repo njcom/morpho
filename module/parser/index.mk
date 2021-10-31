@@ -38,7 +38,7 @@ test-parser-gui: compile-parser
 	cd $(dstDirPath) && grun $(grammar) $(startRule) -Werror -gui $(inFilePath)
 
 ci-test:
-	$(binDirPath)/parser setup
+	$(MAKE) setup
 	$(MAKE) parser
 	$(MAKE) test
 
@@ -65,5 +65,8 @@ clean:
 init:
 	composer require antlr/antlr4-php-runtime
 
-.PHONY: test-lexer tokens valid-tokens invalid-tokens test test-parser test-parser-gui ci-test antlr-lexer antlr-parser lexer parser clean init
+setup:
+	$(binDirPath)/parser setup
+
+.PHONY: test-lexer tokens valid-tokens invalid-tokens test test-parser test-parser-gui ci-test antlr-lexer antlr-parser lexer parser clean init setup
 .SILENT:
