@@ -2,22 +2,18 @@
 
 set -eu
 
+set -x
+
 readonly SCRIPT_FILE_NAME="$(basename "$0")"
 readonly SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH/$SCRIPT_FILE_NAME"
 
 unset _JAVA_OPTIONS
 readonly baseDirPath=$(realpath -e $SCRIPT_DIR_PATH/..)
-if [[ -e $(echo /usr/share/java/antlr-*-complete.jar | head -1) ]]; then
-    readonly antlrJarFilePath=$(echo /usr/share/java/antlr-*-complete.jar | head -1)
-else
-    readonly antlrJarFilePath="$baseDirPath"/antlr-complete.jar
-fi
-readonly antlrBinFilePath=/usr/local/bin/antlr4
 readonly dstDirPath=$baseDirPath/dst
 readonly srcDirPath=$baseDirPath/src
 readonly startRule=program
-readonly grammar=$(basename $srcDirPath/*Parser* | perl -WpE 's/Parser\.g4$//')
+readonly grammar=$(basename "$srcDirPath"/*Parser* | perl -WpE 's/Parser\.g4$//')
 
 fix() {
     while IFS= read -r -d '' filePath; do
@@ -25,22 +21,8 @@ fix() {
     done < <(find "$(realpath -e "$dstDirPath")" -name '*.java' -type f -print0)
 }
 
-setup() {
-    if [[ ! -e "$antlrJarFilePath" ]]; then
-        curl -sSfL -o "$antlrJarFilePath" https://www.antlr.org/download/antlr-4.9.2-complete.jar
-    fi
-    if ! command -v antlr4 > /dev/null; then
-        cat > "$antlrBinFilePath" <<OUT
-#!/bin/sh
-java -jar "$antlrJarFilePath" "\$@"
-OUT
-        chmod +x "$antlrBinFilePath"
-        export PATH="$(dirname "$antlrBinFilePath")":$PATH
-    fi
-}
-
 grun() {
-    java -cp .:$antlrJarFilePath org.antlr.v4.gui.TestRig "$@"
+    java -cp .:"$ANTLR_JAR_FILE_PATH" org.antlr.v4.gui.TestRig "$@"
 }
 
 test-all() {
@@ -54,7 +36,7 @@ test-all() {
 
 watch() {
     if [[ $# -lt 1 ]]; then
-        echo >&2 Usage: $SCRIPT_FILE_NAME \$makeTarget
+        echo >&2 Usage: "$SCRIPT_FILE_NAME" \$makeTarget
         echo >&2 '    where $makeTarget is any target from Makefile'
         exit 1
     fi
