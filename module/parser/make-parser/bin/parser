@@ -13,6 +13,7 @@ if [[ -e $(echo /usr/share/java/antlr-*-complete.jar | head -1) ]]; then
 else
     readonly antlrJarFilePath="$baseDirPath"/antlr-complete.jar
 fi
+readonly antlrBinFilePath=/usr/local/bin/antlr4
 readonly dstDirPath=$baseDirPath/dst
 readonly srcDirPath=$baseDirPath/src
 readonly startRule=program
@@ -29,7 +30,6 @@ setup() {
         curl -sSfL -o "$antlrJarFilePath" https://www.antlr.org/download/antlr-4.9.2-complete.jar
     fi
     if ! command -v antlr4 > /dev/null; then
-        local -r antlrBinFilePath=$SCRIPT_DIR_PATH/antlr4
         cat > "$antlrBinFilePath" <<OUT
 #!/bin/sh
 java -jar "$antlrJarFilePath" "\$@"
