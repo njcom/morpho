@@ -8,5 +8,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: module/parser: Run tests
+      - name: 'module/parser: Run tests'
         run: make -C module/parser ci-test
