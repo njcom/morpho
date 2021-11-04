@@ -1,5 +1,0 @@
-#    ln -sfrn /usr/share/zoneinfo/UTC /etc/localtime
-#    timedatectl set-ntp true
-#    # Update hardware clock from software clock. Generates /etc/adjtime
-#    hwclock --systohc
-
