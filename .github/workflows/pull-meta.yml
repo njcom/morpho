@@ -5,14 +5,21 @@ on:
 
 jobs:
   main:
-    runs-on: php:8.0.12-cli
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Pull sources
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
 
       - name: 'Pull meta'
         run: |
+          php --version
           cat /etc/os-release
-          composer update
+          composer install
           make pull-meta
           ls -alhR task
 
