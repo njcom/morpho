@@ -1,0 +1,107 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+use Morpho\Tech\Xml\Doc;
+use Morpho\Fs\File;
+use function Morpho\App\Cli\sh;
+use function Morpho\Base\dasherize;
+use function Morpho\Base\showLn;
+
+require 'vendor/autoload.php';
+
+function lname(string $s): string {
+    $s = str_replace('/', '-', $s);
+    return dasherize($s, '.');
+}
+
+function pullUbuntuVers(string $outDirPath): void {
+    sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true) | {name,displayname,fullseriesname,title,description,version,summary,date_created,datereleased,web_link}]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
+    $rows = File::readJson($outDirPath . '/ubuntu.json');
+    foreach ($rows as $k => $row) {
+        $rows[$k] = [
+            'codeName' => $row['name'],
+            'humanCodeName' => $row['displayname'],
+            'ver' => $row['version'],
+            'released' => $row['datereleased'],
+            'link' => $row['web_link'],
+        ];
+    }
+    File::writeJson($outDirPath . '/ubuntu.json', $rows);
+    showLn("Written '$outDirPath/ubuntu.json'");
+}
+
+function pullDebianVers(string $outDirPath): void {
+    try {
+        $tmpFilePath = tempnam($outDirPath, __FUNCTION__);
+        # See also https://www.debian.org/doc/manuals/debian-faq/ftparchives#sourceforcodenames
+        sh("curl -sSL -o " . escapeshellarg($tmpFilePath)  . " 'https://wiki.debian.org/DebianReleases'");
+        $doc = Doc::parseFile($tmpFilePath);
+    } finally {
+        unlink($tmpFilePath);
+    }
+    //$tableNode = $doc->select("//*[contains(text(),'Current LTS Release')]/ancestor::table")->item(0);
+    $tableNode = $doc->select('//*[@id="Production_Releases"]/following-sibling::div/table')->item(0);
+    $dom = simplexml_import_dom($tableNode);
+    $rows = [];
+    $j = 0;
+    $eolEltsFound = false;
+    $map = [
+        0 => 'ver',
+        1 => 'humanCodeName',
+        2 => 'released',
+        3 => 'eol',
+        4 => 'eolLts',
+        5 => 'eolElts', // End Of Life Extended Long Term Support
+    ];
+    foreach ($dom->tbody->tr as $tr) {
+        if ($j === 0) {
+            $j = 1;
+            continue;
+        }
+        $row = [];
+        $i = 0;
+        foreach ($tr as $td) {
+            $val = trim(strip_tags($td->p->asXml()));
+            if (!strlen($val)) {
+                continue;
+            }
+            $row[$map[$i]] = $val;
+            $i++;
+        }
+        if (!empty($row['eol-elts'])) {
+            $eolEltsFound = true;
+        } elseif ($eolEltsFound && empty($row['eol-elts'])) {
+            // Skip outdated releases.
+            break;
+        }
+        $rows[] = $row;
+    }
+    foreach ($rows as $k => $row) {
+        foreach ($map as $key) {
+            if (!isset($row[$key])) {
+                $rows[$k][$key] = null;
+            }
+        }
+    }
+    foreach ($rows as $k => $row) {
+        $rows[$k] = [
+            'codeName' => lname($row['humanCodeName']),
+            'humanCodeName' => $row['humanCodeName'],
+            'ver' => $row['ver'],
+            'released' => $row['released'],
+            'link' => null,
+            'eol' => $row['eol'],
+            'eolLts' => $row['eolLts'],
+            'eolElts' => $row['eolElts'],
+        ];
+    }
+
+    showLn("Written '" . File::writeJson($outDirPath . '/debian.json', $rows) . "'");
+}
+
+function main() {
+    $outDirPath = __DIR__;
+    pullUbuntuVers($outDirPath);
+    pullDebianVers($outDirPath);
+}
+
+main();
