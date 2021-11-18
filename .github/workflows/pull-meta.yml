@@ -8,7 +8,7 @@ jobs:
     runs-on: php:8.0.12-cli
     steps:
       - name: 'Pull sources'
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: 'Pull meta'
         run: |
