@@ -5,8 +5,11 @@ use Morpho\Fs\File;
 use function Morpho\App\Cli\sh;
 use function Morpho\Base\dasherize;
 use function Morpho\Base\showLn;
+use function Morpho\App\Cli\bootstrap;
 
 require 'vendor/autoload.php';
+
+bootstrap();
 
 function lname(string $s): string {
     $s = str_replace('/', '-', $s);
