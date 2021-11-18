@@ -1,0 +1,19 @@
+on:
+  #  schedule:
+  #    - cron:  '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: php:8.0.12-cli
+    steps:
+      - name: 'Pull sources'
+      - uses: actions/checkout@v2
+
+      - name: 'Pull meta'
+        run: |
+          cat /etc/os-release
+          composer update
+          make pull-meta
+          ls -alhR task
+
