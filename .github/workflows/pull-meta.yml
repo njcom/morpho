@@ -7,13 +7,13 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull sources
+      - name: 'Pull sources'
         uses: actions/checkout@v2
 
-      - name: Install PHP
+      - name: 'Install PHP'
         uses: shivammathur/setup-php@v2
         with:
-          #php-version: 8.1
+          #todo: php-version: 8.1
           php-version: 8.0
 
       - name: 'Pull meta'
@@ -24,3 +24,15 @@ jobs:
           make pull-meta
           ls -alhR task
 
+      - name: 'Push the changes'
+        run: |
+            git config --local user.name "$GITHUB_ACTOR"
+            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+            #git config --local --unset-all "http.https://github.com/.extraheader" || true
+            readonly anyChangesDone=$(git status --porcelain)
+            if [[ -n "${anyChangesDone}" ]]; then
+                git add task/pull-meta
+                git commit -m "Issue #7: Updated meta"
+                git pull -s ours origin main || true
+                git push origin main:main
+            fi
