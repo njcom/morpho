@@ -1,6 +1,7 @@
 on:
-  #  schedule:
-  #    - cron:  '0 2 * * *'
+  schedule:
+    # At 06:00 on Thursday.
+    - cron: '0 6 * * 4'
   workflow_dispatch:
 
 jobs:
@@ -18,11 +19,8 @@ jobs:
 
       - name: 'Pull meta'
         run: |
-          php --version
-          cat /etc/os-release
           composer install
           make pull-meta
-          ls -alhR task
 
       - name: 'Push the changes'
         run: |
