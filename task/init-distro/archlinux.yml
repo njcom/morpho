@@ -1,0 +1,48 @@
+- name: Set up host name
+  ansible.builtin.hostname:
+    use: systemd
+    name: "{{ hostname }}"
+
+- name: Generate /etc/hosts
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+    create: yes
+    block: |
+      127.0.0.1 localhost
+      ::1 localhost
+
+- name: Set up locale
+  ansible.builtin.shell:
+    cmd: |
+      # NB: perl can't be used due not configured locale
+      #sed -i -E 's/#(en_US\.UTF-8\s+UTF-8)/\1/' /etc/locale.gen
+      echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
+      locale-gen
+      echo 'LANG=en_US.UTF-8' > /etc/locale.conf
+    creates: /etc/locale.conf
+
+- name: Set up date and time
+  ansible.builtin.shell:
+    cmd: |
+      #    #timedatectl set-timezone Europe/Moscow
+      ln -sfrn /usr/share/zoneinfo/UTC /etc/localtime
+      timedatectl set-ntp true
+      # Update hardware clock from software clock. Generates /etc/adjtime
+      hwclock --systohc
+    creates: /etc/adjtime
+
+# todo
+#- name: Set up kernel modules
+#  # Blacklist some modules
+#  sudo create-link /dev/null /etc/modules-load.d/cdrecord.conf
+
+# -name: Configure kernel via sysctl
+# tcp sockets
+
+# -name: Configure kernel limits
+# todo
+
+# -name: Configure kernel core dump files
