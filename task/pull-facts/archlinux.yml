@@ -1,0 +1,3 @@
+- ansible.builtin.package_facts:
+    manager: pacman
+
