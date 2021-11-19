@@ -26,13 +26,4 @@ jobs:
 
       - name: 'Push the changes'
         run: |
-            git config --local user.name "$GITHUB_ACTOR"
-            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            #git config --local --unset-all "http.https://github.com/.extraheader" || true
-            readonly anyChangesDone=$(git status --porcelain)
-            if [[ -n "${anyChangesDone}" ]]; then
-                git add task/pull-meta
-                git commit -m "Issue #7: Updated meta"
-                git pull -s ours origin main || true
-                git push origin main:main
-            fi
+          ./push-changes.sh task/pull-meta "Issue #7: Updated meta"
