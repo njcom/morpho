@@ -1,0 +1,15 @@
+- name: Init distro
+  include_tasks: "{{ item }}"
+  with_first_found:
+  #debug: "msg={{item}}"
+  #with_items:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+
+- name: Set up packages
+  ansible.builtin.import_tasks: task/setup-base-pkgs/index.yml
+
+- name: Set up dot-files
+  ansible.builtin.import_tasks: task/setup-dot-files/index.yml
+
