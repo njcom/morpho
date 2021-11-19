@@ -16,9 +16,13 @@ function lname(string $s): string {
     return dasherize($s, '.');
 }
 
+function pullKernelVers(string $outDirPath): void {
+    //sh('curl -sSL https://www.kernel.org/feeds/kdist.xml ' . escapeshellarg($outDirPath . '/kernel.json'));
+}
+
 function pullUbuntuVers(string $outDirPath): void {
-    # See also https://wiki.ubuntu.com/Releases
-    sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true) | {name,displayname,fullseriesname,title,description,version,summary,date_created,datereleased,web_link}]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
+    # @todo: Extend with info from the https://wiki.ubuntu.com/Releases
+    sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true)]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
     $rows = File::readJson($outDirPath . '/ubuntu.json');
     foreach ($rows as $k => $row) {
         $rows[$k] = [
@@ -40,7 +44,9 @@ function pullDebianVers(string $outDirPath): void {
         sh("curl -sSL -o " . escapeshellarg($tmpFilePath)  . " 'https://wiki.debian.org/DebianReleases'");
         $doc = Doc::parseFile($tmpFilePath);
     } finally {
-        unlink($tmpFilePath);
+        if (isset($tmpFilePath)) {
+            unlink($tmpFilePath);
+        }
     }
     //$tableNode = $doc->select("//*[contains(text(),'Current LTS Release')]/ancestor::table")->item(0);
     $tableNode = $doc->select('//*[@id="Production_Releases"]/following-sibling::div/table')->item(0);
@@ -71,9 +77,9 @@ function pullDebianVers(string $outDirPath): void {
             $row[$map[$i]] = $val;
             $i++;
         }
-        if (!empty($row['eol-elts'])) {
+        if (!empty($row['eolElts'])) {
             $eolEltsFound = true;
-        } elseif ($eolEltsFound && empty($row['eol-elts'])) {
+        } elseif ($eolEltsFound && empty($row['eolElts'])) {
             // Skip outdated releases.
             break;
         }
@@ -102,10 +108,43 @@ function pullDebianVers(string $outDirPath): void {
     showLn("Written '" . File::writeJson($outDirPath . '/debian.json', $rows) . "'");
 }
 
-function main() {
-    $outDirPath = __DIR__;
+function pullFedoraVers(string $outDirPath): void {
+    // todo:
+    // https://getfedora.org/releases.json
+    // https://fedorapeople.org/groups/schedule/
+}
+
+function pullCentosVers(string $outDirPath): void {
+    // todo: https://wiki.centos.org/About/Product
+}
+
+function pullRhelVers(string $outDirPath): void {
+    // https://access.redhat.com/support/policy/updates/errata
+}
+
+function pullPhpVers(string $outDirPath): void {
+
+}
+
+function pullTypeScriptVers(string $outDirPath): void {
+
+}
+
+function pullAnsibleVers(string $outDirPath): void {
+    // todo: https://endoflife.date/api/ansible.json
+}
+
+function main(): void {
+    $outDirPath = $_SERVER['argv'][1] ?: __DIR__;
+    pullKernelVers($outDirPath);
     pullUbuntuVers($outDirPath);
     pullDebianVers($outDirPath);
+    pullFedoraVers($outDirPath);
+    pullCentosVers($outDirPath);
+    pullRhelVers($outDirPath);
+    pullPhpVers($outDirPath);
+    pullTypeScriptVers($outDirPath);
+    pullAnsibleVers($outDirPath);
 }
 
 main();
