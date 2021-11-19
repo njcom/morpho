@@ -17,6 +17,7 @@ function lname(string $s): string {
 }
 
 function pullUbuntuVers(string $outDirPath): void {
+    # See also https://wiki.ubuntu.com/Releases
     sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true) | {name,displayname,fullseriesname,title,description,version,summary,date_created,datereleased,web_link}]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
     $rows = File::readJson($outDirPath . '/ubuntu.json');
     foreach ($rows as $k => $row) {
