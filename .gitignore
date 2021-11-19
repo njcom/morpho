@@ -1,2 +1,7 @@
 vendor/
 node_modules/
+.ipynb_checkpoints/
+.sass-cache/
+__pycache__/
+*.tsbuildinfo
+.phpunit*.cache
