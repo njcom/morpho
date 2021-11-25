@@ -135,7 +135,7 @@ function pullAnsibleVers(string $outDirPath): void {
 }
 
 function main(): void {
-    $outDirPath = $_SERVER['argv'][1] ?: __DIR__;
+    $outDirPath = $_SERVER['argv'][1] ?? __DIR__;
     pullKernelVers($outDirPath);
     pullUbuntuVers($outDirPath);
     pullDebianVers($outDirPath);
