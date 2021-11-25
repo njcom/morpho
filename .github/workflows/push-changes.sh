@@ -5,6 +5,7 @@ set -eu
 git config --local user.name "$GITHUB_ACTOR"
 git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
 #git config --local --unset-all "http.https://github.com/.extraheader" || true
+
 readonly anyChangesDone=$(git status --porcelain)
 if [[ -n "${anyChangesDone}" ]]; then
     git add "$1"
