@@ -186,6 +186,11 @@ int nft_lex(void *, void *, void *);
 	struct handle_spec	handle_spec;
 	struct position_spec	position_spec;
 	struct prio_spec	prio_spec;
+	struct limit_rate	limit_rate;
+	struct tcp_kind_field {
+		uint16_t kind; /* must allow > 255 for SACK1, 2.. hack */
+		uint8_t field;
+	} tcp_kind_field;
 }
 
 %token TOKEN_EOF 0		"end of file"
@@ -403,6 +408,7 @@ int nft_lex(void *, void *, void *);
 %token OPTION			"option"
 %token ECHO			"echo"
 %token EOL			"eol"
+%token MPTCP			"mptcp"
 %token NOP			"nop"
 %token SACK			"sack"
 %token SACK0			"sack0"
@@ -410,13 +416,15 @@ int nft_lex(void *, void *, void *);
 %token SACK2			"sack2"
 %token SACK3			"sack3"
 %token SACK_PERM		"sack-permitted"
+%token FASTOPEN			"fastopen"
+%token MD5SIG			"md5sig"
 %token TIMESTAMP		"timestamp"
-%token KIND			"kind"
 %token COUNT			"count"
 %token LEFT			"left"
 %token RIGHT			"right"
 %token TSVAL			"tsval"
 %token TSECR			"tsecr"
+%token SUBTYPE			"subtype"
 
 %token DCCP			"dccp"
 
@@ -607,6 +615,9 @@ int nft_lex(void *, void *, void *);
 %token IN			"in"
 %token OUT			"out"
 
+%type <limit_rate>		limit_rate_pkts
+%type <limit_rate>		limit_rate_bytes
+
 %type <string>			identifier type_identifier string comment_spec
 %destructor { xfree($$); }	identifier type_identifier string comment_spec
 
@@ -689,7 +700,7 @@ int nft_lex(void *, void *, void *);
 %type <val>			level_type log_flags log_flags_tcp log_flag_tcp
 %type <stmt>			limit_stmt quota_stmt connlimit_stmt
 %destructor { stmt_free($$); }	limit_stmt quota_stmt connlimit_stmt
-%type <val>			limit_burst_pkts limit_burst_bytes limit_mode time_unit quota_mode
+%type <val>			limit_burst_pkts limit_burst_bytes limit_mode limit_bytes time_unit quota_mode
 %type <stmt>			reject_stmt reject_stmt_alloc
 %destructor { stmt_free($$); }	reject_stmt reject_stmt_alloc
 %type <stmt>			nat_stmt nat_stmt_alloc masq_stmt masq_stmt_alloc redir_stmt redir_stmt_alloc
@@ -870,7 +881,10 @@ int nft_lex(void *, void *, void *);
 %type <expr>			tcp_hdr_expr
 %destructor { expr_free($$); }	tcp_hdr_expr
 %type <val>			tcp_hdr_field
-%type <val>			tcp_hdr_option_type tcp_hdr_option_field
+%type <val>			tcp_hdr_option_type
+%type <val>			tcp_hdr_option_sack
+%type <val>			tcpopt_field_maxseg	tcpopt_field_mptcp	tcpopt_field_sack	 tcpopt_field_tsopt	tcpopt_field_window
+%type <tcp_kind_field>		tcp_hdr_option_kind_and_field
 
 %type <expr>			boolean_expr
 %destructor { expr_free($$); }	boolean_expr
@@ -926,6 +940,7 @@ close_scope_list	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_CMD_LIST); }
 close_scope_limit	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_LIMIT); };
 close_scope_numgen	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_EXPR_NUMGEN); };
 close_scope_quota	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_QUOTA); };
+close_scope_tcp		: { scanner_pop_start_cond(nft->scanner, PARSER_SC_TCP); }
 close_scope_queue	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_EXPR_QUEUE); };
 close_scope_rt		: { scanner_pop_start_cond(nft->scanner, PARSER_SC_EXPR_RT); };
 close_scope_sctp	: { scanner_pop_start_cond(nft->scanner, PARSER_SC_SCTP); };
@@ -3106,7 +3121,7 @@ level_type		:	string
 			}
 			;
 
-log_flags		:	TCP	log_flags_tcp
+log_flags		:	TCP	log_flags_tcp	close_scope_tcp
 			{
 				$$ = $2;
 			}
@@ -3145,42 +3160,31 @@ log_flag_tcp		:	SEQUENCE
 			}
 			;
 
-limit_stmt		:	LIMIT	RATE	limit_mode	NUM	SLASH	time_unit	limit_burst_pkts	close_scope_limit
+limit_stmt		:	LIMIT	RATE	limit_mode	limit_rate_pkts	limit_burst_pkts	close_scope_limit
 	    		{
-				if ($7 == 0) {
-					erec_queue(error(&@7, "limit burst must be > 0"),
+				if ($5 == 0) {
+					erec_queue(error(&@5, "limit burst must be > 0"),
 						   state->msgs);
 					YYERROR;
 				}
 				$$ = limit_stmt_alloc(&@$);
-				$$->limit.rate	= $4;
-				$$->limit.unit	= $6;
-				$$->limit.burst	= $7;
+				$$->limit.rate	= $4.rate;
+				$$->limit.unit	= $4.unit;
+				$$->limit.burst	= $5;
 				$$->limit.type	= NFT_LIMIT_PKTS;
 				$$->limit.flags = $3;
 			}
-			|	LIMIT	RATE	limit_mode	NUM	STRING	limit_burst_bytes	close_scope_limit
+			|	LIMIT	RATE	limit_mode	limit_rate_bytes	limit_burst_bytes	close_scope_limit
 			{
-				struct error_record *erec;
-				uint64_t rate, unit;
-
-				if ($6 == 0) {
-					erec_queue(error(&@6, "limit burst must be > 0"),
+				if ($5 == 0) {
+					erec_queue(error(&@5, "limit burst must be > 0"),
 						   state->msgs);
 					YYERROR;
 				}
-
-				erec = rate_parse(&@$, $5, &rate, &unit);
-				xfree($5);
-				if (erec != NULL) {
-					erec_queue(erec, state->msgs);
-					YYERROR;
-				}
-
 				$$ = limit_stmt_alloc(&@$);
-				$$->limit.rate	= rate * $4;
-				$$->limit.unit	= unit;
-				$$->limit.burst	= $6;
+				$$->limit.rate	= $4.rate;
+				$$->limit.unit	= $4.unit;
+				$$->limit.burst	= $5;
 				$$->limit.type	= NFT_LIMIT_PKT_BYTES;
 				$$->limit.flags = $3;
 			}
@@ -3250,20 +3254,51 @@ limit_burst_pkts	:	/* empty */			{ $$ = 5; }
 			|	BURST	NUM	PACKETS		{ $$ = $2; }
 			;
 
+limit_rate_pkts		:	NUM     SLASH	time_unit
+			{
+				$$.rate = $1;
+				$$.unit = $3;
+			}
+			;
+
 limit_burst_bytes	:	/* empty */			{ $$ = 5; }
-			|	BURST	NUM	BYTES		{ $$ = $2; }
-			|	BURST	NUM	STRING
+			|	BURST	limit_bytes		{ $$ = $2; }
+			;
+
+limit_rate_bytes	:	NUM     STRING
 			{
 				struct error_record *erec;
-				uint64_t rate;
+				uint64_t rate, unit;
 
-				erec = data_unit_parse(&@$, $3, &rate);
-				xfree($3);
+				erec = rate_parse(&@$, $2, &rate, &unit);
+				xfree($2);
 				if (erec != NULL) {
 					erec_queue(erec, state->msgs);
 					YYERROR;
 				}
-				$$ = $2 * rate;
+				$$.rate = rate * $1;
+				$$.unit = unit;
+			}
+			|	limit_bytes SLASH time_unit
+			{
+				$$.rate = $1;
+				$$.unit = $3;
+			}
+			;
+
+limit_bytes		:	NUM	BYTES		{ $$ = $1; }
+			|	NUM	STRING
+			{
+				struct error_record *erec;
+				uint64_t rate;
+
+				erec = data_unit_parse(&@$, $2, &rate);
+				xfree($2);
+				if (erec != NULL) {
+					erec_queue(erec, state->msgs);
+					YYERROR;
+				}
+				$$ = $1 * rate;
 			}
 			;
 
@@ -3337,7 +3372,7 @@ reject_opts		:       /* empty */
 				$<stmt>0->reject.expr = $3;
 				datatype_set($<stmt>0->reject.expr, &icmpx_code_type);
 			}
-			|	WITH	TCP	RESET
+			|	WITH	TCP	close_scope_tcp RESET
 			{
 				$<stmt>0->reject.type = NFT_REJECT_TCP_RST;
 			}
@@ -4280,44 +4315,34 @@ set_elem_stmt		:	COUNTER	close_scope_counter
 				$$->counter.packets = $3;
 				$$->counter.bytes = $5;
 			}
-			|	LIMIT   RATE    limit_mode      NUM     SLASH   time_unit       limit_burst_pkts	close_scope_limit
+			|	LIMIT   RATE    limit_mode      limit_rate_pkts       limit_burst_pkts	close_scope_limit
 			{
-				if ($7 == 0) {
-					erec_queue(error(&@7, "limit burst must be > 0"),
+				if ($5 == 0) {
+					erec_queue(error(&@5, "limit burst must be > 0"),
 						   state->msgs);
 					YYERROR;
 				}
 				$$ = limit_stmt_alloc(&@$);
-				$$->limit.rate  = $4;
-				$$->limit.unit  = $6;
-				$$->limit.burst = $7;
+				$$->limit.rate  = $4.rate;
+				$$->limit.unit  = $4.unit;
+				$$->limit.burst = $5;
 				$$->limit.type  = NFT_LIMIT_PKTS;
 				$$->limit.flags = $3;
 			}
-			|       LIMIT   RATE    limit_mode      NUM     STRING  limit_burst_bytes	close_scope_limit
+			|       LIMIT   RATE    limit_mode      limit_rate_bytes  limit_burst_bytes	close_scope_limit
 			{
-				struct error_record *erec;
-				uint64_t rate, unit;
-
-				if ($6 == 0) {
+				if ($5 == 0) {
 					erec_queue(error(&@6, "limit burst must be > 0"),
 						   state->msgs);
 					YYERROR;
 				}
-				erec = rate_parse(&@$, $5, &rate, &unit);
-				xfree($5);
-				if (erec != NULL) {
-					erec_queue(erec, state->msgs);
-					YYERROR;
-				}
-
 				$$ = limit_stmt_alloc(&@$);
-				$$->limit.rate  = rate * $4;
-				$$->limit.unit  = unit;
-				$$->limit.burst = $6;
+				$$->limit.rate  = $4.rate;
+				$$->limit.unit  = $4.unit;
+				$$->limit.burst = $5;
 				$$->limit.type  = NFT_LIMIT_PKT_BYTES;
 				$$->limit.flags = $3;
-                        }
+			}
 			|	CT	COUNT	NUM	close_scope_ct
 			{
 				$$ = connlimit_stmt_alloc(&@$);
@@ -4447,7 +4472,7 @@ ct_cmd_type		:	HELPERS		{ $$ = CMD_OBJ_CT_HELPERS; }
 			|	EXPECTATION	{ $$ = CMD_OBJ_CT_EXPECT; }
 			;
 
-ct_l4protoname		:	TCP	{ $$ = IPPROTO_TCP; }
+ct_l4protoname		:	TCP	close_scope_tcp	{ $$ = IPPROTO_TCP; }
 			|	UDP	{ $$ = IPPROTO_UDP; }
 			;
 
@@ -4550,34 +4575,25 @@ ct_obj_alloc		:	/* empty */
 			}
 			;
 
-limit_config		:	RATE	limit_mode	NUM	SLASH	time_unit	limit_burst_pkts
+limit_config		:	RATE	limit_mode	limit_rate_pkts	limit_burst_pkts
 			{
 				struct limit *limit;
 
 				limit = &$<obj>0->limit;
-				limit->rate	= $3;
-				limit->unit	= $5;
-				limit->burst	= $6;
+				limit->rate	= $3.rate;
+				limit->unit	= $3.unit;
+				limit->burst	= $4;
 				limit->type	= NFT_LIMIT_PKTS;
 				limit->flags	= $2;
 			}
-			|	RATE	limit_mode	NUM	STRING	limit_burst_bytes
+			|	RATE	limit_mode	limit_rate_bytes	limit_burst_bytes
 			{
 				struct limit *limit;
-				struct error_record *erec;
-				uint64_t rate, unit;
-
-				erec = rate_parse(&@$, $4, &rate, &unit);
-				xfree($4);
-				if (erec != NULL) {
-					erec_queue(erec, state->msgs);
-					YYERROR;
-				}
 
 				limit = &$<obj>0->limit;
-				limit->rate	= rate * $3;
-				limit->unit	= unit;
-				limit->burst	= $5;
+				limit->rate	= $3.rate;
+				limit->unit	= $3.unit;
+				limit->burst	= $4;
 				limit->type	= NFT_LIMIT_PKT_BYTES;
 				limit->flags	= $2;
 			}
@@ -4730,7 +4746,7 @@ primary_rhs_expr	:	symbol_expr		{ $$ = $1; }
 			|	integer_expr		{ $$ = $1; }
 			|	boolean_expr		{ $$ = $1; }
 			|	keyword_expr		{ $$ = $1; }
-			|	TCP
+			|	TCP	close_scope_tcp
 			{
 				uint8_t data = IPPROTO_TCP;
 				$$ = constant_expr_alloc(&@$, &inet_protocol_type,
@@ -5237,7 +5253,7 @@ payload_expr		:	payload_raw_expr
 			|	comp_hdr_expr
 			|	udp_hdr_expr
 			|	udplite_hdr_expr
-			|	tcp_hdr_expr
+			|	tcp_hdr_expr	close_scope_tcp
 			|	dccp_hdr_expr
 			|	sctp_hdr_expr
 			|	th_hdr_expr
@@ -5255,6 +5271,17 @@ payload_raw_expr	:	AT	payload_base_spec	COMMA	NUM	COMMA	NUM
 payload_base_spec	:	LL_HDR		{ $$ = PROTO_BASE_LL_HDR; }
 			|	NETWORK_HDR	{ $$ = PROTO_BASE_NETWORK_HDR; }
 			|	TRANSPORT_HDR	{ $$ = PROTO_BASE_TRANSPORT_HDR; }
+			|	STRING
+			{
+				if (!strcmp($1, "ih")) {
+					$$ = PROTO_BASE_INNER_HDR;
+				} else {
+					erec_queue(error(&@1, "unknown raw payload base"), state->msgs);
+					xfree($1);
+					YYERROR;
+				}
+				xfree($1);
+			}
 			;
 
 eth_hdr_expr		:	ETHER	eth_hdr_field	close_scope_eth
@@ -5461,14 +5488,14 @@ tcp_hdr_expr		:	TCP	tcp_hdr_field
 			{
 				$$ = payload_expr_alloc(&@$, &proto_tcp, $2);
 			}
-			|	TCP	OPTION	tcp_hdr_option_type tcp_hdr_option_field
-			{
-				$$ = tcpopt_expr_alloc(&@$, $3, $4);
-			}
 			|	TCP	OPTION	tcp_hdr_option_type
 			{
 				$$ = tcpopt_expr_alloc(&@$, $3, TCPOPT_COMMON_KIND);
 				$$->exthdr.flags = NFT_EXTHDR_F_PRESENT;
+			}
+			|	TCP	OPTION	tcp_hdr_option_kind_and_field
+			{
+				$$ = tcpopt_expr_alloc(&@$, $3.kind, $3.field);
 			}
 			|	TCP	OPTION	AT tcp_hdr_option_type	COMMA	NUM	COMMA	NUM
 			{
@@ -5489,19 +5516,57 @@ tcp_hdr_field		:	SPORT		{ $$ = TCPHDR_SPORT; }
 			|	URGPTR		{ $$ = TCPHDR_URGPTR; }
 			;
 
-tcp_hdr_option_type	:	EOL		{ $$ = TCPOPT_KIND_EOL; }
-			|	NOP		{ $$ = TCPOPT_KIND_NOP; }
-			|	MSS  	  	{ $$ = TCPOPT_KIND_MAXSEG; }
-			|	WINDOW		{ $$ = TCPOPT_KIND_WINDOW; }
-			|	SACK_PERM	{ $$ = TCPOPT_KIND_SACK_PERMITTED; }
-			|	SACK		{ $$ = TCPOPT_KIND_SACK; }
+tcp_hdr_option_kind_and_field	:	MSS	tcpopt_field_maxseg
+				{
+					struct tcp_kind_field kind_field = { .kind = TCPOPT_KIND_MAXSEG, .field = $2 };
+					$$ = kind_field;
+				}
+				|	tcp_hdr_option_sack	tcpopt_field_sack
+				{
+					struct tcp_kind_field kind_field = { .kind = $1, .field = $2 };
+					$$ = kind_field;
+				}
+				|	WINDOW	tcpopt_field_window
+				{
+					struct tcp_kind_field kind_field = { .kind = TCPOPT_KIND_WINDOW, .field = $2 };
+					$$ = kind_field;
+				}
+				|	TIMESTAMP	tcpopt_field_tsopt
+				{
+					struct tcp_kind_field kind_field = { .kind = TCPOPT_KIND_TIMESTAMP, .field = $2 };
+					$$ = kind_field;
+				}
+				|	tcp_hdr_option_type	LENGTH
+				{
+					struct tcp_kind_field kind_field = { .kind = $1, .field = TCPOPT_COMMON_LENGTH };
+					$$ = kind_field;
+				}
+				|	MPTCP	tcpopt_field_mptcp
+				{
+					struct tcp_kind_field kind_field = { .kind = TCPOPT_KIND_MPTCP, .field = $2 };
+					$$ = kind_field;
+				}
+				;
+
+tcp_hdr_option_sack	:	SACK		{ $$ = TCPOPT_KIND_SACK; }
 			|	SACK0		{ $$ = TCPOPT_KIND_SACK; }
 			|	SACK1		{ $$ = TCPOPT_KIND_SACK1; }
 			|	SACK2		{ $$ = TCPOPT_KIND_SACK2; }
 			|	SACK3		{ $$ = TCPOPT_KIND_SACK3; }
-			|	ECHO		{ $$ = TCPOPT_KIND_ECHO; }
-			|	TIMESTAMP	{ $$ = TCPOPT_KIND_TIMESTAMP; }
-			|	NUM		{
+			;
+
+tcp_hdr_option_type	:	ECHO			{ $$ = TCPOPT_KIND_ECHO; }
+			|	EOL			{ $$ = TCPOPT_KIND_EOL; }
+			|	FASTOPEN		{ $$ = TCPOPT_KIND_FASTOPEN; }
+			|	MD5SIG			{ $$ = TCPOPT_KIND_MD5SIG; }
+			|	MPTCP			{ $$ = TCPOPT_KIND_MPTCP; }
+			|	MSS			{ $$ = TCPOPT_KIND_MAXSEG; }
+			|	NOP			{ $$ = TCPOPT_KIND_NOP; }
+			|	SACK_PERM		{ $$ = TCPOPT_KIND_SACK_PERMITTED; }
+			|       TIMESTAMP               { $$ = TCPOPT_KIND_TIMESTAMP; }
+			|       WINDOW                  { $$ = TCPOPT_KIND_WINDOW; }
+			|	tcp_hdr_option_sack	{ $$ = $1; }
+			|	NUM			{
 				if ($1 > 255) {
 					erec_queue(error(&@1, "value too large"), state->msgs);
 					YYERROR;
@@ -5510,14 +5575,21 @@ tcp_hdr_option_type	:	EOL		{ $$ = TCPOPT_KIND_EOL; }
 			}
 			;
 
-tcp_hdr_option_field	:	KIND		{ $$ = TCPOPT_COMMON_KIND; }
-			|	LENGTH		{ $$ = TCPOPT_COMMON_LENGTH; }
-			|	SIZE		{ $$ = TCPOPT_MAXSEG_SIZE; }
-			|	COUNT		{ $$ = TCPOPT_WINDOW_COUNT; }
-			|	LEFT		{ $$ = TCPOPT_SACK_LEFT; }
+tcpopt_field_sack	: 	LEFT		{ $$ = TCPOPT_SACK_LEFT; }
 			|	RIGHT		{ $$ = TCPOPT_SACK_RIGHT; }
-			|	TSVAL		{ $$ = TCPOPT_TS_TSVAL; }
+			;
+
+tcpopt_field_window	:	COUNT           { $$ = TCPOPT_WINDOW_COUNT; }
+			;
+
+tcpopt_field_tsopt	:	TSVAL           { $$ = TCPOPT_TS_TSVAL; }
 			|	TSECR		{ $$ = TCPOPT_TS_TSECR; }
+			;
+
+tcpopt_field_maxseg	:	SIZE		{ $$ = TCPOPT_MAXSEG_SIZE; }
+			;
+
+tcpopt_field_mptcp	:	SUBTYPE		{ $$ = TCPOPT_MPTCP_SUBTYPE; }
 			;
 
 dccp_hdr_expr		:	DCCP	dccp_hdr_field
