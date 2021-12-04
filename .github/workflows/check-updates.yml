@@ -1,27 +1,27 @@
-on:
-  schedule:
-    # At 02:00 every day
-    - cron:  '0 2 * * *'
-  workflow_dispatch:
-
-jobs:
-  main:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: 'module/parser: Check nftables updates'
-        run: |
-          baseDirPath=$(pwd)/module/parser/nftables-parser
-
-          tmpDirPath=$(mktemp -d ./tmp.XXXXXXXXX)
-          pushd "$tmpDirPath" > /dev/null
-          git clone --depth 1 --recursive git://git.netfilter.org/nftables
-          cp -v nftables/src/scanner.l "$baseDirPath"/rc/lexer.l
-          cp -v nftables/src/parser_bison.y "$baseDirPath"/rc/parser.y
-          cp -v nftables/files/{nftables,examples}/*.nft "$baseDirPath"/test
-          popd > /dev/null
-          rm -rf "$tmpDirPath"
-
-      - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v3.10.0
+#on:
+#  schedule:
+#    # At 02:00 every day
+#    - cron:  '0 2 * * *'
+#  workflow_dispatch:
+#
+#jobs:
+#  main:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: 'module/parser: Check nftables updates'
+#        run: |
+#          baseDirPath=$(pwd)/module/parser/nftables-parser
+#
+#          tmpDirPath=$(mktemp -d ./tmp.XXXXXXXXX)
+#          pushd "$tmpDirPath" > /dev/null
+#          git clone --depth 1 --recursive git://git.netfilter.org/nftables
+#          cp -v nftables/src/scanner.l "$baseDirPath"/rc/lexer.l
+#          cp -v nftables/src/parser_bison.y "$baseDirPath"/rc/parser.y
+#          cp -v nftables/files/{nftables,examples}/*.nft "$baseDirPath"/test
+#          popd > /dev/null
+#          rm -rf "$tmpDirPath"
+#
+#      - name: Create a Pull Request
+#        uses: peter-evans/create-pull-request@v3.10.0
