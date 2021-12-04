@@ -1,1 +1,0 @@
-jhash ip saddr . tcp dport mod 2
