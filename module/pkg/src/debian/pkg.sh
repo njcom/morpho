@@ -21,3 +21,13 @@ reinstallPkg() {
 installPkgFromFile() {
     dpkg -i "$@"
 }
+
+# $pkgName
+filesInInstalledPkg() {
+    dpkg -L "$@"
+}
+
+# $filePath
+pkgByFile() {
+    dpkg -S "$(which "$@")"
+}
