@@ -62,7 +62,7 @@ _installPkgFromFile() {
 
 
 
-isPackageInstalled() {
+isPkgInstalled() {
     if pacman -Q "$@" &> /dev/null; then
         echo Installed
         return 0
@@ -74,44 +74,44 @@ isPackageInstalled() {
 
 
 
-packageInfo() {
+pkgInfo() {
     # yay handles both AUR and not AUR packages.
     yay -Si "$@"
 }
 
-orphanedPackages() {
+orphanedPkgs() {
     pacman -Qdt "$@"
 }
 
-packages() {
+pkgs() {
     pacman -Q
      #| awk '{print $1}'
 }
 
-filesInPackage() {
-    for package in "$@"; do
-        if isPackageInstalled $package &> /dev/null; then
-            filesInInstalledPackage "$@"
+filesInPkg() {
+    for pkg in "$@"; do
+        if isPkgInstalled $pkg &> /dev/null; then
+            filesInInstalledPkg "$@"
         else
-            filesInNotInstalledPackage "$@"
+            filesInNotInstalledPkg "$@"
         fi
     done
 }
 
-filesInInstalledPackage() {
+filesInInstalledPkg() {
     pacman -Ql "$@"
 }
 
-filesInNotInstalledPackage() {
+filesInNotInstalledPkg() {
     sudo pacman -Fy
     yay -Fl "$@"
 }
 
-packageDeps() {
+pkgDeps() {
     pactree -l "$@"
 }
 
-notInstalledPackageByFile() {
+notInstalledPkgByFile() {
     # Options:
     # -r enable regular expression matching
     sudo pacman -Fy
@@ -121,29 +121,29 @@ notInstalledPackageByFile() {
     #pacman -F "$@" # it does not work in bash for some reason, but does work in fish
 }
 
-packageByFile() {
+pkgByFile() {
     #pacman -F "$@"
     if ! pkgfile "$@"; then
-        notInstalledPackageByFile "$@"
+        notInstalledPkgByFile "$@"
     fi
 }
 
-findPackage() {
+findPkg() {
     pacman -Ss "$@"
 }
 
-deletePackageCache() {
+deletePkgCache() {
     sudo pacman -Sc "$@"
 }
 
-brokenPackages() {
+brokenPkgs() {
     echo @TODO
     #pactree -l pacman | sort -u | cut -f 1 -d ' '
 }
 
 depsOf() {
-    for package in "$@"; do
-        pactree  -l "$package" | grep -vP "^${package}$"
+    for pkg in "$@"; do
+        pactree  -l "$pkg" | grep -vP "^${pkg}$"
     done
 }
 
@@ -151,18 +151,18 @@ requiredBy() {
     pactree --reverse "$@"
 }
 
-packageSourceUri() {
-    local package="$1"
+pkgSourceUri() {
+    local pkg="$1"
     local repo=
-    if [[ $(pacman -Si "$package" | egrep 'Repository\s*' | awk -F':' '{print $2}' | xargs | tr '[:upper:]' '[:lower:]') == "community" ]]; then
+    if [[ $(pacman -Si "$pkg" | egrep 'Repository\s*' | awk -F':' '{print $2}' | xargs | tr '[:upper:]' '[:lower:]') == "community" ]]; then
         repo=community
     else
-        repo=packages
+        repo=pkgs
     fi
-    cat <(downloadToStdout https://git.archlinux.org/svntogit/${repo}.git/plain/trunk/PKGBUILD\?h\=packages/"$package") <(echo 'echo $source') | bash -
+    cat <(dlToStdout https://git.archlinux.org/svntogit/${repo}.git/plain/trunk/PKGBUILD\?h\=packages/"$pkg") <(echo 'echo $source') | bash -
 }
 
-packagesInGroup() {
+pkgsInGroup() {
     pacman -Sg "$@"
 }
 
@@ -171,11 +171,11 @@ packagesInGroup() {
 ###############################################################################
 # AUR
 
-installAurPackage() {
+installAurPkg() {
     yay -S "$@"
 }
 
-updateAurPackages() {
+updateAurPkgs() {
     if [[ $# -gt 0 ]]; then
         yay -S "$@"
     else
@@ -183,19 +183,19 @@ updateAurPackages() {
     fi
 }
 
-aurPackages() {
+aurPkgs() {
     pacman -Qm
 }
 
-# $packageName
-aurPackageDownloadUri() {
+# $pkgName
+aurPkgDlUri() {
     echo todo
     #package-query -Aif '%i %w %o %m %u' "$@" | awk '{print $NF}'
 }
 
-# $packageName
-downloadAurPackageFile() {
-    dl $(aurPackageDownloadUri "$@")
+# $pkgName
+dlAurPkgFile() {
+    dl $(aurPkgDlUri "$@")
 }
 
 
