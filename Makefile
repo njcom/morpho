@@ -23,7 +23,7 @@ check-inventory:
 	ansible-inventory -i $(inventory-file-path) -y --list
 
 ci-test:
-	make -C module/parser ci-test
+	#make -C module/parser ci-test
 
 debug:
 	ansible-playbook -i $(inventory-file-path) --tags debug $(playbook-file-path)
