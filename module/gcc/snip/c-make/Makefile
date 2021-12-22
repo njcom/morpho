@@ -12,7 +12,7 @@ exeFilePath := $(dstDirPath)/$(prog)
 
 #CC = musl-gcc
 CC := gcc
-CFLAGS := -O0 -g3 -gdwarf-4 -static -std=gnu17 -pedantic -Wall -Wextra -Werror -pedantic-errors -funsigned-char -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Isrc
+CFLAGS := -O0 -g3 -gdwarf-4 -static -std=gnu17 -pedantic -Wall -Wextra -Werror -pedantic-errors -funsigned-char -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -fanalyzer -Isrc
 LDFLAGS := -Lsrc
 
 all: $(exeFilePath)
