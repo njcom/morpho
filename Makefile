@@ -23,7 +23,7 @@ check-inventory:
 	ansible-inventory -i $(inventory-file-path) -y --list
 
 ci-test:
-	#make -C module/parser ci-test
+	make -C module/* ci-test
 
 debug:
 	ansible-playbook -i $(inventory-file-path) --tags debug $(playbook-file-path)
@@ -31,5 +31,9 @@ debug:
 pull-meta:
 	php task/pull-meta/index
 
-.PHONY: check play facts check-connect check-inventory ci-test debug pull-meta
+index:
+	mkdir -p $(CURDIR)/tech
+	ln -srfn $(CURDIR)/module/gcc $(CURDIR)/tech/gcc
+
+.PHONY: check play facts check-connect check-inventory ci-test debug pull-meta index
 .SILENT:
