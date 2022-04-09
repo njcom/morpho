@@ -2,6 +2,7 @@
     {
         "codeName": "impish",
         "humanCodeName": "Impish",
+        "fullName": "The Impish Indri",
         "ver": "21.10",
         "released": "2021-10-14T16:37:02.888756+00:00",
         "link": "https://launchpad.net/ubuntu/impish"
@@ -9,6 +10,7 @@
     {
         "codeName": "focal",
         "humanCodeName": "Focal",
+        "fullName": "The Focal Fossa",
         "ver": "20.04",
         "released": "2020-04-23T17:54:13.264514+00:00",
         "link": "https://launchpad.net/ubuntu/focal"
@@ -16,6 +18,7 @@
     {
         "codeName": "bionic",
         "humanCodeName": "Bionic",
+        "fullName": "The Bionic Beaver",
         "ver": "18.04",
         "released": "2018-04-26T23:53:46.335802+00:00",
         "link": "https://launchpad.net/ubuntu/bionic"
@@ -23,6 +26,7 @@
     {
         "codeName": "xenial",
         "humanCodeName": "Xenial",
+        "fullName": "The Xenial Xerus",
         "ver": "16.04",
         "released": "2016-04-21T23:26:46.693052+00:00",
         "link": "https://launchpad.net/ubuntu/xenial"
@@ -30,6 +34,7 @@
     {
         "codeName": "trusty",
         "humanCodeName": "Trusty",
+        "fullName": "The Trusty Tahr",
         "ver": "14.04",
         "released": "2014-04-17T17:17:10.986619+00:00",
         "link": "https://launchpad.net/ubuntu/trusty"

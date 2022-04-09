@@ -24,4 +24,4 @@ jobs:
 
       - name: 'Push the changes'
         run: |
-          .github/workflows/push-changes.sh task/pull-meta "Issue #7: Updated meta"
+          .github/workflows/push-changes.sh "Issue #7: Updated meta"

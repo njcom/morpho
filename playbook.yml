@@ -1,9 +1,0 @@
-- name: Set up localhost
-  hosts: localhost
-  tasks:
-    - import_tasks: task/pull-facts/index.yml
-      tags: facts
-
-    - import_tasks: task/init-distro/index.yml
-      vars:
-        hostname: my

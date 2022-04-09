@@ -5,6 +5,8 @@ playbook-file-path := $(CURDIR)/playbook.yml
 role-dir-path := $(CURDIR)/role
 ansible-playbook := ansible-playbook -i $(inventory-file-path) $(playbook-file-path)
 
+include $(CURDIR)/index.mk
+
 check:
 	ansible-playbook -i $(inventory-file-path) --check $(playbook-file-path)
 
@@ -29,11 +31,12 @@ debug:
 	ansible-playbook -i $(inventory-file-path) --tags debug $(playbook-file-path)
 
 pull-meta:
-	php task/pull-meta/index
+	php module/meta/task/pull-meta/index
 
 index:
-	mkdir -p $(CURDIR)/tech
-	ln -srfn $(CURDIR)/module/gcc $(CURDIR)/tech/gcc
+	mkdir -p $(CURDIR)/index/tech
+	for tech in gcc make; do \
+		ln -vsrfn $(CURDIR)/module/$$tech $(CURDIR)/index/tech/$$tech; \
+	done
 
-.PHONY: check play facts check-connect check-inventory ci-test debug pull-meta index
-.SILENT:
+.PHONY: targets check play facts check-connect check-inventory ci-test debug pull-meta index help
