@@ -27,6 +27,12 @@ filesInInstalledPkg() {
     dpkg -L "$@"
 }
 
+# $pkgName
+fileInNotInstalledPkg() {
+    sudo apt-file update
+    apt-file list "$@"
+}
+
 # $filePath
 pkgByFile() {
     dpkg -S "$(which "$@")"

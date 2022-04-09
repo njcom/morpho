@@ -17,10 +17,12 @@ function lname(string $s): string {
 }
 
 function pullKernelVers(string $outDirPath): void {
+    // todo: use this: https://www.kernel.org/releases.json
     //sh('curl -sSL https://www.kernel.org/feeds/kdist.xml ' . escapeshellarg($outDirPath . '/kernel.json'));
 }
 
 function pullUbuntuVers(string $outDirPath): void {
+    // todo: use https://changelogs.ubuntu.com/meta-release-lts
     # @todo: Extend with info from the https://wiki.ubuntu.com/Releases
     sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true)]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
     $rows = File::readJson($outDirPath . '/ubuntu.json');
@@ -28,6 +30,7 @@ function pullUbuntuVers(string $outDirPath): void {
         $rows[$k] = [
             'codeName' => $row['name'],
             'humanCodeName' => $row['displayname'],
+            'fullName' => $row['title'],
             'ver' => $row['version'],
             'released' => $row['datereleased'],
             'link' => $row['web_link'],
