@@ -2,12 +2,10 @@
 <?php declare(strict_types=1);
 use Morpho\Tech\Xml\Doc;
 use Morpho\Fs\File;
-use function Morpho\App\Cli\sh;
-use function Morpho\Base\dasherize;
-use function Morpho\Base\showLn;
-use function Morpho\App\Cli\bootstrap;
+use function Morpho\App\Cli\{sh, bootstrap};
+use function Morpho\Base\{dasherize, showLn, q};
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../../../../vendor/autoload.php';
 
 bootstrap();
 
@@ -16,9 +14,12 @@ function lname(string $s): string {
     return dasherize($s, '.');
 }
 
-function pullKernelVers(string $outDirPath): void {
+/*
+function pullLinuxVers(string $outDirPath): void {
     // todo: use this: https://www.kernel.org/releases.json
     //sh('curl -sSL https://www.kernel.org/feeds/kdist.xml ' . escapeshellarg($outDirPath . '/kernel.json'));
+
+
 }
 
 function pullUbuntuVers(string $outDirPath): void {
@@ -124,30 +125,51 @@ function pullCentosVers(string $outDirPath): void {
 function pullRhelVers(string $outDirPath): void {
     // https://access.redhat.com/support/policy/updates/errata
 }
-
-function pullPhpVers(string $outDirPath): void {
-
-}
+*/
 
 function pullTypeScriptVers(string $outDirPath): void {
-
-}
-
-function pullAnsibleVers(string $outDirPath): void {
-    // todo: https://endoflife.date/api/ansible.json
+    // todo
 }
 
 function main(): void {
-    $outDirPath = $_SERVER['argv'][1] ?? __DIR__;
-    pullKernelVers($outDirPath);
-    pullUbuntuVers($outDirPath);
-    pullDebianVers($outDirPath);
-    pullFedoraVers($outDirPath);
-    pullCentosVers($outDirPath);
-    pullRhelVers($outDirPath);
-    pullPhpVers($outDirPath);
-    pullTypeScriptVers($outDirPath);
-    pullAnsibleVers($outDirPath);
+    //$outDirPath = $_SERVER['argv'][1] ?? __DIR__;
+    $techs = [
+        'centos',
+        'composer',
+        'debian',
+        'drupal',
+        'elasticsearch',
+        'fedora',
+        'gitlab',
+        'jquery',
+        'kde-plasma' => 'kde',
+        'kotlin',
+        'kubernetes',
+        'linux',
+        'mariadb',
+        'mysql',
+        'nginx',
+        'nodejs',
+        'perl',
+        'php',
+        'postgresql',
+        'python',
+        'qt',
+        'rhel',
+        'sles',
+        'ubuntu',
+    ];
+    // todo: typescript, bash, make, cmake, gcc, linq, neo4j, llvm, qemu, sqlite, wordpress, antlr
+    foreach ($techs as $key => $tech) {
+        $outBaseName = $tech;
+        if (!is_numeric($key)) {
+            $tech = $key;
+        }
+        showLn("Pulling meta for the " . q($tech) . '...');
+        sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq --indent 4 . | jq 'sort_by(.release) | reverse' > " . escapeshellarg($outBaseName . '.json'));
+    }
+    // todo: typescript, bash, make, cmake
+    //pullTypeScriptVers($outDirPath);
 }
 
 main();
