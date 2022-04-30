@@ -1,34 +1,34 @@
 [
-  {
-    "cycle": "15",
-    "release": "2018-07-15",
-    "support": "2028-07-31",
-    "eol": "2031-07-31",
-    "latest": "SLES 15 SP 3",
-    "cycleShortHand": "15-SP3"
-  },
-  {
-    "cycle": "12",
-    "release": "2014-10-27",
-    "support": "2024-10-31",
-    "eol": "2027-10-31",
-    "latest": "SLES 12 SP5",
-    "cycleShortHand": "12-SP5"
-  },
-  {
-    "cycle": "11",
-    "release": "2009-03-23",
-    "support": "2019-03-31",
-    "eol": "2022-03-31",
-    "latest": "SLES 11 SP4",
-    "cycleShortHand": "11-SP4"
-  },
-  {
-    "cycle": "10",
-    "release": "2006-07-17",
-    "support": "2013-07-31",
-    "eol": "2016-07-31",
-    "latest": "SLES 10 SP4",
-    "cycleShortHand": "10-SP4"
-  }
+    {
+        "cycle": "15",
+        "release": "2018-07-15",
+        "support": "2028-07-31",
+        "eol": "2031-07-31",
+        "latest": "SLES 15 SP 3",
+        "cycleShortHand": "15-SP3"
+    },
+    {
+        "cycle": "12",
+        "release": "2014-10-27",
+        "support": "2024-10-31",
+        "eol": "2027-10-31",
+        "latest": "SLES 12 SP5",
+        "cycleShortHand": "12-SP5"
+    },
+    {
+        "cycle": "11",
+        "release": "2009-03-23",
+        "support": "2019-03-31",
+        "eol": "2022-03-31",
+        "latest": "SLES 11 SP4",
+        "cycleShortHand": "11-SP4"
+    },
+    {
+        "cycle": "10",
+        "release": "2006-07-17",
+        "support": "2013-07-31",
+        "eol": "2016-07-31",
+        "latest": "SLES 10 SP4",
+        "cycleShortHand": "10-SP4"
+    }
 ]

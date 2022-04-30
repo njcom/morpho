@@ -161,12 +161,12 @@ function main(): void {
     ];
     // todo: typescript, bash, make, cmake, gcc, linq, neo4j, llvm, qemu, sqlite, wordpress, antlr
     foreach ($techs as $key => $tech) {
-        $outBaseName = $tech;
+        $outFilePath = __DIR__ . '/' . $tech . '.json';
         if (!is_numeric($key)) {
             $tech = $key;
         }
         showLn("Pulling meta for the " . q($tech) . '...');
-        sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq --indent 4 . | jq 'sort_by(.release) | reverse' > " . escapeshellarg($outBaseName . '.json'));
+        sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq 'sort_by(.release) | reverse' | jq --indent 4 . > " . escapeshellarg($outFilePath));
     }
     // todo: typescript, bash, make, cmake
     //pullTypeScriptVers($outDirPath);
