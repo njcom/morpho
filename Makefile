@@ -1,7 +1,10 @@
 include $(CURDIR)/common.mk
 
 ci-test:
-	make -C module/* ci-test
+	for module in gcc make meta pkg; do \
+		echo Running ci-test for the $$module...; \
+		make -C module/$$module ci-test; \
+	done
 
 pull-meta:
 	module/meta/task/pull-meta/index
