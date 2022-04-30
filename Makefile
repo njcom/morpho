@@ -5,7 +5,7 @@ playbook-file-path := $(CURDIR)/playbook.yml
 role-dir-path := $(CURDIR)/role
 ansible-playbook := ansible-playbook -i $(inventory-file-path) $(playbook-file-path)
 
-include $(CURDIR)/index.mk
+include $(CURDIR)/common.mk
 
 check:
 	ansible-playbook -i $(inventory-file-path) --check $(playbook-file-path)
