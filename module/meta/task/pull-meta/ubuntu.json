@@ -42,7 +42,7 @@
         "release": "2020-04-23",
         "support": "2025-04-02",
         "eol": "2030-04-01",
-        "latest": "20.04.3"
+        "latest": "20.04.4"
     },
     {
         "cycle": "19.10",
@@ -59,7 +59,8 @@
         "release": "2018-04-26",
         "support": "2023-04-02",
         "eol": "2028-04-01",
-        "latest": "18.04.6"
+        "latest": "18.04.6",
+        "link": "https://wiki.ubuntu.com/BionicBeaver/ReleaseNotes"
     },
     {
         "cycle": "16.04",
