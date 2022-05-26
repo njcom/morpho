@@ -4,31 +4,35 @@
         "cycleShortHand": 106,
         "eol": false,
         "support": false,
-        "release": "2021-11-16",
-        "latest": "1.6.21"
+        "release": "2021-11-11",
+        "latest": "1.6.21",
+        "latestReleaseDate": "2022-04-18"
     },
     {
         "cycle": "1.5",
         "cycleShortHand": 105,
         "eol": false,
         "support": false,
-        "release": "2021-05-05",
-        "latest": "1.5.32"
+        "release": "2021-04-26",
+        "latest": "1.5.32",
+        "latestReleaseDate": "2021-11-26"
     },
     {
         "cycle": "1.4",
         "cycleShortHand": 104,
         "eol": false,
         "support": false,
-        "release": "2020-08-17",
-        "latest": "1.4.32"
+        "release": "2020-08-13",
+        "latest": "1.4.32",
+        "latestReleaseDate": "2021-03-25"
     },
     {
         "cycle": "1.3",
         "cycleShortHand": 103,
         "eol": false,
         "support": false,
-        "release": "2018-10-29",
-        "latest": "1.3.72"
+        "release": "2018-10-25",
+        "latest": "1.3.72",
+        "latestReleaseDate": "2020-04-14"
     }
 ]

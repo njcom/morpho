@@ -5,7 +5,8 @@
         "lts": false,
         "support": "2023-10-18",
         "eol": "2025-04-30",
-        "latest": "18.2.0"
+        "latest": "18.2.0",
+        "latestReleaseDate": "2022-05-17"
     },
     {
         "cycle": "17",
@@ -13,7 +14,8 @@
         "lts": false,
         "support": "2022-04-01",
         "eol": "2022-06-01",
-        "latest": "17.9.0"
+        "latest": "17.9.0",
+        "latestReleaseDate": "2022-04-07"
     },
     {
         "cycle": "16",
@@ -21,7 +23,8 @@
         "lts": true,
         "support": "2022-10-18",
         "eol": "2024-04-30",
-        "latest": "16.15.0"
+        "latest": "16.15.0",
+        "latestReleaseDate": "2022-04-26"
     },
     {
         "cycle": "15",
@@ -29,7 +32,8 @@
         "lts": false,
         "support": "2021-04-01",
         "eol": "2021-06-01",
-        "latest": "15.14.0"
+        "latest": "15.14.0",
+        "latestReleaseDate": "2021-04-06"
     },
     {
         "cycle": "14",
@@ -37,7 +41,8 @@
         "lts": true,
         "support": "2021-10-19",
         "eol": "2023-04-30",
-        "latest": "14.19.3"
+        "latest": "14.19.3",
+        "latestReleaseDate": "2022-05-17"
     },
     {
         "cycle": "12",
@@ -45,7 +50,8 @@
         "lts": true,
         "support": "2020-10-20",
         "eol": "2022-04-30",
-        "latest": "12.22.12"
+        "latest": "12.22.12",
+        "latestReleaseDate": "2022-04-05"
     },
     {
         "cycle": "10",
@@ -53,6 +59,7 @@
         "lts": true,
         "support": "2020-05-19",
         "eol": "2021-04-30",
-        "latest": "10.24.1"
+        "latest": "10.24.1",
+        "latestReleaseDate": "2021-04-06"
     }
 ]
