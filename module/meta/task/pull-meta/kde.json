@@ -1,26 +1,26 @@
 [
     {
-        "cycle": "5.24",
-        "release": "2022-02-08",
-        "latest": "5.24.5",
-        "support": "2022-06-09",
-        "eol": false,
-        "lts": true
-    },
-    {
-        "cycle": "5.23",
-        "release": "2021-10-14",
-        "latest": "5.23.5",
-        "support": "2022-02-03",
-        "eol": "2022-02-03",
-        "lts": false
-    },
-    {
         "cycle": "5.18",
-        "release": "2020-02-11",
         "latest": "5.18.8",
         "support": "2020-06-04",
         "eol": "2022-02-11",
-        "lts": true
+        "lts": true,
+        "releaseDate": "2020-02-11"
+    },
+    {
+        "cycle": "5.23",
+        "latest": "5.23.5",
+        "support": "2022-02-03",
+        "eol": "2022-02-03",
+        "lts": false,
+        "releaseDate": "2021-10-14"
+    },
+    {
+        "cycle": "5.24",
+        "latest": "5.24.5",
+        "support": "2022-06-09",
+        "eol": false,
+        "lts": true,
+        "releaseDate": "2022-02-08"
     }
 ]

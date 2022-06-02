@@ -1,122 +1,122 @@
 [
     {
-        "cycle": "15.0",
-        "release": "2022-05-20",
-        "support": "2022-06-22",
-        "eol": "2022-08-22",
-        "latest": "15.0.0",
-        "latestReleaseDate": "2022-05-20"
-    },
-    {
-        "cycle": "14.10",
-        "release": "2022-04-21",
-        "support": "2022-05-22",
-        "eol": "2022-07-22",
-        "latest": "14.10.3",
-        "latestReleaseDate": "2022-05-20"
-    },
-    {
-        "cycle": "14.9",
-        "release": "2022-03-21",
-        "support": "2022-04-22",
-        "eol": "2022-06-22",
-        "latest": "14.9.4",
-        "latestReleaseDate": "2022-04-29"
-    },
-    {
-        "cycle": "14.8",
-        "release": "2022-02-21",
-        "support": "2022-03-22",
-        "eol": "2022-05-22",
-        "latest": "14.8.6",
-        "latestReleaseDate": "2022-04-29"
-    },
-    {
-        "cycle": "14.7",
-        "release": "2022-01-21",
-        "support": "2022-02-22",
-        "eol": "2022-04-22",
-        "latest": "14.7.7",
-        "latestReleaseDate": "2022-03-31"
-    },
-    {
-        "cycle": "14.6",
-        "release": "2021-12-21",
-        "support": "2022-01-22",
-        "eol": "2022-03-22",
-        "latest": "14.6.7",
-        "latestReleaseDate": "2022-03-31"
-    },
-    {
-        "cycle": "14.5",
-        "release": "2021-11-19",
-        "support": "2021-12-22",
-        "eol": "2022-02-22",
-        "latest": "14.5.4",
-        "latestReleaseDate": "2022-02-03"
-    },
-    {
-        "cycle": "14.4",
-        "release": "2021-10-21",
-        "support": "2021-11-22",
-        "eol": "2022-01-22",
-        "latest": "14.4.5",
-        "latestReleaseDate": "2022-01-11"
-    },
-    {
-        "cycle": "14.3",
-        "release": "2021-09-21",
-        "support": "2021-10-22",
-        "eol": "2021-12-22",
-        "latest": "14.3.6",
-        "latestReleaseDate": "2021-12-03"
-    },
-    {
-        "cycle": "14.2",
-        "release": "2021-08-20",
-        "support": "2021-09-22",
-        "eol": "2021-11-22",
-        "latest": "14.2.7",
-        "latestReleaseDate": "2021-11-26"
-    },
-    {
-        "cycle": "14.1",
-        "release": "2021-07-21",
-        "support": "2021-08-22",
-        "eol": "2021-10-22",
-        "latest": "14.1.8",
-        "latestReleaseDate": "2021-11-15"
-    },
-    {
-        "cycle": "14.0",
-        "release": "2021-06-21",
-        "support": "2021-07-22",
-        "eol": "2021-09-22",
-        "latest": "14.0.12",
-        "latestReleaseDate": "2021-11-05"
-    },
-    {
-        "cycle": "13.12",
-        "release": "2021-05-21",
-        "support": "2021-06-22",
-        "eol": "2021-08-22",
-        "latest": "13.12.15",
-        "latestReleaseDate": "2021-11-03"
-    },
-    {
-        "cycle": "13.11",
-        "release": "2021-04-21",
-        "support": "2021-05-22",
-        "eol": "2021-07-22",
-        "latest": "13.11.7",
-        "latestReleaseDate": "2021-07-07"
-    },
-    {
         "cycle": "13.10",
-        "release": "2021-03-18",
         "support": "2021-04-22",
         "eol": "2021-06-22",
         "latest": "13.10.5",
-        "latestReleaseDate": "2021-06-01"
+        "latestReleaseDate": "2021-06-01",
+        "releaseDate": "2021-03-18"
+    },
+    {
+        "cycle": "13.11",
+        "support": "2021-05-22",
+        "eol": "2021-07-22",
+        "latest": "13.11.7",
+        "latestReleaseDate": "2021-07-07",
+        "releaseDate": "2021-04-21"
+    },
+    {
+        "cycle": "13.12",
+        "support": "2021-06-22",
+        "eol": "2021-08-22",
+        "latest": "13.12.15",
+        "latestReleaseDate": "2021-11-03",
+        "releaseDate": "2021-05-21"
+    },
+    {
+        "cycle": "14.0",
+        "support": "2021-07-22",
+        "eol": "2021-09-22",
+        "latest": "14.0.12",
+        "latestReleaseDate": "2021-11-05",
+        "releaseDate": "2021-06-21"
+    },
+    {
+        "cycle": "14.1",
+        "support": "2021-08-22",
+        "eol": "2021-10-22",
+        "latest": "14.1.8",
+        "latestReleaseDate": "2021-11-15",
+        "releaseDate": "2021-07-21"
+    },
+    {
+        "cycle": "14.2",
+        "support": "2021-09-22",
+        "eol": "2021-11-22",
+        "latest": "14.2.7",
+        "latestReleaseDate": "2021-11-26",
+        "releaseDate": "2021-08-20"
+    },
+    {
+        "cycle": "14.3",
+        "support": "2021-10-22",
+        "eol": "2021-12-22",
+        "latest": "14.3.6",
+        "latestReleaseDate": "2021-12-03",
+        "releaseDate": "2021-09-21"
+    },
+    {
+        "cycle": "14.4",
+        "support": "2021-11-22",
+        "eol": "2022-01-22",
+        "latest": "14.4.5",
+        "latestReleaseDate": "2022-01-11",
+        "releaseDate": "2021-10-21"
+    },
+    {
+        "cycle": "14.5",
+        "support": "2021-12-22",
+        "eol": "2022-02-22",
+        "latest": "14.5.4",
+        "latestReleaseDate": "2022-02-03",
+        "releaseDate": "2021-11-19"
+    },
+    {
+        "cycle": "14.6",
+        "support": "2022-01-22",
+        "eol": "2022-03-22",
+        "latest": "14.6.7",
+        "latestReleaseDate": "2022-03-31",
+        "releaseDate": "2021-12-21"
+    },
+    {
+        "cycle": "14.7",
+        "support": "2022-02-22",
+        "eol": "2022-04-22",
+        "latest": "14.7.7",
+        "latestReleaseDate": "2022-03-31",
+        "releaseDate": "2022-01-21"
+    },
+    {
+        "cycle": "14.8",
+        "support": "2022-03-22",
+        "eol": "2022-05-22",
+        "latest": "14.8.6",
+        "latestReleaseDate": "2022-04-29",
+        "releaseDate": "2022-02-21"
+    },
+    {
+        "cycle": "14.9",
+        "support": "2022-04-22",
+        "eol": "2022-06-22",
+        "latest": "14.9.4",
+        "latestReleaseDate": "2022-04-29",
+        "releaseDate": "2022-03-21"
+    },
+    {
+        "cycle": "14.10",
+        "support": "2022-05-22",
+        "eol": "2022-07-22",
+        "latest": "14.10.3",
+        "latestReleaseDate": "2022-05-20",
+        "releaseDate": "2022-04-21"
+    },
+    {
+        "cycle": "15.0",
+        "support": "2022-06-22",
+        "eol": "2022-08-22",
+        "latest": "15.0.0",
+        "latestReleaseDate": "2022-05-20",
+        "releaseDate": "2022-05-20"
     }
 ]
