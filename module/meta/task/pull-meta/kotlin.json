@@ -34,5 +34,14 @@
         "latest": "1.6.21",
         "latestReleaseDate": "2022-04-18",
         "releaseDate": "2021-11-11"
+    },
+    {
+        "cycle": "1.7",
+        "cycleShortHand": 107,
+        "eol": false,
+        "support": false,
+        "latest": "1.7.0",
+        "latestReleaseDate": "2022-06-07",
+        "releaseDate": "2022-06-07"
     }
 ]

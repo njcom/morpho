@@ -1,5 +1,12 @@
 [
     {
+        "cycle": "2.6",
+        "eol": "2013-10-29",
+        "latest": "2.6.9",
+        "latestReleaseDate": "2013-10-29",
+        "releaseDate": "2008-10-01"
+    },
+    {
         "cycle": "2.7",
         "eol": "2020-01-01",
         "latest": "2.7.18",
