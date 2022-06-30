@@ -28,11 +28,11 @@
     },
     {
         "cycle": "5.25",
-        "latest": "5.25.0",
+        "latest": "5.25.2",
         "support": "2022-10-11",
         "eol": "2022-10-11",
         "lts": false,
         "releaseDate": "2022-06-14",
-        "latestReleaseDate": "2022-06-14"
+        "latestReleaseDate": "2022-06-28"
     }
 ]
