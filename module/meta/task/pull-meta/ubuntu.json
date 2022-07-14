@@ -6,7 +6,8 @@
         "support": "2019-04-02",
         "eol": "2024-04-01",
         "latest": "14.04.6",
-        "releaseDate": "2014-04-17"
+        "releaseDate": "2014-04-17",
+        "latestReleaseDate": "2019-03-07"
     },
     {
         "cycle": "16.04",
@@ -15,7 +16,8 @@
         "support": "2021-04-02",
         "eol": "2026-04-01",
         "latest": "16.04.7",
-        "releaseDate": "2016-04-21"
+        "releaseDate": "2016-04-21",
+        "latestReleaseDate": "2020-08-13"
     },
     {
         "cycle": "18.04",
@@ -25,7 +27,8 @@
         "eol": "2028-04-01",
         "latest": "18.04.6",
         "link": "https://wiki.ubuntu.com/BionicBeaver/ReleaseNotes",
-        "releaseDate": "2018-04-26"
+        "releaseDate": "2018-04-26",
+        "latestReleaseDate": "2021-09-17"
     },
     {
         "cycle": "19.10",
@@ -33,7 +36,8 @@
         "support": "2020-07-06",
         "eol": "2020-07-06",
         "latest": "19.10",
-        "releaseDate": "2019-10-17"
+        "releaseDate": "2019-10-17",
+        "latestReleaseDate": "2019-10-17"
     },
     {
         "cycle": "20.04",
@@ -42,7 +46,8 @@
         "support": "2025-04-02",
         "eol": "2030-04-01",
         "latest": "20.04.4",
-        "releaseDate": "2020-04-23"
+        "releaseDate": "2020-04-23",
+        "latestReleaseDate": "2022-02-25"
     },
     {
         "cycle": "20.10",
@@ -50,7 +55,8 @@
         "support": "2021-07-22",
         "eol": "2021-07-22",
         "latest": "20.10",
-        "releaseDate": "2020-10-22"
+        "releaseDate": "2020-10-22",
+        "latestReleaseDate": "2020-10-22"
     },
     {
         "cycle": "21.04",
@@ -59,7 +65,8 @@
         "eol": "2022-01-20",
         "latest": "21.04",
         "link": "https://wiki.ubuntu.com/HirsuteHippo/ReleaseNotes/",
-        "releaseDate": "2021-04-22"
+        "releaseDate": "2021-04-22",
+        "latestReleaseDate": "2021-04-22"
     },
     {
         "cycle": "21.10",
@@ -68,7 +75,8 @@
         "eol": "2022-07-31",
         "latest": "21.10",
         "link": "https://wiki.ubuntu.com/ImpishIndri/ReleaseNotes/",
-        "releaseDate": "2021-10-14"
+        "releaseDate": "2021-10-14",
+        "latestReleaseDate": "2021-10-14"
     },
     {
         "cycle": "22.04",
@@ -78,6 +86,7 @@
         "lts": true,
         "latest": "22.04",
         "link": "https://wiki.ubuntu.com/JammyJellyfish/ReleaseNotes/",
-        "releaseDate": "2022-04-21"
+        "releaseDate": "2022-04-21",
+        "latestReleaseDate": "2022-04-21"
     }
 ]
