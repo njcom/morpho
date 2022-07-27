@@ -19,9 +19,9 @@ all: $(exeFilePath)
 	$^
 
 $(exeFilePath): $(dstDirPath)/morpho.o $(dstDirPath)/$(prog).o
-	# $^: names of all the prerequisites, with spaces between them
+	# $^: names of the space separated all the prerequisites
 	# $@: target
-	$(CC) $(LDFLAGS) $(CFLAGS) $^ -o $(exeFilePath)
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $(exeFilePath)
 	echo Written "$@"
 
 $(dstDirPath)/%.o : $(srcDirPath)/%.c
@@ -36,7 +36,7 @@ clean:
 	rm -fv $(dstDirPath)/*
 
 debug:
-	gdb -ex start -ex 'i li' --args $(exeFilePath)
+	gdb -x $(srcDirPath)/main.gdb --args $(exeFilePath)
 
 format:
 	clang-format --verbose -i $(srcDirPath)/*.c $(srcDirPath)/*.h
