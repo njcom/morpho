@@ -1,6 +1,6 @@
 # morpho
 
-Organizer for developers: project, task and site management system.
+Kubernetes cluster for PHP projects: sites, web-applications.
 
 ## Current status
 
