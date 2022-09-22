@@ -1,7 +1,6 @@
 [
     {
         "cycle": "5.0",
-        "cycleShortHand": "500",
         "support": "2005-09-05",
         "eol": "2005-09-05",
         "latest": "5.0.5",
@@ -10,7 +9,6 @@
     },
     {
         "cycle": "5.1",
-        "cycleShortHand": "501",
         "support": "2006-08-24",
         "eol": "2006-08-24",
         "latest": "5.1.6",
@@ -19,7 +17,6 @@
     },
     {
         "cycle": "5.2",
-        "cycleShortHand": "502",
         "support": "2008-11-02",
         "eol": "2011-01-06",
         "latest": "5.2.17",
@@ -28,7 +25,6 @@
     },
     {
         "cycle": "5.3",
-        "cycleShortHand": "503",
         "support": "2011-06-30",
         "eol": "2014-08-14",
         "latest": "5.3.29",
@@ -37,7 +33,6 @@
     },
     {
         "cycle": "5.4",
-        "cycleShortHand": "504",
         "support": "2014-09-14",
         "eol": "2015-09-14",
         "latest": "5.4.45",
@@ -46,7 +41,6 @@
     },
     {
         "cycle": "5.5",
-        "cycleShortHand": "505",
         "support": "2015-07-10",
         "eol": "2016-07-21",
         "latest": "5.5.38",
@@ -55,7 +49,6 @@
     },
     {
         "cycle": "5.6",
-        "cycleShortHand": "506",
         "support": "2017-01-19",
         "eol": "2018-12-31",
         "latest": "5.6.40",
@@ -64,7 +57,6 @@
     },
     {
         "cycle": "7.0",
-        "cycleShortHand": "700",
         "support": "2018-01-04",
         "eol": "2019-01-10",
         "latest": "7.0.33",
@@ -73,7 +65,6 @@
     },
     {
         "cycle": "7.1",
-        "cycleShortHand": "701",
         "support": "2018-12-01",
         "eol": "2019-12-01",
         "latest": "7.1.33",
@@ -82,7 +73,6 @@
     },
     {
         "cycle": "7.2",
-        "cycleShortHand": "702",
         "support": "2019-11-30",
         "eol": "2020-11-30",
         "latest": "7.2.34",
@@ -91,7 +81,6 @@
     },
     {
         "cycle": "7.3",
-        "cycleShortHand": "703",
         "support": "2020-12-06",
         "eol": "2021-12-06",
         "latest": "7.3.33",
@@ -100,7 +89,6 @@
     },
     {
         "cycle": "7.4",
-        "cycleShortHand": "704",
         "support": "2021-11-28",
         "eol": "2022-11-28",
         "latest": "7.4.30",
@@ -109,7 +97,6 @@
     },
     {
         "cycle": "8.0",
-        "cycleShortHand": "800",
         "support": "2022-11-26",
         "eol": "2023-11-26",
         "latest": "8.0.23",
@@ -118,7 +105,6 @@
     },
     {
         "cycle": "8.1",
-        "cycleShortHand": "801",
         "support": "2023-11-25",
         "eol": "2024-11-25",
         "latest": "8.1.10",
