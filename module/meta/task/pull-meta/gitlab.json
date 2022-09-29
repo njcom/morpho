@@ -142,5 +142,13 @@
         "latest": "15.3.3",
         "latestReleaseDate": "2022-09-01",
         "releaseDate": "2022-08-19"
+    },
+    {
+        "cycle": "15.4",
+        "support": "2022-10-22",
+        "eol": "2022-12-22",
+        "latest": "15.4.0",
+        "latestReleaseDate": "2022-09-21",
+        "releaseDate": "2022-09-21"
     }
 ]
