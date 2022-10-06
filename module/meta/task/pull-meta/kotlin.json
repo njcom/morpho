@@ -35,8 +35,9 @@
         "cycle": "1.7",
         "eol": false,
         "support": false,
-        "latest": "1.7.10",
-        "latestReleaseDate": "2022-07-04",
+        "latest": "1.7.20",
+        "link": "https://kotlinlang.org/docs/whatsnew1720.html",
+        "latestReleaseDate": "2022-09-26",
         "releaseDate": "2022-06-07"
     }
 ]
