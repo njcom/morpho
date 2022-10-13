@@ -1,28 +1,12 @@
 [
     {
-        "cycle": "9",
-        "support": "2027-05-31",
-        "eol": "2027-05-31",
-        "latest": "9",
-        "releaseDate": "2021-09-15"
-    },
-    {
-        "cycle": "stream-8",
-        "support": "2024-05-31",
-        "eol": "2024-05-31",
-        "releaseLabel": "CentOS Stream 8",
-        "latest": "8",
-        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOSStream",
-        "releaseDate": "2019-09-24"
-    },
-    {
-        "cycle": "8",
-        "releaseLabel": "CentOS Linux 8",
-        "support": "2021-12-31",
-        "eol": "2021-12-31",
-        "latest": "8 (2111)",
-        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOS8.2111",
-        "releaseDate": "2019-09-24"
+        "cycle": "6",
+        "releaseLabel": "CentOS 6",
+        "support": "2017-05-10",
+        "eol": "2020-11-30",
+        "latest": "6.10",
+        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOS6.10",
+        "releaseDate": "2011-07-10"
     },
     {
         "cycle": "7",
@@ -34,12 +18,28 @@
         "releaseDate": "2014-07-07"
     },
     {
-        "cycle": "6",
-        "releaseLabel": "CentOS 6",
-        "support": "2017-05-10",
-        "eol": "2020-11-30",
-        "latest": "6.10",
-        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOS6.10",
-        "releaseDate": "2011-07-10"
+        "cycle": "8",
+        "releaseLabel": "CentOS Linux 8",
+        "support": "2021-12-31",
+        "eol": "2021-12-31",
+        "latest": "8 (2111)",
+        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOS8.2111",
+        "releaseDate": "2019-09-24"
+    },
+    {
+        "cycle": "stream-8",
+        "support": "2024-05-31",
+        "eol": "2024-05-31",
+        "releaseLabel": "CentOS Stream 8",
+        "latest": "8",
+        "link": "https://wiki.centos.org/Manuals/ReleaseNotes/CentOSStream",
+        "releaseDate": "2019-09-24"
+    },
+    {
+        "cycle": "9",
+        "support": "2027-05-31",
+        "eol": "2027-05-31",
+        "latest": "9",
+        "releaseDate": "2021-09-15"
     }
 ]
