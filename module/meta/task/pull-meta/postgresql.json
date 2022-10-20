@@ -117,5 +117,12 @@
         "latest": "14.5",
         "latestReleaseDate": "2022-08-08",
         "releaseDate": "2021-09-27"
+    },
+    {
+        "cycle": "15",
+        "eol": "2027-11-11",
+        "latest": "15.0",
+        "latestReleaseDate": "2022-10-10",
+        "releaseDate": "2022-10-10"
     }
 ]
