@@ -68,5 +68,12 @@
         "latest": "3.10.8",
         "latestReleaseDate": "2022-10-11",
         "releaseDate": "2021-10-04"
+    },
+    {
+        "cycle": "3.11",
+        "eol": "2027-10-24",
+        "latest": "3.11.0",
+        "latestReleaseDate": "2022-10-24",
+        "releaseDate": "2022-10-24"
     }
 ]

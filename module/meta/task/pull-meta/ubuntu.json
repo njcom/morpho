@@ -71,8 +71,8 @@
     {
         "cycle": "21.10",
         "codename": "Impish Indri",
-        "support": "2022-07-31",
-        "eol": "2022-07-31",
+        "support": "2022-07-14",
+        "eol": "2022-07-14",
         "latest": "21.10",
         "link": "https://wiki.ubuntu.com/ImpishIndri/ReleaseNotes/",
         "releaseDate": "2021-10-14",
@@ -81,12 +81,22 @@
     {
         "cycle": "22.04",
         "codename": "Jammy Jellyfish",
-        "support": "2027-04-02",
+        "support": "2027-04-21",
         "eol": "2032-04-01",
         "lts": true,
         "latest": "22.04.1",
         "link": "https://wiki.ubuntu.com/JammyJellyfish/ReleaseNotes/",
         "releaseDate": "2022-04-21",
         "latestReleaseDate": "2022-08-11"
+    },
+    {
+        "cycle": "22.10",
+        "codename": "Kinetic Kudu",
+        "support": "2023-07-20",
+        "eol": "2023-07-20",
+        "latest": "22.10",
+        "link": "https://wiki.ubuntu.com/KineticKudu/ReleaseNotes/",
+        "releaseDate": "2022-10-20",
+        "latestReleaseDate": "2022-10-20"
     }
 ]
