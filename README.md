@@ -1,6 +1,6 @@
 # morpho
 
-Bare-metal Kubernetes cluster for PHP projects: sites, web-applications.
+todo
 
 ## Current status
 
