@@ -1,5 +1,3 @@
-let s:vim_dir_path=expand("<sfile>:p:h")
-
 fu! SetupPlugins()
     " netrw
     fu! OpenNetrw()
@@ -202,6 +200,10 @@ fu! SetupSearch()
     set smartcase
     set incsearch
     set hlsearch
+
+    " Show number of matches
+    set shortmess-=S
+
     " Options for `grep` which will be called with for the :grep and :lgrep
     set grepprg=grep\ -rnIiP\ --exclude-dir={.bzr,CVS,.git,.hg,.svn}
 endf
@@ -248,14 +250,14 @@ fu! SetupKeys()
     "vnoremap K :m '<-2<CR>gv=gv
 
     " Move through windows: Alt+(j|k|l|;)
-    noremap j <C-w>h
-    inoremap j <C-o><C-w>h
-    noremap k <C-w>j
-    inoremap k <C-o><C-w>j
-    noremap l <C-w>k
-    inoremap l <C-o><C-w>k
-    noremap ; <C-w>l
-    inoremap ; <C-o><C-w>l
+"    noremap j <C-w>h
+"    inoremap j <C-o><C-w>h
+"    noremap k <C-w>j
+"    inoremap k <C-o><C-w>j
+"    noremap l <C-w>k
+"    inoremap l <C-o><C-w>k
+"    noremap ; <C-w>l
+"    inoremap ; <C-o><C-w>l
 
     " To left window
     noremap <C-w>j <C-w>h
@@ -302,7 +304,7 @@ fu! SetupKeys()
     " Delete right char: Ctrl+d
     inoremap <C-d> <C-o>x
     " Delete end of word: Alt+d
-    inoremap d <C-o>dw
+    "inoremap d <C-o>dw
 
    " Left
     inoremap <C-j> <C-o>h
@@ -313,7 +315,7 @@ fu! SetupKeys()
     " Right
     inoremap <C-semicolon> <C-o>l
 
-    set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
+    "set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
 
     " Find next char for `f` or `t`: '
     noremap ' ;
@@ -322,6 +324,7 @@ fu! SetupKeys()
     if has("unix") || has("gui_gtk") || has("gui_gtk2") || has("gui_gnome")
         nnoremap <leader>c :let @+=expand("%:p")<CR>
     endif
+    nnoremap <leader>C :echo expand("%:p")<CR>
 
     " Save session: Space s s
 "    exec 'nnoremap <Leader>ss :mksession! ~/.vim/session/session.vim'
@@ -350,8 +353,8 @@ fu! SetupKeys()
     nnoremap <silent> <esc> :noh<cr><esc>
 
     " Delete previous word: C-Backspace
-    cnoremap  <C-w>
-    inoremap  <C-w>
+    "cnoremap  <C-w>
+    "inoremap  <C-w>
     " Fix Backspace for `find ... | xargs vim`
     noremap! <C-?> <C-h>
 

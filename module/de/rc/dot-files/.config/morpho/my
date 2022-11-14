@@ -1,0 +1,11 @@
+xkb_keymap {
+        xkb_keycodes  { include "evdev+aliases(qwerty)" };
+        xkb_types     { include "complete"      };
+        xkb_compat    { include "complete+ledcaps(group_lock)"  };
+        xkb_geometry  { include "pc(pc104)"     };
+        xkb_symbols "my" {
+            include "pc+us+ru:2+inet(evdev)+group(caps_toggle)+ctrl(nocaps)"
+            key <CAPS> { [ISO_First_Group, ISO_First_Group] };
+            key <RALT> { [ISO_Last_Group, ISO_Last_Group] };
+        };
+};
