@@ -3,4 +3,4 @@ setxkbmap -option
 setxkbmap
 
 # Load keys
-xkbcomp ~/.config/xkb/my "$DISPLAY"
+xkbcomp ~/.config/morpho/xkb "$DISPLAY"
