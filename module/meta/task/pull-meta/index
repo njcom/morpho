@@ -160,14 +160,16 @@ function main(): void {
         'ubuntu',
     ];
     // todo: typescript, bash, make, cmake, gcc, linq, neo4j, llvm, qemu, sqlite, wordpress, antlr
+    $targetDirPath =__DIR__;
     foreach ($techs as $key => $tech) {
-        $outFilePath = __DIR__ . '/' . $tech . '.json';
+        $outFilePath = $targetDirPath . '/' . $tech . '.json';
         if (!is_numeric($key)) {
             $tech = $key;
         }
         showLn("Pulling meta for the " . q($tech) . '...');
         sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq 'sort_by(.release) | reverse' | jq --indent 4 . > " . escapeshellarg($outFilePath));
     }
+    showLn("Saved to '$targetDirPath/'");
     // todo: typescript, bash, make, cmake
     //pullTypeScriptVers($outDirPath);
 }
