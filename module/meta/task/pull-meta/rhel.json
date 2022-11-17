@@ -38,10 +38,10 @@
         "cycle": "8",
         "support": "2024-05-31",
         "eol": "2029-05-31",
-        "latest": "8.6",
+        "latest": "8.7",
         "releaseDate": "2019-05-07",
         "lts": "2029-05-31",
-        "latestReleaseDate": "2022-05-10"
+        "latestReleaseDate": "2022-11-09"
     },
     {
         "cycle": "9",
