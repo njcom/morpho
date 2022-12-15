@@ -5,7 +5,8 @@
         "latest": "1.12.4",
         "link": "https://blog.jquery.com/2016/05/20/jquery-1-12-4-and-2-2-4-released/",
         "latestReleaseDate": "2016-05-20",
-        "releaseDate": "2006-08-31"
+        "releaseDate": "2006-08-31",
+        "lts": false
     },
     {
         "cycle": "2",
@@ -13,14 +14,16 @@
         "latest": "2.2.4",
         "link": "https://blog.jquery.com/2016/05/20/jquery-1-12-4-and-2-2-4-released/",
         "latestReleaseDate": "2016-05-20",
-        "releaseDate": "2013-04-18"
+        "releaseDate": "2013-04-18",
+        "lts": false
     },
     {
         "cycle": "3",
         "eol": false,
-        "latest": "3.6.1",
+        "latest": "3.6.2",
         "link": "https://blog.jquery.com/2022/08/26/jquery-3-6-1-maintenance-release/",
-        "latestReleaseDate": "2022-08-26",
-        "releaseDate": "2016-06-09"
+        "latestReleaseDate": "2022-12-13",
+        "releaseDate": "2016-06-09",
+        "lts": false
     }
 ]

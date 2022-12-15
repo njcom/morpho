@@ -4,21 +4,24 @@
         "eol": "2022-02-10",
         "latest": "6.8.23",
         "latestReleaseDate": "2022-01-13",
-        "releaseDate": "2017-11-14"
+        "releaseDate": "2017-11-14",
+        "lts": false
     },
     {
         "cycle": "7",
         "eol": "2023-08-01",
-        "latest": "7.17.7",
-        "latestReleaseDate": "2022-10-25",
-        "releaseDate": "2019-04-10"
+        "latest": "7.17.8",
+        "latestReleaseDate": "2022-12-08",
+        "releaseDate": "2019-04-10",
+        "lts": false
     },
     {
         "cycle": "8",
         "eol": "2023-10-26",
-        "latest": "8.5.2",
-        "latestReleaseDate": "2022-11-22",
+        "latest": "8.5.3",
+        "latestReleaseDate": "2022-12-08",
         "releaseDate": "2022-02-10",
-        "link": "https://www.elastic.co/guide/en/elasticsearch/reference/8.5/release-notes-8.5.0.html"
+        "link": "https://www.elastic.co/guide/en/elasticsearch/reference/8.5/release-notes-8.5.0.html",
+        "lts": false
     }
 ]

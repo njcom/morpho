@@ -12,42 +12,48 @@
         "eol": "2019-03-31",
         "latest": "10.0.38",
         "latestReleaseDate": "2019-01-29",
-        "releaseDate": "2014-06-12"
+        "releaseDate": "2014-06-12",
+        "lts": false
     },
     {
         "cycle": "10.1",
         "eol": "2020-10-17",
         "latest": "10.1.48",
         "latestReleaseDate": "2020-10-30",
-        "releaseDate": "2016-09-29"
+        "releaseDate": "2016-09-29",
+        "lts": false
     },
     {
         "cycle": "10.2",
         "eol": "2022-05-23",
         "latest": "10.2.44",
         "latestReleaseDate": "2022-05-20",
-        "releaseDate": "2017-05-15"
+        "releaseDate": "2017-05-15",
+        "lts": false
     },
     {
         "cycle": "10.3",
         "eol": "2023-05-25",
         "latest": "10.3.37",
         "latestReleaseDate": "2022-11-07",
-        "releaseDate": "2018-05-23"
+        "releaseDate": "2018-05-23",
+        "lts": false
     },
     {
         "cycle": "10.4",
         "eol": "2024-06-18",
         "latest": "10.4.27",
         "latestReleaseDate": "2022-11-07",
-        "releaseDate": "2019-06-17"
+        "releaseDate": "2019-06-17",
+        "lts": false
     },
     {
         "cycle": "10.5",
         "eol": "2025-06-24",
         "latest": "10.5.18",
         "latestReleaseDate": "2022-11-07",
-        "releaseDate": "2020-06-23"
+        "releaseDate": "2020-06-23",
+        "lts": false
     },
     {
         "cycle": "10.6",
@@ -62,20 +68,23 @@
         "eol": "2023-02-14",
         "latest": "10.7.7",
         "latestReleaseDate": "2022-11-07",
-        "releaseDate": "2022-02-08"
+        "releaseDate": "2022-02-08",
+        "lts": false
     },
     {
         "cycle": "10.8",
         "eol": "2023-05-20",
         "latest": "10.8.6",
         "releaseDate": "2022-05-20",
-        "latestReleaseDate": "2022-11-07"
+        "latestReleaseDate": "2022-11-07",
+        "lts": false
     },
     {
         "cycle": "10.9",
         "eol": "2023-08-22",
         "latest": "10.9.4",
         "releaseDate": "2022-08-15",
-        "latestReleaseDate": "2022-11-07"
+        "latestReleaseDate": "2022-11-07",
+        "lts": false
     }
 ]

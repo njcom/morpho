@@ -4,27 +4,31 @@
         "support": "2013-07-31",
         "eol": "2016-07-31",
         "latest": "SLES 10 SP4",
-        "releaseDate": "2006-07-17"
+        "releaseDate": "2006-07-17",
+        "lts": false
     },
     {
         "cycle": "11",
         "support": "2019-03-31",
         "eol": "2022-03-31",
         "latest": "SLES 11 SP4",
-        "releaseDate": "2009-03-23"
+        "releaseDate": "2009-03-23",
+        "lts": false
     },
     {
         "cycle": "12",
         "support": "2024-10-31",
         "eol": "2027-10-31",
         "latest": "SLES 12 SP5",
-        "releaseDate": "2014-10-27"
+        "releaseDate": "2014-10-27",
+        "lts": false
     },
     {
         "cycle": "15",
         "support": "2028-07-31",
         "eol": "2031-07-31",
         "latest": "SLES 15 SP4",
-        "releaseDate": "2018-07-15"
+        "releaseDate": "2018-07-15",
+        "lts": false
     }
 ]
