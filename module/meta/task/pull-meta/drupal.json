@@ -14,7 +14,8 @@
         "eol": "2020-12-01",
         "latest": "8.8.12",
         "latestReleaseDate": "2020-11-25",
-        "releaseDate": "2019-12-04"
+        "releaseDate": "2019-12-04",
+        "lts": false
     },
     {
         "cycle": "8.9",
@@ -22,7 +23,8 @@
         "eol": "2021-11-02",
         "latest": "8.9.20",
         "latestReleaseDate": "2021-11-17",
-        "releaseDate": "2020-06-03"
+        "releaseDate": "2020-06-03",
+        "lts": false
     },
     {
         "cycle": "9.0",
@@ -30,7 +32,8 @@
         "eol": "2021-06-16",
         "latest": "9.0.14",
         "latestReleaseDate": "2021-05-25",
-        "releaseDate": "2020-06-03"
+        "releaseDate": "2020-06-03",
+        "lts": false
     },
     {
         "cycle": "9.1",
@@ -38,7 +41,8 @@
         "eol": "2021-12-08",
         "latest": "9.1.15",
         "latestReleaseDate": "2021-11-24",
-        "releaseDate": "2020-12-02"
+        "releaseDate": "2020-12-02",
+        "lts": false
     },
     {
         "cycle": "9.2",
@@ -46,7 +50,8 @@
         "eol": "2022-06-15",
         "latest": "9.2.21",
         "latestReleaseDate": "2022-06-10",
-        "releaseDate": "2021-06-16"
+        "releaseDate": "2021-06-16",
+        "lts": false
     },
     {
         "cycle": "9.3",
@@ -54,14 +59,16 @@
         "eol": "2022-12-14",
         "latest": "9.3.22",
         "latestReleaseDate": "2022-09-28",
-        "releaseDate": "2021-12-08"
+        "releaseDate": "2021-12-08",
+        "lts": false
     },
     {
         "cycle": "9.4",
         "support": "2022-12-14",
         "eol": "2023-06-21",
-        "latest": "9.4.8",
-        "latestReleaseDate": "2022-10-06",
-        "releaseDate": "2022-06-15"
+        "latest": "9.4.9",
+        "latestReleaseDate": "2022-12-07",
+        "releaseDate": "2022-06-15",
+        "lts": false
     }
 ]

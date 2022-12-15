@@ -37,7 +37,8 @@
         "eol": "2020-07-06",
         "latest": "19.10",
         "releaseDate": "2019-10-17",
-        "latestReleaseDate": "2019-10-17"
+        "latestReleaseDate": "2019-10-17",
+        "lts": false
     },
     {
         "cycle": "20.04",
@@ -56,7 +57,8 @@
         "eol": "2021-07-22",
         "latest": "20.10",
         "releaseDate": "2020-10-22",
-        "latestReleaseDate": "2020-10-22"
+        "latestReleaseDate": "2020-10-22",
+        "lts": false
     },
     {
         "cycle": "21.04",
@@ -66,7 +68,8 @@
         "latest": "21.04",
         "link": "https://wiki.ubuntu.com/HirsuteHippo/ReleaseNotes/",
         "releaseDate": "2021-04-22",
-        "latestReleaseDate": "2021-04-22"
+        "latestReleaseDate": "2021-04-22",
+        "lts": false
     },
     {
         "cycle": "21.10",
@@ -76,7 +79,8 @@
         "latest": "21.10",
         "link": "https://wiki.ubuntu.com/ImpishIndri/ReleaseNotes/",
         "releaseDate": "2021-10-14",
-        "latestReleaseDate": "2021-10-14"
+        "latestReleaseDate": "2021-10-14",
+        "lts": false
     },
     {
         "cycle": "22.04",
@@ -97,6 +101,7 @@
         "latest": "22.10",
         "link": "https://wiki.ubuntu.com/KineticKudu/ReleaseNotes/",
         "releaseDate": "2022-10-20",
-        "latestReleaseDate": "2022-10-20"
+        "latestReleaseDate": "2022-10-20",
+        "lts": false
     }
 ]
