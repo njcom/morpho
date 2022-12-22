@@ -21,7 +21,6 @@
         "latest": "8.5.3",
         "latestReleaseDate": "2022-12-08",
         "releaseDate": "2022-02-10",
-        "link": "https://www.elastic.co/guide/en/elasticsearch/reference/8.5/release-notes-8.5.0.html",
         "lts": false
     }
 ]

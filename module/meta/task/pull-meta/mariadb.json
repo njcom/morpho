@@ -86,5 +86,13 @@
         "releaseDate": "2022-08-15",
         "latestReleaseDate": "2022-11-07",
         "lts": false
+    },
+    {
+        "cycle": "10.10",
+        "eol": "2023-11-17",
+        "latest": "10.10.2",
+        "releaseDate": "2022-11-07",
+        "latestReleaseDate": "2022-11-07",
+        "lts": false
     }
 ]
