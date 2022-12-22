@@ -3,48 +3,48 @@
         "cycle": "4.9",
         "eol": "2023-01-01",
         "lts": true,
-        "latest": "4.9.335",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "4.9.336",
+        "latestReleaseDate": "2022-12-14",
         "releaseDate": "2016-12-11"
     },
     {
         "cycle": "4.14",
         "eol": "2024-01-01",
         "lts": true,
-        "latest": "4.14.301",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "4.14.302",
+        "latestReleaseDate": "2022-12-14",
         "releaseDate": "2017-11-12"
     },
     {
         "cycle": "4.19",
         "eol": "2024-12-01",
         "lts": true,
-        "latest": "4.19.268",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "4.19.269",
+        "latestReleaseDate": "2022-12-14",
         "releaseDate": "2018-10-22"
     },
     {
         "cycle": "5.4",
         "eol": "2025-12-01",
         "lts": true,
-        "latest": "5.4.226",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "5.4.228",
+        "latestReleaseDate": "2022-12-19",
         "releaseDate": "2019-11-24"
     },
     {
         "cycle": "5.10",
         "eol": "2026-12-01",
         "lts": true,
-        "latest": "5.10.158",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "5.10.160",
+        "latestReleaseDate": "2022-12-19",
         "releaseDate": "2020-12-13"
     },
     {
         "cycle": "5.15",
         "eol": "2023-10-31",
         "lts": true,
-        "latest": "5.15.82",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "5.15.84",
+        "latestReleaseDate": "2022-12-19",
         "releaseDate": "2021-10-31"
     },
     {
@@ -82,9 +82,17 @@
     {
         "cycle": "6.0",
         "eol": false,
-        "latest": "6.0.12",
-        "latestReleaseDate": "2022-12-08",
+        "latest": "6.0.14",
+        "latestReleaseDate": "2022-12-19",
         "releaseDate": "2022-10-02",
+        "lts": false
+    },
+    {
+        "cycle": "6.1",
+        "eol": false,
+        "latest": "6.1",
+        "latestReleaseDate": "2022-12-11",
+        "releaseDate": "2022-12-11",
         "lts": false
     }
 ]

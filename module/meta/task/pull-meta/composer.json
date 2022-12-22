@@ -25,10 +25,18 @@
     },
     {
         "cycle": "2.4",
-        "eol": false,
+        "eol": "2022-12-20",
         "latest": "2.4.4",
         "latestReleaseDate": "2022-10-27",
         "releaseDate": "2022-08-16",
+        "lts": false
+    },
+    {
+        "cycle": "2.5",
+        "eol": false,
+        "latest": "2.5.0",
+        "latestReleaseDate": "2022-12-20",
+        "releaseDate": "2022-12-20",
         "lts": false
     }
 ]
