@@ -77,10 +77,11 @@
     {
         "cycle": "6.2",
         "eol": "2024-09-30",
-        "latest": "6.2.4",
+        "latest": "6.2.7",
         "lts": true,
-        "latestReleaseDate": "2022-03-16",
-        "releaseDate": "2021-09-30"
+        "latestReleaseDate": "2023-01-02",
+        "releaseDate": "2021-09-30",
+        "link": "https://www.qt.io/blog/commercial-lts-qt-6.2.7-released"
     },
     {
         "cycle": "6.3",
@@ -93,9 +94,9 @@
     {
         "cycle": "6.4",
         "eol": "2023-03-30",
-        "latest": "6.4.1",
+        "latest": "6.4.2",
         "lts": false,
-        "latestReleaseDate": "2022-11-14",
+        "latestReleaseDate": "2023-01-03",
         "releaseDate": "2022-09-28"
     }
 ]
