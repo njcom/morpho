@@ -196,5 +196,14 @@
         "latestReleaseDate": "2023-01-12",
         "releaseDate": "2022-12-21",
         "lts": false
+    },
+    {
+        "cycle": "15.8",
+        "support": "2023-02-22",
+        "eol": "2023-04-22",
+        "latest": "15.8.0",
+        "latestReleaseDate": "2023-01-20",
+        "releaseDate": "2023-01-20",
+        "lts": false
     }
 ]
