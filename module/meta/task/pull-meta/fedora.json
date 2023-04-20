@@ -66,7 +66,7 @@
     {
         "cycle": "36",
         "latest": "36",
-        "eol": "2023-05-16",
+        "eol": "2023-05-18",
         "latestReleaseDate": "2022-05-10",
         "releaseDate": "2022-05-10",
         "lts": false
@@ -77,6 +77,14 @@
         "eol": "2023-12-15",
         "latestReleaseDate": "2022-11-15",
         "releaseDate": "2022-11-15",
+        "lts": false
+    },
+    {
+        "cycle": "38",
+        "latest": "38",
+        "eol": "2025-05-18",
+        "latestReleaseDate": "2023-04-18",
+        "releaseDate": "2023-04-18",
         "lts": false
     }
 ]
