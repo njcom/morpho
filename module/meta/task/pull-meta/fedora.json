@@ -1,90 +1,90 @@
 [
     {
         "cycle": "28",
-        "latest": "28",
-        "eol": "2019-05-28",
-        "latestReleaseDate": "2018-05-01",
         "releaseDate": "2018-05-01",
+        "eol": "2019-05-28",
+        "latest": "28",
+        "latestReleaseDate": "2018-05-01",
         "lts": false
     },
     {
         "cycle": "29",
-        "latest": "29",
-        "eol": "2019-11-26",
-        "latestReleaseDate": "2018-10-30",
         "releaseDate": "2018-10-30",
+        "eol": "2019-11-26",
+        "latest": "29",
+        "latestReleaseDate": "2018-10-30",
         "lts": false
     },
     {
         "cycle": "30",
-        "latest": "30",
-        "eol": "2020-05-26",
-        "latestReleaseDate": "2019-04-30",
         "releaseDate": "2019-04-30",
+        "eol": "2020-05-26",
+        "latest": "30",
+        "latestReleaseDate": "2019-04-30",
         "lts": false
     },
     {
         "cycle": "31",
-        "latest": "31",
-        "eol": "2020-11-30",
-        "latestReleaseDate": "2019-10-29",
         "releaseDate": "2019-10-29",
+        "eol": "2020-11-30",
+        "latest": "31",
+        "latestReleaseDate": "2019-10-29",
         "lts": false
     },
     {
         "cycle": "32",
-        "latest": "32",
-        "eol": "2021-05-25",
-        "latestReleaseDate": "2020-04-28",
         "releaseDate": "2020-04-28",
+        "eol": "2021-05-25",
+        "latest": "32",
+        "latestReleaseDate": "2020-04-28",
         "lts": false
     },
     {
         "cycle": "33",
-        "latest": "33",
-        "eol": "2021-11-30",
-        "latestReleaseDate": "2020-10-27",
         "releaseDate": "2020-10-27",
+        "eol": "2021-11-30",
+        "latest": "33",
+        "latestReleaseDate": "2020-10-27",
         "lts": false
     },
     {
         "cycle": "34",
-        "latest": "34",
-        "eol": "2022-06-07",
-        "latestReleaseDate": "2021-04-27",
         "releaseDate": "2021-04-27",
+        "eol": "2022-06-07",
+        "latest": "34",
+        "latestReleaseDate": "2021-04-27",
         "lts": false
     },
     {
         "cycle": "35",
-        "latest": "35",
-        "eol": "2022-12-13",
-        "latestReleaseDate": "2021-11-02",
         "releaseDate": "2021-11-02",
+        "eol": "2022-12-13",
+        "latest": "35",
+        "latestReleaseDate": "2021-11-02",
         "lts": false
     },
     {
         "cycle": "36",
-        "latest": "36",
-        "eol": "2023-05-18",
-        "latestReleaseDate": "2022-05-10",
         "releaseDate": "2022-05-10",
+        "eol": "2023-05-18",
+        "latest": "36",
+        "latestReleaseDate": "2022-05-10",
         "lts": false
     },
     {
         "cycle": "37",
-        "latest": "37",
-        "eol": "2023-12-15",
-        "latestReleaseDate": "2022-11-15",
         "releaseDate": "2022-11-15",
+        "eol": "2023-12-15",
+        "latest": "37",
+        "latestReleaseDate": "2022-11-15",
         "lts": false
     },
     {
         "cycle": "38",
-        "latest": "38",
-        "eol": "2025-05-18",
-        "latestReleaseDate": "2023-04-18",
         "releaseDate": "2023-04-18",
+        "eol": "2024-05-18",
+        "latest": "38",
+        "latestReleaseDate": "2023-04-18",
         "lts": false
     }
 ]
