@@ -103,8 +103,8 @@
         "releaseDate": "2023-04-11",
         "support": "2024-04-28",
         "eol": "2024-06-28",
-        "latest": "1.27.2",
-        "latestReleaseDate": "2023-05-17",
+        "latest": "1.27.3",
+        "latestReleaseDate": "2023-06-14",
         "lts": false
     }
 ]
