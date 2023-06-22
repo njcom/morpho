@@ -30,9 +30,9 @@
         "cycle": "15",
         "support": "2028-07-31",
         "eol": "2031-07-31",
-        "latest": "15.4",
+        "latest": "15.5",
         "releaseDate": "2018-07-16",
-        "latestReleaseDate": "2022-06-21",
+        "latestReleaseDate": "2023-06-20",
         "lts": false
     }
 ]

@@ -46,11 +46,11 @@
     },
     {
         "cycle": "5.27",
-        "latest": "5.27.5",
+        "latest": "5.27.6",
         "support": true,
         "eol": false,
         "lts": true,
         "releaseDate": "2023-02-14",
-        "latestReleaseDate": "2023-05-09"
+        "latestReleaseDate": "2023-06-20"
     }
 ]
