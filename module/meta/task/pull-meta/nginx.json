@@ -80,6 +80,14 @@
         "lts": false
     },
     {
+        "cycle": "1.19",
+        "releaseDate": "2020-05-26",
+        "eol": "2021-05-25",
+        "latest": "1.19.10",
+        "latestReleaseDate": "2021-04-13",
+        "lts": false
+    },
+    {
         "cycle": "1.20",
         "releaseDate": "2021-04-20",
         "eol": "2022-05-24",
