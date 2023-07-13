@@ -41,10 +41,18 @@
     },
     {
         "cycle": "1.8",
-        "eol": false,
+        "eol": "2023-07-06",
         "latest": "1.8.22",
         "latestReleaseDate": "2023-06-07",
         "releaseDate": "2022-12-28",
+        "lts": false
+    },
+    {
+        "cycle": "1.9",
+        "releaseDate": "2023-07-06",
+        "eol": false,
+        "latest": "1.9.0",
+        "latestReleaseDate": "2023-07-06",
         "lts": false
     }
 ]
