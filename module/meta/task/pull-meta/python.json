@@ -66,8 +66,8 @@
         "cycle": "3.8",
         "support": "2021-05-03",
         "eol": "2024-10-14",
-        "latest": "3.8.17",
-        "latestReleaseDate": "2023-06-06",
+        "latest": "3.8.18",
+        "latestReleaseDate": "2023-08-24",
         "releaseDate": "2019-10-14",
         "lts": false
     },
@@ -75,8 +75,8 @@
         "cycle": "3.9",
         "support": "2022-05-17",
         "eol": "2025-10-05",
-        "latest": "3.9.17",
-        "latestReleaseDate": "2023-06-06",
+        "latest": "3.9.18",
+        "latestReleaseDate": "2023-08-24",
         "releaseDate": "2020-10-05",
         "lts": false
     },
@@ -84,8 +84,8 @@
         "cycle": "3.10",
         "support": "2023-04-05",
         "eol": "2026-10-04",
-        "latest": "3.10.12",
-        "latestReleaseDate": "2023-06-06",
+        "latest": "3.10.13",
+        "latestReleaseDate": "2023-08-24",
         "releaseDate": "2021-10-04",
         "lts": false
     },
@@ -93,8 +93,8 @@
         "cycle": "3.11",
         "support": "2024-04-01",
         "eol": "2027-10-24",
-        "latest": "3.11.4",
-        "latestReleaseDate": "2023-06-06",
+        "latest": "3.11.5",
+        "latestReleaseDate": "2023-08-24",
         "releaseDate": "2022-10-24",
         "lts": false
     }
