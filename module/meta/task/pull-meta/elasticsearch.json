@@ -18,8 +18,8 @@
     {
         "cycle": "8",
         "eol": "2024-08-10",
-        "latest": "8.10.1",
-        "latestReleaseDate": "2023-09-18",
+        "latest": "8.10.2",
+        "latestReleaseDate": "2023-09-21",
         "releaseDate": "2022-02-10",
         "lts": false
     }
