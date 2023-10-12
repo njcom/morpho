@@ -1,26 +1,26 @@
 [
     {
         "cycle": "6",
+        "releaseDate": "2017-11-14",
         "eol": "2022-02-10",
         "latest": "6.8.23",
         "latestReleaseDate": "2022-01-13",
-        "releaseDate": "2017-11-14",
         "lts": false
     },
     {
         "cycle": "7",
-        "eol": false,
-        "latest": "7.17.13",
-        "latestReleaseDate": "2023-09-06",
         "releaseDate": "2019-04-10",
+        "eol": false,
+        "latest": "7.17.14",
+        "latestReleaseDate": "2023-10-10",
         "lts": false
     },
     {
         "cycle": "8",
-        "eol": "2024-08-10",
-        "latest": "8.10.2",
-        "latestReleaseDate": "2023-09-21",
         "releaseDate": "2022-02-10",
+        "eol": "2024-08-10",
+        "latest": "8.10.3",
+        "latestReleaseDate": "2023-10-10",
         "lts": false
     }
 ]
