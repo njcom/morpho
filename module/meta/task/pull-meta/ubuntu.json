@@ -207,5 +207,16 @@
         "latest": "23.04",
         "latestReleaseDate": "2023-04-20",
         "lts": false
+    },
+    {
+        "cycle": "23.10",
+        "codename": "Mantic Minotaur",
+        "releaseDate": "2023-10-12",
+        "support": "2024-07-01",
+        "eol": "2024-07-01",
+        "extendedSupport": false,
+        "latest": "23.10",
+        "latestReleaseDate": "2023-10-12",
+        "lts": false
     }
 ]
