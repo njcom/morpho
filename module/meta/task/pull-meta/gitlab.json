@@ -295,5 +295,14 @@
         "latest": "16.6.2",
         "latestReleaseDate": "2023-12-13",
         "lts": false
+    },
+    {
+        "cycle": "16.7",
+        "releaseDate": "2023-12-20",
+        "support": "2024-01-18",
+        "eol": "2024-03-21",
+        "latest": "16.7.0",
+        "latestReleaseDate": "2023-12-20",
+        "lts": false
     }
 ]
