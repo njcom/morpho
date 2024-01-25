@@ -52,5 +52,14 @@
         "latest": "8.2.0",
         "latestReleaseDate": "2023-10-12",
         "lts": false
+    },
+    {
+        "cycle": "8.3",
+        "releaseDate": "2023-12-14",
+        "support": true,
+        "eol": false,
+        "latest": "8.3.0",
+        "latestReleaseDate": "2023-12-14",
+        "lts": false
     }
 ]
