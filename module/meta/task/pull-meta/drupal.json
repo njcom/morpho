@@ -5,6 +5,7 @@
         "releaseDate": "2011-01-05",
         "support": "2015-11-19",
         "eol": "2025-01-05",
+        "extendedSupport": true,
         "latest": "7.99",
         "latestReleaseDate": "2023-12-06"
     },
@@ -13,6 +14,7 @@
         "releaseDate": "2019-12-04",
         "support": "2020-06-03",
         "eol": "2020-12-01",
+        "extendedSupport": false,
         "latest": "8.8.12",
         "latestReleaseDate": "2020-11-25",
         "lts": false
@@ -22,6 +24,7 @@
         "releaseDate": "2020-06-03",
         "support": "2020-12-01",
         "eol": "2021-11-02",
+        "extendedSupport": false,
         "latest": "8.9.20",
         "latestReleaseDate": "2021-11-17",
         "lts": false
@@ -31,6 +34,7 @@
         "releaseDate": "2020-06-03",
         "support": "2020-12-02",
         "eol": "2021-06-16",
+        "extendedSupport": false,
         "latest": "9.0.14",
         "latestReleaseDate": "2021-05-25",
         "lts": false
@@ -40,6 +44,7 @@
         "releaseDate": "2020-12-02",
         "support": "2021-06-16",
         "eol": "2021-12-08",
+        "extendedSupport": false,
         "latest": "9.1.15",
         "latestReleaseDate": "2021-11-24",
         "lts": false
@@ -49,6 +54,7 @@
         "releaseDate": "2021-06-16",
         "support": "2021-12-08",
         "eol": "2022-06-15",
+        "extendedSupport": false,
         "latest": "9.2.21",
         "latestReleaseDate": "2022-06-10",
         "lts": false
@@ -58,6 +64,7 @@
         "releaseDate": "2021-12-08",
         "support": "2022-06-15",
         "eol": "2022-12-14",
+        "extendedSupport": false,
         "latest": "9.3.22",
         "latestReleaseDate": "2022-09-28",
         "lts": false
@@ -67,6 +74,7 @@
         "releaseDate": "2022-06-15",
         "support": "2022-12-14",
         "eol": "2023-06-21",
+        "extendedSupport": false,
         "latest": "9.4.15",
         "latestReleaseDate": "2023-05-03",
         "lts": false
@@ -76,6 +84,7 @@
         "releaseDate": "2022-12-15",
         "support": "2023-06-21",
         "eol": "2023-11-01",
+        "extendedSupport": false,
         "latest": "9.5.11",
         "latestReleaseDate": "2023-09-19",
         "lts": false
@@ -85,6 +94,7 @@
         "releaseDate": "2022-12-15",
         "support": "2023-06-21",
         "eol": "2023-12-15",
+        "extendedSupport": false,
         "latest": "10.0.11",
         "latestReleaseDate": "2023-09-19",
         "lts": false
@@ -94,6 +104,7 @@
         "releaseDate": "2023-06-22",
         "support": "2023-12-15",
         "eol": "2024-06-19",
+        "extendedSupport": false,
         "latest": "10.1.8",
         "latestReleaseDate": "2024-01-16",
         "lts": false
@@ -103,6 +114,7 @@
         "releaseDate": "2023-12-15",
         "support": "2024-06-19",
         "eol": "2024-12-18",
+        "extendedSupport": false,
         "latest": "10.2.2",
         "latestReleaseDate": "2024-01-16",
         "lts": false
