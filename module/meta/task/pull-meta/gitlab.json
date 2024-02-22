@@ -313,5 +313,14 @@
         "latest": "16.8.2",
         "latestReleaseDate": "2024-02-07",
         "lts": false
+    },
+    {
+        "cycle": "16.9",
+        "releaseDate": "2024-02-14",
+        "support": "2024-03-21",
+        "eol": "2024-05-16",
+        "latest": "16.9.0",
+        "latestReleaseDate": "2024-02-14",
+        "lts": false
     }
 ]
