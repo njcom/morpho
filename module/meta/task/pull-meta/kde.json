@@ -6,7 +6,8 @@
         "support": "2020-06-04",
         "eol": "2022-02-11",
         "latest": "5.18.8",
-        "latestReleaseDate": "2021-10-19"
+        "latestReleaseDate": "2021-10-19",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/"
     },
     {
         "cycle": "5.23",
@@ -15,6 +16,7 @@
         "eol": "2022-02-03",
         "latest": "5.23.5",
         "latestReleaseDate": "2022-01-04",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/",
         "lts": false
     },
     {
@@ -22,9 +24,10 @@
         "lts": true,
         "releaseDate": "2022-02-08",
         "support": "2022-06-14",
-        "eol": false,
+        "eol": "2022-10-14",
         "latest": "5.24.7",
-        "latestReleaseDate": "2022-10-14"
+        "latestReleaseDate": "2022-10-14",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/"
     },
     {
         "cycle": "5.25",
@@ -33,6 +36,7 @@
         "eol": "2022-10-11",
         "latest": "5.25.5",
         "latestReleaseDate": "2022-09-06",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/",
         "lts": false
     },
     {
@@ -42,6 +46,7 @@
         "eol": "2023-02-14",
         "latest": "5.26.5",
         "latestReleaseDate": "2023-01-03",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/",
         "lts": false
     },
     {
@@ -51,6 +56,16 @@
         "support": true,
         "eol": false,
         "latest": "5.27.10",
-        "latestReleaseDate": "2023-12-05"
+        "latestReleaseDate": "2023-12-05",
+        "link": "https://kde.org/announcements/plasma/5/__LATEST__/"
+    },
+    {
+        "cycle": "6.0",
+        "releaseDate": "2024-02-28",
+        "support": true,
+        "eol": false,
+        "latest": "6.0.0",
+        "latestReleaseDate": "2023-12-05",
+        "lts": false
     }
 ]
