@@ -18,7 +18,7 @@
     {
         "cycle": "8",
         "releaseDate": "2022-02-10",
-        "eol": "2024-08-10",
+        "eol": false,
         "latest": "8.12.2",
         "latestReleaseDate": "2024-02-22",
         "lts": false
