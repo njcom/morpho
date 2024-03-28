@@ -64,8 +64,8 @@
         "releaseDate": "2024-02-28",
         "support": true,
         "eol": false,
-        "latest": "6.0.2",
-        "latestReleaseDate": "2024-03-12",
+        "latest": "6.0.3",
+        "latestReleaseDate": "2024-03-26",
         "lts": false
     }
 ]
