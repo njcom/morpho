@@ -20,32 +20,32 @@
         "lts": true,
         "releaseDate": "2018-10-22",
         "eol": "2024-12-31",
-        "latest": "4.19.311",
-        "latestReleaseDate": "2024-03-26"
+        "latest": "4.19.312",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "5.4",
         "lts": true,
         "releaseDate": "2019-11-25",
         "eol": "2025-12-31",
-        "latest": "5.4.273",
-        "latestReleaseDate": "2024-03-26"
+        "latest": "5.4.274",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "5.10",
         "lts": true,
         "releaseDate": "2020-12-13",
         "eol": "2026-12-31",
-        "latest": "5.10.214",
-        "latestReleaseDate": "2024-03-26"
+        "latest": "5.10.215",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "5.15",
         "lts": true,
         "releaseDate": "2021-10-31",
         "eol": "2026-10-31",
-        "latest": "5.15.153",
-        "latestReleaseDate": "2024-03-26"
+        "latest": "5.15.155",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "5.16",
@@ -92,8 +92,8 @@
         "lts": true,
         "releaseDate": "2022-12-11",
         "eol": "2026-12-31",
-        "latest": "6.1.84",
-        "latestReleaseDate": "2024-04-03"
+        "latest": "6.1.86",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "6.2",
@@ -132,13 +132,13 @@
         "lts": true,
         "releaseDate": "2023-10-30",
         "eol": "2026-12-31",
-        "latest": "6.6.25",
-        "latestReleaseDate": "2024-04-04"
+        "latest": "6.6.27",
+        "latestReleaseDate": "2024-04-13"
     },
     {
         "cycle": "6.7",
         "releaseDate": "2024-01-07",
-        "eol": "2024-05-07",
+        "eol": "2024-04-03",
         "latest": "6.7.12",
         "latestReleaseDate": "2024-04-03",
         "lts": false
@@ -147,8 +147,8 @@
         "cycle": "6.8",
         "releaseDate": "2024-03-10",
         "eol": "2024-07-10",
-        "latest": "6.8.4",
-        "latestReleaseDate": "2024-04-04",
+        "latest": "6.8.6",
+        "latestReleaseDate": "2024-04-13",
         "lts": false
     }
 ]
