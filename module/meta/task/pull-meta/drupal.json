@@ -113,8 +113,8 @@
         "cycle": "10.2",
         "releaseDate": "2023-12-15",
         "eol": "2024-12-18",
-        "latest": "10.2.5",
-        "latestReleaseDate": "2024-04-03",
+        "latest": "10.2.6",
+        "latestReleaseDate": "2024-05-01",
         "lts": false,
         "support": "2024-06-19",
         "extendedSupport": false
