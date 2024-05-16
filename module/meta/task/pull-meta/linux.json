@@ -150,5 +150,13 @@
         "latest": "6.8.9",
         "latestReleaseDate": "2024-05-02",
         "lts": false
+    },
+    {
+        "cycle": "6.9",
+        "releaseDate": "2024-05-12",
+        "eol": "2024-09-12",
+        "latest": "6.9",
+        "latestReleaseDate": "2024-05-12",
+        "lts": false
     }
 ]
