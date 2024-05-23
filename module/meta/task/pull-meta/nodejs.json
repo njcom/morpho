@@ -160,8 +160,8 @@
         "releaseDate": "2022-04-19",
         "lts": "2022-10-25",
         "eol": "2025-04-30",
-        "latest": "18.20.2",
-        "latestReleaseDate": "2024-04-10",
+        "latest": "18.20.3",
+        "latestReleaseDate": "2024-05-21",
         "support": "2023-10-18"
     },
     {
@@ -196,8 +196,8 @@
         "releaseDate": "2024-04-24",
         "lts": "2024-10-29",
         "eol": "2027-04-30",
-        "latest": "22.1.0",
-        "latestReleaseDate": "2024-05-02",
+        "latest": "22.2.0",
+        "latestReleaseDate": "2024-05-15",
         "support": "2025-10-21"
     }
 ]
