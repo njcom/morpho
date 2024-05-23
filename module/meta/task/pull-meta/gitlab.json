@@ -340,5 +340,14 @@
         "latestReleaseDate": "2024-05-07",
         "lts": false,
         "support": "2024-05-16"
+    },
+    {
+        "cycle": "17.0",
+        "releaseDate": "2024-05-15",
+        "eol": "2024-08-15",
+        "latest": "17.0.0",
+        "latestReleaseDate": "2024-05-15",
+        "lts": false,
+        "support": "2024-06-20"
     }
 ]
