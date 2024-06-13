@@ -12,8 +12,8 @@
         "releaseDate": "2021-12-22",
         "lts": true,
         "eol": false,
-        "latest": "2.2.23",
-        "latestReleaseDate": "2024-02-08"
+        "latest": "2.2.24",
+        "latestReleaseDate": "2024-06-10"
     },
     {
         "cycle": "2.3",
@@ -51,8 +51,8 @@
         "cycle": "2.7",
         "releaseDate": "2024-02-08",
         "eol": false,
-        "latest": "2.7.6",
-        "latestReleaseDate": "2024-05-04",
+        "latest": "2.7.7",
+        "latestReleaseDate": "2024-06-10",
         "lts": false
     }
 ]
