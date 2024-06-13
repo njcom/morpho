@@ -129,8 +129,8 @@
         "cycle": "3.12",
         "releaseDate": "2023-10-02",
         "eol": "2028-10-31",
-        "latest": "3.12.3",
-        "latestReleaseDate": "2024-04-09",
+        "latest": "3.12.4",
+        "latestReleaseDate": "2024-06-06",
         "lts": false,
         "support": "2025-04-02"
     }

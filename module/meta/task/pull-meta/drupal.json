@@ -4,8 +4,8 @@
         "lts": true,
         "releaseDate": "2011-01-05",
         "eol": "2025-01-05",
-        "latest": "7.100",
-        "latestReleaseDate": "2024-03-06",
+        "latest": "7.101",
+        "latestReleaseDate": "2024-06-05",
         "support": "2015-11-19",
         "extendedSupport": true
     },
@@ -113,8 +113,8 @@
         "cycle": "10.2",
         "releaseDate": "2023-12-15",
         "eol": "2024-12-18",
-        "latest": "10.2.6",
-        "latestReleaseDate": "2024-05-01",
+        "latest": "10.2.7",
+        "latestReleaseDate": "2024-06-06",
         "lts": false,
         "support": "2024-06-19",
         "extendedSupport": false
