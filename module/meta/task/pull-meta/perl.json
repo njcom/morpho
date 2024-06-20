@@ -42,7 +42,7 @@
         "latest": "5.34.3",
         "latestReleaseDate": "2023-11-29",
         "lts": false,
-        "support": "2022-05-27"
+        "support": "2023-07-02"
     },
     {
         "cycle": "5.36",
@@ -51,7 +51,7 @@
         "latest": "5.36.3",
         "latestReleaseDate": "2023-11-29",
         "lts": false,
-        "support": true
+        "support": "2024-06-09"
     },
     {
         "cycle": "5.38",
@@ -59,6 +59,15 @@
         "eol": "2026-07-02",
         "latest": "5.38.2",
         "latestReleaseDate": "2023-11-29",
+        "lts": false,
+        "support": true
+    },
+    {
+        "cycle": "5.40",
+        "releaseDate": "2024-06-09",
+        "eol": "2027-06-09",
+        "latest": "5.40.0",
+        "latestReleaseDate": "2024-06-09",
         "lts": false,
         "support": true
     }
