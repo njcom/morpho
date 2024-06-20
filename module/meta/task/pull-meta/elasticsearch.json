@@ -11,16 +11,16 @@
         "cycle": "7",
         "releaseDate": "2019-04-10",
         "eol": false,
-        "latest": "7.17.21",
-        "latestReleaseDate": "2024-05-03",
+        "latest": "7.17.22",
+        "latestReleaseDate": "2024-06-13",
         "lts": false
     },
     {
         "cycle": "8",
         "releaseDate": "2022-02-10",
         "eol": false,
-        "latest": "8.14.0",
-        "latestReleaseDate": "2024-06-05",
+        "latest": "8.14.1",
+        "latestReleaseDate": "2024-06-12",
         "lts": false
     }
 ]
