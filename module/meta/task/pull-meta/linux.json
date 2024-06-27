@@ -36,8 +36,8 @@
         "lts": true,
         "releaseDate": "2020-12-13",
         "eol": "2026-12-31",
-        "latest": "5.10.219",
-        "latestReleaseDate": "2024-06-16"
+        "latest": "5.10.220",
+        "latestReleaseDate": "2024-06-21"
     },
     {
         "cycle": "5.15",
@@ -92,8 +92,8 @@
         "lts": true,
         "releaseDate": "2022-12-11",
         "eol": "2026-12-31",
-        "latest": "6.1.94",
-        "latestReleaseDate": "2024-06-16"
+        "latest": "6.1.95",
+        "latestReleaseDate": "2024-06-21"
     },
     {
         "cycle": "6.2",
@@ -132,8 +132,8 @@
         "lts": true,
         "releaseDate": "2023-10-30",
         "eol": "2026-12-31",
-        "latest": "6.6.34",
-        "latestReleaseDate": "2024-06-16"
+        "latest": "6.6.35",
+        "latestReleaseDate": "2024-06-21"
     },
     {
         "cycle": "6.7",
@@ -155,8 +155,8 @@
         "cycle": "6.9",
         "releaseDate": "2024-05-12",
         "eol": "2024-09-12",
-        "latest": "6.9.5",
-        "latestReleaseDate": "2024-06-16",
+        "latest": "6.9.6",
+        "latestReleaseDate": "2024-06-21",
         "lts": false
     }
 ]
