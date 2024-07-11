@@ -129,8 +129,8 @@
         "cycle": "8.2",
         "releaseDate": "2022-12-08",
         "eol": "2026-12-31",
-        "latest": "8.2.20",
-        "latestReleaseDate": "2024-06-06",
+        "latest": "8.2.21",
+        "latestReleaseDate": "2024-07-04",
         "lts": false,
         "support": "2024-12-31"
     },
@@ -138,8 +138,8 @@
         "cycle": "8.3",
         "releaseDate": "2023-11-23",
         "eol": "2027-12-31",
-        "latest": "8.3.8",
-        "latestReleaseDate": "2024-06-06",
+        "latest": "8.3.9",
+        "latestReleaseDate": "2024-07-04",
         "lts": false,
         "support": "2025-12-31"
     }

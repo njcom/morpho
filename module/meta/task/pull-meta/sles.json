@@ -192,9 +192,18 @@
     {
         "cycle": "15.5",
         "releaseDate": "2023-06-20",
-        "eol": false,
+        "eol": "2024-12-31",
         "latest": "15.5",
         "latestReleaseDate": "2023-06-20",
+        "lts": false,
+        "extendedSupport": "2027-12-31"
+    },
+    {
+        "cycle": "15.6",
+        "releaseDate": "2024-06-26",
+        "eol": false,
+        "latest": "15.6",
+        "latestReleaseDate": "2024-06-26",
         "lts": false,
         "extendedSupport": true
     }

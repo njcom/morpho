@@ -123,8 +123,8 @@
         "cycle": "10.3",
         "releaseDate": "2024-06-20",
         "eol": false,
-        "latest": "10.3.0",
-        "latestReleaseDate": "2024-06-20",
+        "latest": "10.3.1",
+        "latestReleaseDate": "2024-07-04",
         "lts": false,
         "support": true,
         "extendedSupport": false
