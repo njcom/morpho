@@ -1,19 +1,63 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
-use Morpho\Tech\Xml\Doc;
-use Morpho\Fs\File;
+namespace Morpho\Infra;
+
+/*use Morpho\Tech\Xml\Doc;
+use Morpho\Fs\File;*/
+
+use Morpho\Base\Env;
+
 use function Morpho\App\Cli\{sh, bootstrap};
-use function Morpho\Base\{dasherize, showLn, q};
+use function Morpho\Base\{dasherize, fromJson, showLn, q};
 
 require __DIR__ . '/../../../../vendor/autoload.php';
-
-bootstrap();
 
 function lname(string $s): string {
     $s = str_replace('/', '-', $s);
     return dasherize($s, '.');
 }
 
+function pullTechMeta(string $tech, string $targetFilePath): void {
+    showLn("Pulling meta for the " . q($tech) . '...');
+    sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq 'sort_by(.release) | reverse' | jq --indent 4 . > " . escapeshellarg($targetFilePath));
+}
+
+function pullBashMeta(string $targetFilePath): void {
+
+}
+
+
+function pullCmakeMeta(string $targetFilePath): void {
+
+}
+
+function pullMakeMeta(string $targetFilePath): void {
+
+}
+
+function pullQemuMeta(string $targetFilePath): void {
+
+}
+
+function pullLinqMeta(string $targetFilePath): void {
+    // @todo: Pull from https://www.nuget.org/packages/System.Linq/
+}
+
+function pullNeo4jMeta(string $targetFilePath): void {
+
+}
+
+function pullSqliteMeta(string $targetFilePath): void {
+
+}
+
+function pullGccMeta(string $targetFilePath): void {
+
+}
+
+function pullLlvmMeta(string $targetFilePath): void {
+
+}
 /*
 function pullLinuxVers(string $outDirPath): void {
     // todo: use this: https://www.kernel.org/releases.json
@@ -21,10 +65,13 @@ function pullLinuxVers(string $outDirPath): void {
 
 
 }
-
-function pullUbuntuVers(string $outDirPath): void {
+*/
+function pullUbuntuMeta(string $targetFilePath): void {
+    pullTechMeta('ubuntu', $targetFilePath);
+    // @todo: extend with data from https://lists.ubuntu.com/archives/ubuntu-release/2019-April/004757.html
     // todo: use https://changelogs.ubuntu.com/meta-release-lts
-    # @todo: Extend with info from the https://wiki.ubuntu.com/Releases
+    # @todo: https://wiki.ubuntu.com/Releases
+    /*
     sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true)]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
     $rows = File::readJson($outDirPath . '/ubuntu.json');
     foreach ($rows as $k => $row) {
@@ -39,8 +86,9 @@ function pullUbuntuVers(string $outDirPath): void {
     }
     File::writeJson($outDirPath . '/ubuntu.json', $rows);
     showLn("Written '$outDirPath/ubuntu.json'");
+    */
 }
-
+/*
 function pullDebianVers(string $outDirPath): void {
     try {
         $tmpFilePath = tempnam($outDirPath, __FUNCTION__);
@@ -127,51 +175,85 @@ function pullRhelVers(string $outDirPath): void {
 }
 */
 
-function pullTypeScriptVers(string $outDirPath): void {
+function pullTsMeta(string $outDirPath): void {
     // todo
 }
 
+function checkTargetFile(string $targetFilePath): void {
+    //assert(filesize($targetFilePath) > 0, "Target file '$targetFilePath' is not empty");
+    $d = fromJson(file_get_contents($targetFilePath));
+    assert(is_array($d) && count($d), "File contains non empty JSON object");
+}
+
 function main(): void {
-    //$outDirPath = $_SERVER['argv'][1] ?? __DIR__;
+    bootstrap();
+    Env::enableExpectations();
     $techs = [
-        'centos',
-        'composer',
-        'debian',
-        'drupal',
+        // Storage
         'elasticsearch',
-        'fedora',
-        'gitlab',
-        'jquery',
-        'kde-plasma' => 'kde',
-        'kotlin',
-        'kubernetes',
-        'linux',
         'mariadb',
         'mysql',
+        'neo4j',
+        'postgresql',
+        'sqlite',
+        // Web
+        'gitlab',
         'nginx',
+        // DE
+        'kde-plasma' => 'kde',
+        // Web
+        'composer',
+        'drupal',
+        'jquery',
+        'wordpress',
+        // Programming languages
+        'bash',
+        'cmake',
+        'kotlin',
+        'make',
         'nodejs',
         'perl',
         'php',
-        'postgresql',
         'python',
+        'ts',
+        // Frameworks, libraries
+        'dotnet',
+        'antlr',
+        'linq',
         'qt',
+        // Compiler suites
+        'gcc',
+        'llvm',
+        // Virtualization
+        'qemu',
+        // OS
+        'kubernetes',
+        'linux',
+        // Distros
+        'centos',
+        'debian',
+        'fedora',
         'rhel',
         'sles',
         'ubuntu',
     ];
-    // todo: typescript, bash, make, cmake, gcc, linq, neo4j, llvm, qemu, sqlite, wordpress, antlr
+    //$outDirPath = $_SERVER['argv'][1] ?? __DIR__;
     $targetDirPath =__DIR__;
     foreach ($techs as $key => $tech) {
-        $outFilePath = $targetDirPath . '/' . $tech . '.json';
         if (!is_numeric($key)) {
             $tech = $key;
         }
-        showLn("Pulling meta for the " . q($tech) . '...');
-        sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tech . '.json') . " | jq 'sort_by(.release) | reverse' | jq --indent 4 . > " . escapeshellarg($outFilePath));
+        $targetFilePath = $targetDirPath . '/' . $tech . '.json';
+        $fn = __NAMESPACE__ . '\\pull' . $tech . 'meta';
+        if (function_exists($fn)) {
+            showLn("Calling $fn()...");
+            $fn($targetFilePath);
+        } else {
+            pullTechMeta($tech, $targetFilePath);
+        }
+        checkTargetFile($targetFilePath);
+        showLn("Saved '$targetFilePath'");
     }
-    showLn("Saved to '$targetDirPath/'");
-    // todo: typescript, bash, make, cmake
-    //pullTypeScriptVers($outDirPath);
 }
 
 main();

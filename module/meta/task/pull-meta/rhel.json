@@ -41,13 +41,13 @@
     },
     {
         "cycle": "8",
+        "support": "2024-05-31",
+        "eol": "2029-05-31",
+        "latest": "8.7",
         "releaseDate": "2019-05-07",
         "eol": "2029-05-31",
         "lts": "2029-05-31",
-        "latest": "8.10",
-        "latestReleaseDate": "2024-05-22",
-        "support": "2024-05-31",
-        "extendedSupport": "2032-05-31"
+        "latestReleaseDate": "2022-11-09"
     },
     {
         "cycle": "9",

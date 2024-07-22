@@ -1,6 +1,8 @@
 # Common code for the all Makefiles.
 
-targets: ## Show available targets
+.DEFAULT_GOAL := show-targets
+
+show-targets: ## Show available targets
 	echo Targets:
 	grep -oP '^[A-Za-z0-9_-]+:' $(MAKEFILE_LIST) | awk -F':' '{print $$(NF-1)}' | perl -WpE 's/^/    /g'
 
@@ -10,10 +12,13 @@ help: ## This help
 
 unexport _JAVA_OPTIONS
 
-.PHONY: help targets
+.PHONY: help show-targets
 .SILENT:
-# Do not use make's built-in rules and variables (this increases performance and avoids hard-to-debug behaviour).
-MAKEFLAGS += -rR
+
+GNUMAKEFLAGS =
+# Do not use make's built-in rules (-r/--no-builtin-rules) and variables (-R/--no-builtin-variables), as this increases performance and avoids hard-to-debug behaviour.
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-builtin-variables
 # Warning on undefined variables.
 MAKEFLAGS += --warn-undefined-variables
 # Suppress "Entering directory ..." unless we are changing the work directory.

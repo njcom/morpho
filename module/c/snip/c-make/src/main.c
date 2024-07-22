@@ -3,4 +3,5 @@
 
 int main(int argc, char *const *argv, char *const *envp) {
     puts("Hello!");
+    return 0;
 }

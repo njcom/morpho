@@ -11,7 +11,7 @@ pull-meta:
 
 index:
 	mkdir -p $(CURDIR)/index/tech
-	for tech in gcc make; do \
+	for tech in make; do \
 		ln -vsrfn $(CURDIR)/module/$$tech $(CURDIR)/index/tech/$$tech; \
 	done
 
