@@ -17,16 +17,17 @@ Documentation does not exist yet.
     1. Linux: other OSs are not supported
     1. Nginx
     1. PHP
-    1. MySQL (MariaDB)
+    1. MariaDB
     1. PostgreSQL
     1. Podman: for containers
 1. Client-side (Frontend):
-    1. TypeScript: required to compile to JavaScript
-    1. SCSS: required to compile to CSS
+    1. JavaScript: used for production, which is compiled from TypeScript (for development)
+        1. Node.js: required to compile TypeScript to JavaScript
+    1. CSS: used for production, which is compiled from SCSS (for development)
+        1. SASS: required to compile SCSS to CSS
     1. HTML
 1. Development:
-    1. Node.js: required for TypeScript
-    1. GNU Make
+    1. GNU Make: useful shell commands
 
 ## License
 
