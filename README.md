@@ -4,19 +4,20 @@ Cybernetic framework for self-learning, self-organizing, self-development.
 
 ## Current status
 
-1. Not ready (WIP). API is not stable:<p>[![.github/workflows/test.yml](https://github.com/morpho-os/framework/actions/workflows/test.yml/badge.svg)](https://github.com/morpho-os/framework/actions/workflows/test.yml)</p>
-3. [Project tasks](https://github.com/orgs/njcom/projects/9)
+1. Not ready (WIP). API is not stable:<p>[![.github/workflows/test.yml](https://github.com/njcom/framework/actions/workflows/test.yml/badge.svg)](https://github.com/njcom/framework/actions/workflows/test.yml)</p>
+1. [Project tasks](https://github.com/orgs/njcom/projects/9)
 
 ## Used technologies
 
 ### For development
 
-1. Containerization: todo
-1. Server-side/Backend:
+1. Containerization:
+    1. Podman
+1. Server-side (Backend):
     1. Nginx
     1. PHP
     1. MySQL/MariaDB: optional, can be used as DBMS
-1. Client-side/Frontend:
+1. Client-side (Frontend):
     1. TypeScript: required to compile to JavaScript
     1. SCSS: required to compile to CSS
     1. HTML
