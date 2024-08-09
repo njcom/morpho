@@ -25,10 +25,7 @@ Documentation does not exist yet.
     1. SCSS: required to compile to CSS
     1. HTML
 1. Development:
-    1. Git
-    1. PHP
     1. Node.js: required for TypeScript
-    1. GNU Bash
     1. GNU Make
 
 ## License
