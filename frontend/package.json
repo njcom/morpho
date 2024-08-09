@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "glob": "^10.4.5",
+    "tslib": "^2.6.3"
+  }
+}

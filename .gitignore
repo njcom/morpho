@@ -1,0 +1,20 @@
+# Composer's files:
+/vendor/
+.vscode/
+
+# Generated files:
+cache/*
+log/*
+selenium.log.*
+*.jar
+*.log
+*.bak
+geckodriver
+.phpunit*.cache
+*.tsbuildinfo
+/frontend/localhost/lib/base/*.js
+!/frontend/localhost/lib/base/index.js
+deno.lock
+
+# npm
+node_modules/

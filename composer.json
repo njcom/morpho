@@ -1,0 +1,74 @@
+{
+    "name": "njcom/framework",
+    "description": "Framework for building web-sites, web-applications, web-IDEs, command-line applications.",
+    "type": "library",
+    "license": [
+        "Apache-2.0"
+    ],
+    "keywords": [
+        "morpho",
+        "ide",
+        "framework",
+        "cms",
+        "mvc",
+        "rest",
+        "restful",
+        "core",
+        "module",
+        "compiler"
+    ],
+    "require": {
+        "php-64bit": ">=8.3",
+        "ext-ctype": "*",
+        "ext-date": "*",
+        "ext-dom": "*",
+        "ext-iconv": "*",
+        "ext-libxml": "*",
+        "ext-mbstring": "*",
+        "ext-pcntl": "*",
+        "ext-pcre": "*",
+        "ext-pdo": "*",
+        "ext-posix": "*",
+        "ext-reflection": "*",
+        "ext-session": "*",
+        "ext-spl": "*",
+        "ext-tokenizer": "*",
+        "monolog/monolog": "dev-main",
+        "nikic/fast-route": "dev-master",
+        "nikic/iter": "dev-master",
+        "nikic/php-parser": "^5.0",
+        "symfony/yaml": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Morpho\\": "lib/"
+        },
+        "files": [
+            "lib/App/autoload.php",
+            "lib/Base/autoload.php",
+            "lib/Caching/autoload.php",
+            "lib/Tech/autoload.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Morpho\\Test\\": "test"
+        }
+    },
+    "config": {
+        "discard-changes": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.x-dev"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/njcom/framework/issues"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "@morpho/framework",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "",
+    "scripts": {
+        "postinstall": ""
+    },
+    "author": "",
+    "private": true,
+    "dependencies": {
+        "@codemirror/autocomplete": "^6.17.0",
+        "@codemirror/commands": "^6.6.0",
+        "@codemirror/lang-javascript": "^6.2.2",
+        "@codemirror/lang-markdown": "^6.2.5",
+        "@codemirror/lang-python": "^6.1.6",
+        "@codemirror/language": "^6.10.2",
+        "@codemirror/lint": "^6.8.1",
+        "@codemirror/search": "^6.5.6",
+        "@codemirror/state": "^6.4.1",
+        "@codemirror/view": "^6.28.4",
+        "@lezer/common": "^1.2.1",
+        "@lezer/highlight": "^1.2.0",
+        "bootstrap": "latest",
+        "codemirror": "^6.0.1",
+        "jquery": "latest",
+        "toastify-js": "latest"
+    },
+    "devDependencies": {
+        "@types/bootstrap": "latest",
+        "@types/jquery": "latest",
+        "@types/qunit": "latest",
+        "qunit": "latest"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "esModuleInterop": true,
+        "inlineSourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "incremental": false,
+        "noEmitOnError": true,
+        "allowArbitraryExtensions": true,
+        "resolveJsonModule": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowUnreachableCode": true,
+        "removeComments": true,
+        "useDefineForClassFields": true,
+        "noErrorTruncation": true
+    }
+}

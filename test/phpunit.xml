@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- defect: error | failure | warning | risky -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
+    bootstrap="bootstrap.php" cacheDirectory=".phpunit.cache" executionOrder="depends,defects" requireCoverageMetadata="false" beStrictAboutCoverageMetadata="true" beStrictAboutOutputDuringTests="true"
+    stopOnDefect="false" stopOnIncomplete="false" stopOnSkipped="false"
+    failOnEmptyTestSuite="true" failOnIncomplete="true" failOnRisky="true" failOnSkipped="false" failOnWarning="true" failOnDeprecation="true" failOnNotice="true"
+    displayDetailsOnIncompleteTests="true" displayDetailsOnSkippedTests="true" displayDetailsOnTestsThatTriggerDeprecations="true" displayDetailsOnTestsThatTriggerErrors="true" displayDetailsOnTestsThatTriggerNotices="true" displayDetailsOnTestsThatTriggerWarnings="true" colors="true">
+    <testsuites>
+        <testsuite name="lib">
+            <!-- <file>TestSuite.php</file> -->
+            <directory>.</directory>
+            <!-- Exclude abstract classes: -->
+            <exclude>Unit/App/MessageTest.php</exclude>
+            <exclude>Unit/Caching/CacheTest.php</exclude>
+            <exclude>Unit/Tech/MySql/QueryTest.php</exclude>
+            <exclude>Unit/Tech/Php/DiscoverStrategyTest.php</exclude>
+            <exclude>Unit/Tech/Php/test-data/ClassTypeDiscovererTest/Test.php</exclude>
+        </testsuite>
+        <testsuite name="module">
+            <directory>../module/localhost/test</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">lib</directory>
+        </include>
+    </source>
+</phpunit>

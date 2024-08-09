@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+set -eu
+
+SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+declare -r SCRIPT_DIR_PATH
+SCRIPT_FILE_NAME="$(basename "$0")"
+declare -r SCRIPT_FILE_NAME
+declare -r SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH"/"$SCRIPT_FILE_NAME"
+
+BASE_DIR_PATH="$(realpath -e "$SCRIPT_DIR_PATH"/..)"
+declare -r BASE_DIR_PATH
+declare -r FRONTEND_DIR_PATH="$BASE_DIR_PATH"/frontend
+declare ROLLUP_CONF_FILE_PATH="$FRONTEND_DIR_PATH"/rollup.config.mjs
+
+################################################################################
+# Functions
+
+delete_empty_dirs() {
+    find "$FRONTEND_DIR_PATH"/module -mindepth 2 -not -path '*/node_modules/*' -type d -empty -delete
+}
+
+################################################################################
+# JS
+
+build-js() {
+    rollup -c "$ROLLUP_CONF_FILE_PATH"
+}
+
+watch-js() {
+    rollup -c "$ROLLUP_CONF_FILE_PATH" --watch
+}
+
+clean-js() {
+    find "$FRONTEND_DIR_PATH"/module -mindepth 2 -not -path '*/node_modules/*' -and \( -name '*.js' -or -name '*.map' -or -name '*.tsbuildinfo' -or -name '*.d.ts' \) -not -path '*/lib/base/index.d.ts' -not -name 'jquery.js' -print -delete
+    delete_empty_dirs
+}
+
+################################################################################
+# CSS
+
+build-css() {
+    sass --verbose "$FRONTEND_DIR_PATH"/module
+}
+
+watch-css() {
+    sass --watch "$FRONTEND_DIR_PATH"/module
+    # declare cmds=()
+    # while IFS= read -r -d '' ts_conf_file_path; do
+    #     cmds+=("$TSC_CMD --build $ts_conf_file_path --watch --preserveWatchOutput" "$@")
+    # done < <(ts-conf-files -print0)
+    # # https://github.com/microsoft/TypeScript/issues/17611
+    # concurrently --raw -- "${cmds[@]}"
+}
+
+clean-css() {
+    find "$FRONTEND_DIR_PATH"/module -mindepth 2 -not -path '*/node_modules/*' -and \( -name '*.css' -or -name '*.css.map' \) -print -delete
+    delete_empty_dirs
+}
+
+################################################################################
+# Common (JS + CSS)
+
+build() {
+    build-js
+    build-css
+}
+
+clean() {
+    clean-js
+    clean-css
+}
+
+install-global-packages() {
+    npm install -g rollup sass
+    # todo: postcss autoprefixer
+    # todo Install deno using package manager
+}
+
+install-local-packages() {
+    declare -r find_args=(
+        -name package.json
+        -type f
+        -not -path '*/node_modules/*'
+        -print0
+    )
+    declare path
+    while IFS= read -r -d '' path; do
+        pushd "$(dirname "$path")" > /dev/null
+        #test -e package.json || echo '{}' > package.json
+        echo "Installing packages in '$(dirname "$path")'..."
+        npm update # runs scripts in package.json
+        popd > /dev/null # $(dirname "$path")
+    done < <(echo -en "$BASE_DIR_PATH/package.json\x00"; echo -en "$FRONTEND_DIR_PATH/package.json\x00"; find "$FRONTEND_DIR_PATH"/module "${find_args[@]}")
+}
+
+install() {
+    install-global-packages
+    install-local-packages
+}
+
+setup() {
+    clean
+    build
+}
+
+################################################################################
+# Sub-command processing
+
+# Return if script has been sourced as the library
+#(return 0 2>/dev/null) && return 0
+
+cmd_re() {
+    grep -P '^[0-9a-z].*\(\)\s+{' "$SCRIPT_FILE_PATH" | grep -vP '[_A-Z]' | tr -d '() {' | tr '\n' '|' | sed 's/|$//' | sed 's/^/(/' | sed 's/$/)/'
+}
+
+help() {
+    echo "Usage: $0 \$cmd"
+    # shellcheck disable=SC2016
+    echo '    where $cmd:'
+    cmd_re | perl -WpE 's/[|()]/\n/g' | perl -WpE 's/^/        /' | perl -WnE 'print unless m/^\s*$/'
+}
+
+if [[ $# -lt 1 ]]; then
+    help
+    exit
+fi
+
+if [[ ! "$1" =~ ^$(cmd_re)$ ]]; then
+    help 1>&2
+    exit 1
+fi
+
+"$@"
