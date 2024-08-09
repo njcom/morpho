@@ -5,7 +5,7 @@ Cybernetic framework for self-learning, self-organizing, self-development.
 ## Current status
 
 1. Not ready (WIP). API is not stable:<p>[![.github/workflows/test.yml](https://github.com/njcom/framework/actions/workflows/test.yml/badge.svg)](https://github.com/njcom/framework/actions/workflows/test.yml)</p>
-1. [Project tasks](https://github.com/orgs/njcom/projects/9)
+1. [Project tasks (board)](https://github.com/orgs/njcom/projects/9) and [Issues](https://github.com/njcom/framework/issues)
 
 ## Documentation
 
