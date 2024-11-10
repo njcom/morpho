@@ -17,7 +17,7 @@ jobs:
         uses: srggrs/assign-one-project-github-action@1.2.1
         if: github.event.action == 'opened'
         with:
-          project: 'https://github.com/njcom/framework/projects/3'
+          project: 'https://github.com/njcom/framework/projects/9'
           column_name: 'todo'
 
           #    - name: Assign issues and pull requests with `bug` label to project 3
