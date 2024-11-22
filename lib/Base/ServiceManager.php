@@ -24,10 +24,10 @@ use function strtolower;
  */
 class ServiceManager extends ArrayObject implements ArrayAccess {
     public array $aliases = [];
-    public mixed $conf;
     protected const FACTORY_METHOD_PREFIX = 'mk';
     protected const FACTORY_METHOD_SUFFIX = 'Service';
     private array $loading = [];
+    public mixed $conf;
 
     public function __construct(array $services = null) {
         parent::__construct();

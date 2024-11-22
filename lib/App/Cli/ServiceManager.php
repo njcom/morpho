@@ -25,9 +25,9 @@ class ServiceManager extends BaseServiceManager {
     protected function mkErrorLoggerService() {
         $logger = new Logger('error');
 
-        if (ErrorHandler::isErrorLogEnabled()) {
-            $logger->pushHandler(new PhpErrorLogWriter());
-        }
+        //if (ErrorHandler::isErrorLogEnabled()) {
+        $logger->pushHandler(new PhpErrorLogWriter());
+        //}
 
         $logger->pushHandler(
             new class extends AbstractProcessingHandler {
@@ -71,12 +71,6 @@ class ServiceManager extends BaseServiceManager {
     }
 
     protected function mkResultRendererService() {
-        return new class implements IFn {
-            public function __invoke(mixed $context): mixed {
-                $result = $context->response['result'];
-                $context->response->body = is_iterable($result) ? Terminal::renderList($result) : (string) $result;
-                return $context;
-            }
-        };
+        return new ResultRenderer();
     }
 }

@@ -36,7 +36,7 @@ use function substr;
  * This class is changed version of HTML_SemiParser class originally written by Dmitry Koterov: http://forum.dklab.ru/users/DmitryKoterov/, original code was found at: https://github.com/DmitryKoterov/html_formpersister
  */
 class HtmlSemiParser implements IHasTemplateEngine, IFn {
-    public TemplateEngine $templateEngine;
+    public mixed $templateEngine;
 
     protected string $tagHandlerPrefix = 'tag';
     protected string $containerHandlerPrefix = 'container';
@@ -60,7 +60,9 @@ class HtmlSemiParser implements IHasTemplateEngine, IFn {
     private array $spIgnored;
     private bool $selfAdd;
 
-    public function __construct() {
+    public function __construct(mixed $templateEngine) {
+        $this->templateEngine = $templateEngine;
+
         $this->selfAdd = true;
         $this->attachHandlersFrom($this);
         $this->selfAdd = false;
@@ -357,6 +359,7 @@ class HtmlSemiParser implements IHasTemplateEngine, IFn {
             if (is_string($name) && $name[0] === '_') {
                 continue;
             }
+            /*
             if (str_contains($value, '<?')) {
                 // Modified RE from https://github.com/nikic/PHP-Parser/blob/master/grammar/rebuildParsers.php#L34
                 $groups = preg_split(
@@ -375,8 +378,9 @@ class HtmlSemiParser implements IHasTemplateEngine, IFn {
                 }
                 $attribs[] = $this->templateEngine->attrib($name, $value, true, false);
             } else {
+            */
                 $attribs[] = $this->templateEngine->attrib($name, $value);
-            }
+            //}
         }
         return $this->templateEngine->tag($tag['_tagName'], $tag['_text'] ?? null, ($attribs ? implode(' ', $attribs) : null), ['escape' => false]);
     }

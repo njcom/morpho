@@ -35,8 +35,10 @@ class DispatchErrorHandler implements IHasServiceManager, IFn {
             throw new UnexpectedValueException('Empty exception handler');
         }
 
+        $hashId = fn ($exception) => md5(str_replace("\x00", '', $exception->getFile()) . "\x00" . $exception->getLine());
+
         foreach ($this->thrownExceptions as $prevException) {
-            if (ErrorHandler::hashId($prevException) === ErrorHandler::hashId($exception)) {
+            if ($hashId($prevException) === $hashId($exception)) {
                 throw new RuntimeException('Exception loop has been detected', 0, $exception);
             }
         }

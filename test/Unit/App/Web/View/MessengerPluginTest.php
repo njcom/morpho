@@ -27,7 +27,13 @@ class MessengerPluginTest extends TestCase {
         parent::setUp();
         $this->messenger = new Messenger();
         $this->messenger->setMessageStorage(new MessageStorage());
-        $serviceManager = new ServiceManager();
+        $serviceManager = new ServiceManager([
+            'templateengine' => new class {
+                public function e($text) {
+                    return htmlspecialchars($text, ENT_QUOTES);
+                }
+            },
+        ]);
         $serviceManager['messenger'] = $this->messenger;
 
         $this->messengerPlugin = new MessengerPlugin();

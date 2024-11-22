@@ -7,14 +7,9 @@
 namespace Morpho\Test\Unit\App\Web\View;
 
 use ArrayIterator;
-use Morpho\App\ISite;
 use Morpho\App\Web\IRequest;
 use Morpho\App\Web\IResponse;
-use Morpho\App\Web\View\FormProcessor;
-use Morpho\App\Web\View\PhpProcessor;
 use Morpho\App\Web\View\TemplateEngine;
-use Morpho\App\Web\View\RcProcessor;
-use Morpho\App\Web\View\UriProcessor;
 use Morpho\Base\IPipe;
 use Morpho\Base\NotImplementedException;
 use Morpho\Testing\TestCase;
@@ -34,23 +29,7 @@ class TemplateEngineTest extends TestCase {
 
     protected function setUp(): void {
         parent::setUp();
-        $this->templateEngine = new TemplateEngine($this->templateEngineConf());
-    }
-
-    private function templateEngineConf(): array {
-        //$request = $this->createMock(IRequest::class);
-        $request = $this->mkRequestStub();
-        $site = $this->createMock(ISite::class);
-        return [
-            'request' => $request,
-            'site'    => $site,
-            'steps'   => [
-                'phpProcessor'    => new PhpProcessor(),
-                'uriProcessor'    => new UriProcessor($request),
-                'formPersister'   => new FormProcessor($request),
-                'scriptProcessor' => new RcProcessor($request, $site),
-            ],
-        ];
+        $this->templateEngine = new TemplateEngine(function () {}, [], true);
     }
 
     public function testInterface() {
@@ -73,7 +52,7 @@ class TemplateEngineTest extends TestCase {
         ];
         yield [
             "It&#039;s",
-            '<?= "It$foo";',
+            '<?= "It" . $this->e($foo);',
             ['foo' => "'s"],
         ];
     }
@@ -95,18 +74,17 @@ class TemplateEngineTest extends TestCase {
     }
 
     public function testEval_PrependCustomStep() {
-        $code = '<?php echo ??;';
+        $code = '??';
         $this->templateEngine->prependStep(
             function ($context) {
-                $context['program'] = str_replace('??', '"<span>$smile</span>"', $context['program']);
+                $context['program'] = str_replace('??', '<span><?= $smile ?></span>', $context['program']);
                 return $context;
             }
         );
+
         $res = $this->templateEngine->eval($code, ['smile' => ':)']);
-        $this->assertSame(
-            htmlspecialchars('<span>:)</span>', ENT_QUOTES),
-            $res
-        );
+
+        $this->assertSame('<span>:)</span>', $res);
     }
 
     public function testEvalPhpFile_PreservingThis() {
@@ -114,7 +92,7 @@ class TemplateEngineTest extends TestCase {
         $filePath = $this->createTmpFile();
         file_put_contents($filePath, $code);
 
-        $templateEngine = new class ($this->templateEngineConf()) extends TemplateEngine {
+        $templateEngine = new class (function () {}, [], true) extends TemplateEngine {
             protected $a = 'Hello';
         };
         $this->assertSame(
@@ -124,7 +102,7 @@ class TemplateEngineTest extends TestCase {
     }
 
     public function testForceCompileAccessor() {
-        $this->checkBoolAccessor([$this->templateEngine, 'forceCompile'], false);
+        $this->assertTrue($this->templateEngine->forceCompile);
     }
 
     public function testLink_WithoutText() {
@@ -229,40 +207,40 @@ class TemplateEngineTest extends TestCase {
             null,
         ];
         yield [
-            ' checked',
+            'checked',
             [
                 'checked',
             ],
         ];
         yield [
-            ' checked autofocus',
+            'checked autofocus',
             [
                 'checked',
                 'autofocus',
             ],
         ];
         yield [
-            ' type="image" border="1"',
+            'type="image" border="1"',
             [
                 'type'   => 'image',
                 'border' => '1',
             ],
         ];
         yield [
-            ' style="display: block; width: 80%;"',
+            'style="display: block; width: 80%;"',
             [
                 'style' => 'display: block; width: 80%;',
             ],
         ];
         yield [
-            ' checked type="image"',
+            'checked type="image"',
             [
                 'checked',
                 'type' => 'image',
             ],
         ];
         yield [
-            ' che&#039;c&quot;ked ty&#039;p&quot;e="im&quot;a&#039;ge"',
+            'che&#039;c&quot;ked ty&#039;p&quot;e="im&quot;a&#039;ge"',
             [
                 'che\'c"ked',
                 'ty\'p"e' => 'im"a\'ge',
@@ -304,26 +282,19 @@ class TemplateEngineTest extends TestCase {
         );
     }
 
-    public function testTag1_MultipleAttribs() {
+    public function testOpenTag_MultipleAttribs() {
         $attribs = ['href' => 'foo/bar.css', 'rel' => 'stylesheet'];
         $expected = '<link href="foo/bar.css" rel="stylesheet">';
-        $this->assertEquals(
-            $expected,
-            $this->templateEngine->tag('link', null, $attribs, ['eol' => false, 'single' => true])
-        );
-        $this->assertEquals(
-            $expected,
-            $this->templateEngine->tag1('link', $attribs, ['eol' => false])
-        );
+        $this->assertSame($expected, $this->templateEngine->openTag('link', $attribs));
     }
 
-    public function testTag1_Html5() {
-        $this->assertSame('<foo bar="baz">', $this->templateEngine->tag1('foo', ['bar' => 'baz']));
-        $this->assertSame('<foo bar="baz">', $this->templateEngine->tag1('foo', ['bar' => 'baz'], ['xml' => false]));
+    public function testOpenTag_Html5() {
+        $this->assertSame('<foo bar="baz">', $this->templateEngine->openTag('foo', ['bar' => 'baz']));
+        $this->assertSame('<foo bar="baz">', $this->templateEngine->openTag('foo', ['bar' => 'baz'], false));
     }
 
-    public function testTag1_Xml() {
-        $this->assertSame('<foo bar="baz" />', $this->templateEngine->tag1('foo', ['bar' => 'baz'], ['xml' => true]));
+    public function testOpenTag_Xml() {
+        $this->assertSame('<foo bar="baz" />', $this->templateEngine->openTag('foo', ['bar' => 'baz'], true));
     }
 
     public function testHtmlId() {
@@ -351,7 +322,7 @@ class TemplateEngineTest extends TestCase {
 
     public function testMultipleAttribs() {
         $this->assertEquals(
-            ' data-api name="foo" id="some-id"',
+            'data-api name="foo" id="some-id"',
             $this->templateEngine->attribs(['data-api', 'name' => 'foo', 'id' => 'some-id'])
         );
     }

@@ -45,7 +45,8 @@ class Terminal {
     }
 
     public static function renderList(iterable $struct, int $indentMultiplier = 0, string $itemPrefix = self::ITEM_PREFIX): string {
-        return implode("\n", iterator_to_array(self::simplifyIter($struct, $indentMultiplier, $itemPrefix), false));
+        $arr = iterator_to_array(self::simplifyIter($struct, $indentMultiplier, $itemPrefix), false);
+        return count($arr) ? implode("\n", $arr) . "\n" : '';
     }
 
     public static function isInteractive(): bool {

@@ -48,7 +48,7 @@ class MessengerPlugin extends WidgetPlugin implements Countable {
 
     protected function renderMessageOfType(array $message, string $type): string {
         $text = format(
-            nl2br($this->e($message['text'])),
+            nl2br($this->templateEngine->e($message['text'])),
             $message['args'],
             function ($arg) {
                 return $arg;

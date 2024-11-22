@@ -12,14 +12,10 @@ use Stringable;
 
 abstract class WidgetPlugin extends Plugin implements IHasServiceManager, Stringable {
     protected ServiceManager $serviceManager;
-    protected TemplateEngine $templateEngine;
+    protected mixed $templateEngine;
 
     public function setServiceManager(ServiceManager $serviceManager): void {
         $this->serviceManager = $serviceManager;
         $this->templateEngine = $this->serviceManager['templateEngine'];
-    }
-
-    protected function e($text): string {
-        return $this->templateEngine->e($text);
     }
 }

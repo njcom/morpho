@@ -222,12 +222,12 @@ class Dir {
     }
 
     public static function in(string $dirPath, callable $fn): mixed {
-        $curDirPath = getcwd();
+        $prevCurDirPath = getcwd();
         try {
-            chdir($cdDirPath);
-            $res = $fn($dirPath);
+            chdir($dirPath);
+            $res = $fn($dirPath, $prevCurDirPath);
         } finally {
-            chdir($curDirPath);
+            chdir($prevCurDirPath);
         }
         return $res;
     }

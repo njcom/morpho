@@ -21,7 +21,7 @@ use function fclose;
 use function file_put_contents;
 use function fwrite;
 use function md5;
-use function Morpho\App\Cli\{arg, envVarsStr, earg, sep, sh, showLine, showOk, showSep, stylize};
+use function Morpho\App\Cli\{arg, ask, envVarsStr, earg, sep, sh, showLine, showOk, showSep, stylize};
 use function ob_get_clean;
 use function ob_start;
 use function proc_close;
@@ -256,5 +256,22 @@ OUT
         proc_close($process);
 
         $this->assertEquals("$question? (y/n): Invalid choice, please type y or n\ntrue", $out);
+    }
+
+    public function testAsk_Utf() {
+        $fileName = 'php://memory';
+        $inputStream = fopen($fileName, 'r+');
+        $question = 'Tell me a joke';
+        $inputText = 'шутка 😁';
+        try {
+            fwrite($inputStream, $inputText);
+            ob_start();
+            ask($question, inputStream: $inputStream);
+            $this->assertSame($question, ob_get_clean());
+            rewind($inputStream);
+            $this->assertSame($inputText, stream_get_contents($inputStream));
+        } finally {
+            fclose($inputStream);
+        }
     }
 }

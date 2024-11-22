@@ -18,7 +18,7 @@ abstract class CommandResult implements ICommandResult {
     }
 
     public function isError(): bool {
-        return $this->exitCode() !== Env::SUCCESS_CODE;
+        return $this->exitCode() !== StatusCode::Success->value;
     }
 
     public function exitCode(): int {

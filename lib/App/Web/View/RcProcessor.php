@@ -8,21 +8,13 @@ namespace Morpho\App\Web\View;
 
 use function implode;
 use function usort;
-use function Morpho\App\Cli\sh;
 
 class RcProcessor extends HtmlSemiParser {
-    public string $tsCompilerFilePath;
-
     public string $skipAttr = '_skip';
     public string $indexAttr = '_index';
 
-    protected array $scriptTags = [];
-    protected array $cssLinkTags = [];
-
-    public function __construct(string $tsCompilerFilePath) {
-        parent::__construct();
-        $this->tsCompilerFilePath = $tsCompilerFilePath;
-    }
+    private array $scriptTags = [];
+    private array $cssLinkTags = [];
 
     protected function containerHead(array $tag): array|false|null|string {
         if (isset($tag[$this->skipAttr])) {
@@ -40,10 +32,10 @@ class RcProcessor extends HtmlSemiParser {
             unset($tag[$this->skipAttr]);
             return $tag;
         }
-        $existingTags = $this->scriptTags;
+        $prevTags = $this->scriptTags;
         $this->scriptTags = [];
         $html = $this->__invoke($tag['_text']); // Render the parent page, extract and collect all scripts from it into $this->scriptTags
-        $tag['_text'] = $html . $this->renderBodyScriptTags($this->sortTags(array_merge($this->scriptTags, $existingTags)));
+        $tag['_text'] = $html . $this->renderBodyScriptTags($this->sortTags(array_merge($this->scriptTags, $prevTags)));
         return $tag;
     }
 
@@ -163,10 +155,10 @@ class RcProcessor extends HtmlSemiParser {
         return $event->getArrayCopy();
     }
     */
-    private function renderBodyScriptTags(array $bodyScripts): string {
+    private function renderBodyScriptTags(array $scriptTags): string {
         $scriptPaths = [];
         $html = '';
-        foreach ($bodyScripts as $script) {
+        foreach ($scriptTags as $script) {
             $html .= $this->renderTag($script);
 
             /*

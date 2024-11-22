@@ -58,7 +58,7 @@ class App implements IFn {
             }
             echo $e;
         }
-        if (ErrorHandler::isErrorLogEnabled()) {
+        if (Env::boolIniVal('log_errors') && !empty(ini_get('error_log'))) {
             // @TODO: check how error logging works on PHP core level, remove unnecessary calls and checks.
             error_log(addslashes((string)$e));
         }

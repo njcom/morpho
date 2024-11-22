@@ -16,6 +16,7 @@ const STD_PIPES = [
 ];
 
 use Morpho\Base\Conf;
+use Morpho\Base\NotImplementedException;
 use Morpho\Tech\Php\DumpListener;
 use Morpho\Tech\Php\ErrorHandler;
 use Stringable;
@@ -44,9 +45,9 @@ use const Morpho\Base\CODE_WIDTH_1;
 /**
  * Useful to call from simple CLI applications, not involving the AppInitializer.
  */
-function bootstrap(array $errorHandlerIniSettings = null): void {
+function bootstrap(): void {
     (new Env())->init();
-    (new ErrorHandler([new DumpListener()]))->register($errorHandlerIniSettings);
+    (new ErrorHandler([new DumpListener()]))->register();
 }
 
 function showLine(string|Stringable|iterable|int|float $text = null): void {
@@ -115,7 +116,7 @@ function error(string $errMessage = null, int $exitCode = null): never {
     if ($errMessage) {
         showError($errMessage);
     }
-    exit(null !== $exitCode && 0 !== $exitCode ? $exitCode : Env::FAILURE_CODE);
+    exit(null !== $exitCode && 0 !== $exitCode ? $exitCode : StatusCode::Error->value);
 }
 
 /**
@@ -127,7 +128,7 @@ function errorLine(string $errMessage = null, int $exitCode = null): never {
     if ($errMessage) {
         showErrorLine($errMessage);
     }
-    exit(null !== $exitCode && 0 !== $exitCode ? $exitCode : Env::FAILURE_CODE);
+    exit(null !== $exitCode && 0 !== $exitCode ? $exitCode : StatusCode::Error->value);
 }
 
 /**
@@ -135,7 +136,7 @@ function errorLine(string $errMessage = null, int $exitCode = null): never {
  * @return never
  */
 function exitBool(bool $success): never {
-    exit($success ? Env::SUCCESS_CODE : Env::FAILURE_CODE);
+    exit($success ? StatusCode::Success->value : StatusCode::Error->value);
 }
 
 function stylize(string $text, $codes): string {
@@ -322,9 +323,15 @@ function checkExitCode(int $exitCode, string $errMessage = null): int {
     }
 }*/
 
-function ask(string $question, bool $trim = true, bool $acceptEmptyAnswer = false): string {
+function ask(string $question, bool $trim = true, bool $acceptEmptyAnswer = false, $inputStream = null): string {
     echo $question;
-    $result = fgets(STDIN);
+    if ($acceptEmptyAnswer) {
+        throw new NotImplementedException();
+    }
+    if (null === $inputStream) {
+        $inputStream = STDIN;
+    }
+    $result = fgets($inputStream);
     // \fgets() returns false on Ctrl-D
     if (false === $result) {
         $result = '';

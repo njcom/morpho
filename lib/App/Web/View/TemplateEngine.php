@@ -272,12 +272,6 @@ class TemplateEngine extends ArrPipe {
         return $this->e($htmlId);
     }
 
-    /*
-    public function tag1(string $tagName, array $attribs = null, array $conf = []): string {
-        return $this->tag($tagName, null, $attribs, $conf);
-    }
-    */
-
     /**
      * @param string      $tagName
      * @param string|array|null $text
@@ -295,21 +289,21 @@ class TemplateEngine extends ArrPipe {
         $conf = Conf::check(
             [
                 'escape' => true,
-                'xml'    => false,
+                'xml' => false,
+                'eol' => false,
             ],
             (array)$conf
         );
         $output = $this->openTag($tagName, $attribs, $conf['xml']);
         //if (!$conf['single']) {
-        if (null !== $text) {
-            $output .= $conf['escape'] ? $this->e($text) : $text;
-            $output .= $this->closeTag($tagName);
+        //if (null !== $text) {
+        $output .= $conf['escape'] ? $this->e($text) : $text;
+        $output .= $this->closeTag($tagName);
+        //}
+        if ($conf['eol']) {
+            $output .= "\n";
         }
-        //}
-        //if ($conf['eol']) {
-        //$output .= "\n";
-        //}
-        return $output . "\n";
+        return $output;
     }
 
     /**
@@ -321,7 +315,7 @@ class TemplateEngine extends ArrPipe {
      */
     public function openTag(string $tagName, array|string $attribs = null, bool $isXml = false): string {
         $renderedAttribs = '';
-        if (null !== $attribs) {
+        if ($attribs) {
             if (is_array($attribs)) {
                 $renderedAttribs = ' ' . $this->attribs($attribs);
             } else {
@@ -367,7 +361,7 @@ class TemplateEngine extends ArrPipe {
      */
     public function textControl(array $attribs): string {
         $attribs['type'] = 'text';
-        return $this->tag1('input', $this->addCommonAttribsOfControl($attribs));
+        return $this->openTag('input', $this->addCommonAttribsOfControl($attribs));
     }
 
     /**
@@ -391,7 +385,7 @@ class TemplateEngine extends ArrPipe {
         if (!isset($attribs['value'])) {
             $attribs['value'] = 1;
         }
-        return $this->tag1('input', $this->addCommonAttribsOfControl($attribs));
+        return $this->openTag('input', $this->addCommonAttribsOfControl($attribs));
     }
 
     public function selectControl(?iterable $options, mixed $selectedOption = null, array $attribs = null): string {
@@ -455,7 +449,7 @@ class TemplateEngine extends ArrPipe {
      */
     public function hiddenControl(array $attribs): string {
         $attribs['type'] = 'hidden';
-        return $this->tag1('input', $this->addCommonAttribsOfControl($attribs));
+        return $this->openTag('input', $this->addCommonAttribsOfControl($attribs));
     }
 
     /**
@@ -513,7 +507,7 @@ class TemplateEngine extends ArrPipe {
      * @htmlSafe
      */
     public function ul(iterable $items, array $attribs = null): string {
-        return '<ul' . $this->attribs($attribs) . '>' . $this->list($items) . '</ul>';
+        return '<ul ' . $this->attribs($attribs) . '>' . $this->list($items) . '</ul>';
     }
 
     /**
@@ -523,7 +517,7 @@ class TemplateEngine extends ArrPipe {
      * @htmlSafe
      */
     public function ol(iterable $items, array $attribs = null): string {
-        return '<ol' . $this->attribs($attribs) . '>' . $this->list($items) . '</ol>';
+        return '<ol ' . $this->attribs($attribs) . '>' . $this->list($items) . '</ol>';
     }
 
     /**

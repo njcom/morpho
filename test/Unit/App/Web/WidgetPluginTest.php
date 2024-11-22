@@ -15,7 +15,7 @@ class WidgetPluginTest extends TestCase {
     public function testE_DelegatesToTemplateEngine() {
         $plugin = new class extends WidgetPlugin {
             public function runE($text) {
-                return $this->e($text);
+                return $this->templateEngine->e($text);
             }
 
             public function __toString(): string {

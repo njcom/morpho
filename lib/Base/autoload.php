@@ -806,7 +806,7 @@ function requireFile(string $__filePath, bool $__once = false) {
     return require $__filePath;
 }
 
-// @TODO: Move to Byte??, merge with Converter
+// @TODO: Move to Byte??, merge with Converter, parseQuantity()
 
 function formatBytes(string $bytes, string $format = null): string {
     $n = strlen($bytes);

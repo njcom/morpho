@@ -6,7 +6,6 @@
  */
 namespace Morpho\App\Cli;
 
-use Morpho\App\IHostNameValidator;
 use Morpho\App\SiteFactory as BaseSiteFactory;
 
 class SiteFactory extends BaseSiteFactory {

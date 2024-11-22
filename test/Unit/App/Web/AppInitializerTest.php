@@ -6,12 +6,11 @@
  */
 namespace Morpho\Test\Unit\App\Web;
 
-use Morpho\App\Site;
 use Morpho\App\Web\AppInitializer;
 use Morpho\Base\ServiceManager;
-use Morpho\Tech\Php\IErrorHandler;
 use Morpho\Testing\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 use UnexpectedValueException;
 
 use function ini_get;
@@ -57,21 +56,18 @@ class AppInitializerTest extends TestCase {
         $this->assertSame($timeZone, ini_get('date.timezone'));
     }
 
-    private function mkServiceManager($siteConf) {
+    private function mkServiceManager($siteConf): ServiceManager {
         $serviceManager = $this->createMock(ServiceManager::class);
-        $site = $this->createConfiguredMock(
-            Site::class,
-            [
-                'conf' => $siteConf,
-            ]
-        );
-        $errorHandler = $this->createMock(IErrorHandler::class);
+        $errorHandler = new class {
+            public function register(): void {
+            }
+        };
         $serviceManager->expects($this->any())
             ->method('offsetGet')
             ->willReturnCallback(
-                function ($id) use ($site, $errorHandler) {
-                    if ($id === 'site') {
-                        return $site;
+                function ($id) use ($siteConf, $errorHandler) {
+                    if ($id === 'siteConf') {
+                        return $siteConf;
                     }
                     if ($id === 'errorHandler') {
                         return $errorHandler;

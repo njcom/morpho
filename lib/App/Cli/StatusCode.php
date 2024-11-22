@@ -4,10 +4,9 @@
  * It is distributed under the 'Apache License Version 2.0' license.
  * See the https://github.com/njcom/framework/blob/main/LICENSE for the full license text.
  */
-namespace Morpho\Tech\Php;
+namespace Morpho\App\Cli;
 
-interface IErrorHandler extends IExceptionHandler {
-    public function handleError($level, $message, $filePath, $line): void;
-
-    public function handleFatalError(): void;
+enum StatusCode: int {
+    case Success = 0;
+    case Error = 1;
 }

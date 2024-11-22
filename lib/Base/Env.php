@@ -108,8 +108,8 @@ abstract class Env {
 
     public static function init(): void {
         error_reporting(E_ALL | E_STRICT);
-        ini_set('display_errors', '0');
-        setlocale(LC_ALL, ''); // to fix at least escapeshellarg() to awork with UTF-8.
+        //ini_set('display_errors', '0');
+        setlocale(LC_ALL, ''); // to fix at least escapeshellarg() for UTF-8.
         /* todo: as alternative try (see getconf.c from glibc):
         setlocale (LC_CTYPE, "");
         setlocale (LC_MESSAGES, "");

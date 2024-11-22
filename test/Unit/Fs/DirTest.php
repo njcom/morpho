@@ -38,16 +38,17 @@ class DirTest extends TestCase {
     public function testIn() {
         $curDirPath = getcwd();
         $otherDirPath = $this->createTmpDir();
-        $fn = function ($otherDirPathArg) use ($otherDirPath, &$called) {
-            $this->assertEquals($otherDirPath, getcwd());
-            $this->assertEquals($otherDirPath, $otherDirPathArg);
+        $fn = function (string $newCurDirPath, $prevCurDirPath) use ($otherDirPath, $curDirPath, &$called) {
+            $this->assertSame($newCurDirPath, getcwd());
+            $this->assertSame($otherDirPath, $newCurDirPath);
+            $this->assertSame($curDirPath, $prevCurDirPath);
             $called = true;
             return 'res from fn';
         };
         $res = Dir::in($otherDirPath, $fn);
-        $this->assertEquals('res from fn', $res);
+        $this->assertSame('res from fn', $res);
         $this->assertTrue($called);
-        $this->assertEquals($curDirPath, getcwd());
+        $this->assertSame($curDirPath, getcwd());
     }
 
     public function testDelete_WhenParentNotWritable_BoolValSelector() {

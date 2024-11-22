@@ -19,7 +19,7 @@ use function ob_get_level;
 class ErrorHandler extends BaseErrorHandler {
     public function __construct(iterable $listeners = null) {
         parent::__construct($listeners);
-        $this->listeners()->append($this->mkListener());
+        $this->listeners->append($this->mkListener());
     }
 
     protected function mkListener(): Closure {
