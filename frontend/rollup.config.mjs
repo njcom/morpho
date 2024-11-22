@@ -68,26 +68,21 @@ function conf(inFilePath, outDirPath, preserveModules) {
         sourcemap: true,
         preserveModules,
         entryFileNames: (chunkInfo) => { // see also `chunkFileNames`
-            assert(chunkInfo['type'] === 'chunk');
-            if (chunkInfo['facadeModuleId'].endsWith('/node_modules/codemirror/dist/index.js')) {
-                return 'codemirror.js';
-            }
-            const match = chunkInfo['facadeModuleId'].match(new RegExp('/node_modules/(?<module>@(codemirror|lezer)/[^/]+)/dist/index\\.js$'));
+            assert(chunkInfo['type'] === 'chunk', chunkInfo['type']);
+
+            const facadeModuleId = chunkInfo['facadeModuleId'];
+
+            const match = facadeModuleId.match(new RegExp('/node_modules/(.*\\.(?:js|mjs))$'));
             if (match) {
-                return match['groups']['module'] + '.js';
+                return match[1];
             }
-            if (chunkInfo['facadeModuleId'].endsWith('/node_modules/style-mod/src/style-mod.js')) {
-                return 'style-mod.js';
+
+            if (!facadeModuleId.endsWith('.ts')) {
+                d(chunkInfo);
             }
-            if (chunkInfo['facadeModuleId'].endsWith('/node_modules/w3c-keyname/index.js')) {
-                return 'w3c-keyname.js';
-            }
-            if (chunkInfo['facadeModuleId'].endsWith('/node_modules/crelt/index.js')) {
-                return 'crelt.js';
-            }
-            assert(chunkInfo['facadeModuleId'].startsWith('/') && chunkInfo['facadeModuleId'].endsWith('.ts'));
-            assert(chunkInfo['facadeModuleId'].startsWith(outDirPath));
-            return changeExt(path.relative(outDirPath, chunkInfo['facadeModuleId']), 'js');
+            assert(facadeModuleId.endsWith('.ts'), "Must end with '.ts'");
+            assert(facadeModuleId.startsWith(outDirPath), "Must start with '" + outDirPath + "'");
+            return changeExt(path.relative(outDirPath, facadeModuleId), 'js');
         }
     };
     const checkOutputPath = (path) => {
