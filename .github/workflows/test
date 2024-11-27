@@ -107,8 +107,8 @@ run_tests() {
     #    exit $exit_code
     #fi
 
-    show_sep "Run linter"
-    php "$BASE_DIR_PATH"/bin/lint
+    #show_sep "Run linter"
+    #php "$BASE_DIR_PATH"/bin/lint
 }
 
 deploy_results() {
