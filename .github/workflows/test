@@ -22,7 +22,7 @@ show_facts() {
     ls -alh "$BASE_DIR_PATH"
     id
     cat /etc/os-release
-    which --all php
+    which -a php
     php --version
     composer --version
 }
