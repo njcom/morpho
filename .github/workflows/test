@@ -56,7 +56,6 @@ prepare_env() {
     sudo apt update && sudo apt install -y nginx
     # shellcheck disable=SC2016
     echo "
-    #user $WWW_USER $WWW_GROUP
     server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -73,7 +72,7 @@ prepare_env() {
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
     }
 }" | sudo tee > /dev/null /etc/nginx/sites-enabled/default
-    nginx -t
+    sudo nginx -t
     sudo chown -R "$WWW_USER":"$WWW_GROUP" "$FRONTEND_DIR_PATH" "$MODULE_DIR_PATH"/localhost/{log,tmp/cache}
     sudo systemctl restart nginx
 
