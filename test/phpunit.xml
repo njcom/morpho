@@ -12,9 +12,9 @@
             <!-- Exclude abstract classes: -->
             <exclude>Unit/App/MessageTest.php</exclude>
             <exclude>Unit/Caching/CacheTest.php</exclude>
-            <exclude>Unit/Tech/MySql/QueryTest.php</exclude>
-            <exclude>Unit/Tech/Php/DiscoverStrategyTest.php</exclude>
-            <exclude>Unit/Tech/Php/test-data/ClassTypeDiscovererTest/Test.php</exclude>
+            <exclude>Unit/Tool/MySql/QueryTest.php</exclude>
+            <exclude>Unit/Tool/Php/DiscoverStrategyTest.php</exclude>
+            <exclude>Unit/Tool/Php/test-data/ClassTypeDiscovererTest/Test.php</exclude>
         </testsuite>
         <testsuite name="module">
             <directory>../module/localhost/test</directory>

@@ -25,9 +25,9 @@ use Morpho\App\Web\View\TemplateEngine;
 use Morpho\App\Web\View\RcProcessor;
 use Morpho\App\Web\View\UriProcessor;
 use Morpho\Base\IHasServiceManager;
-use Morpho\Tech\Php\DumpListener;
-use Morpho\Tech\Php\LogListener;
-use Morpho\Tech\Php\NoDupsListener;
+use Morpho\Tool\Php\DumpListener;
+use Morpho\Tool\Php\LogListener;
+use Morpho\Tool\Php\NoDupsListener;
 use UnexpectedValueException;
 
 use function Morpho\Base\classify;

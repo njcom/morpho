@@ -47,7 +47,7 @@
             "lib/App/autoload.php",
             "lib/Base/autoload.php",
             "lib/Caching/autoload.php",
-            "lib/Tech/autoload.php"
+            "lib/Tool/autoload.php"
         ]
     },
     "autoload-dev": {

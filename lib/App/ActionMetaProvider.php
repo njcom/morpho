@@ -7,7 +7,7 @@
 namespace Morpho\App;
 
 use Closure;
-use Morpho\Tech\Php\FileReflection;
+use Morpho\Tool\Php\FileReflection;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;

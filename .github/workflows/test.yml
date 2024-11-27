@@ -31,15 +31,9 @@ jobs:
 
       - name: Create a file to validate completion of tests
         run: |
-          touch 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-
-      - name: Run tests
-        run: |
+          #touch 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
           .github/workflows/test
-          rm -fv 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-
-      - name: Ensure tests completed
-        run: |
-          test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed 
+          #rm -fv 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
+          #test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed 
 
 

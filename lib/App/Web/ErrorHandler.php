@@ -7,7 +7,7 @@
 namespace Morpho\App\Web;
 
 use Closure;
-use Morpho\Tech\Php\ErrorHandler as BaseErrorHandler;
+use Morpho\Tool\Php\ErrorHandler as BaseErrorHandler;
 use Throwable;
 
 use function header;

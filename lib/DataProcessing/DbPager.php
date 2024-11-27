@@ -8,7 +8,7 @@ namespace Morpho\DataProcessing;
 
 use Morpho\Base\IHasServiceManager;
 use Morpho\Base\ServiceManager;
-use Morpho\Tech\Sql\IClient;
+use Morpho\Tool\Sql\IClient;
 
 use function intval;
 

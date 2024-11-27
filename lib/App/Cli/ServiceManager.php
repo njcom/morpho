@@ -13,9 +13,9 @@ use Monolog\LogRecord;
 use Morpho\App\ServiceManager as BaseServiceManager;
 use Morpho\Base\IFn;
 use Morpho\Base\NotImplementedException;
-use Morpho\Tech\Php\ErrorHandler;
-use Morpho\Tech\Php\LogListener;
-use Morpho\Tech\Php\NoDupsListener;
+use Morpho\Tool\Php\ErrorHandler;
+use Morpho\Tool\Php\LogListener;
+use Morpho\Tool\Php\NoDupsListener;
 
 class ServiceManager extends BaseServiceManager {
     protected function mkAppInitializerService() {

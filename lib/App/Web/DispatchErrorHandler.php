@@ -9,7 +9,7 @@ namespace Morpho\App\Web;
 use Morpho\Base\IFn;
 use Morpho\Base\IHasServiceManager;
 use Morpho\Base\THasServiceManager;
-use Morpho\Tech\Php\ErrorHandler;
+use Morpho\Tool\Php\ErrorHandler;
 use RuntimeException;
 use Throwable;
 use UnexpectedValueException;
