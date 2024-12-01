@@ -12,18 +12,18 @@ class ShellCommandResult extends CommandResult {
     protected string $stdOut;
     protected string $stdErr;
     protected string $command;
-    protected ArrayObject $val;
+    protected ArrayObject $value;
 
-    public function __construct(string $command, int $exitCode, string $stdOut, string $stdErr, mixed $val = null) {
+    public function __construct(string $command, int $exitCode, string $stdOut, string $stdErr, mixed $value = null) {
         parent::__construct($exitCode);
         $this->command = $command;
         $this->stdOut = $stdOut;
         $this->stdErr = $stdErr;
-        $this->val = $val ?: new ArrayObject();
+        $this->value = $value ?: new ArrayObject();
     }
 
-    public function val(): ArrayObject {
-        return $this->val;
+    public function value(): ArrayObject {
+        return $this->value;
     }
 
     public function command(): string {

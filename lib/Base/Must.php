@@ -7,53 +7,49 @@
 
 namespace Morpho\Base;
 
-use OutOfRangeException;
-use RuntimeException;
-use UnexpectedValueException;
-
 use function array_flip;
 use function array_intersect_key;
 use function array_keys;
 use function count;
 
 class Must {
-    public static function beTruthy(mixed $val, string $message = null): mixed {
-        if (!$val) {
-            throw new MustException((string)$message, $val);
+    public static function beTruthy(mixed $value, string $message = null): mixed {
+        if (!$value) {
+            throw new MustException((string)$message, $value);
         }
-        return $val;
+        return $value;
     }
 
     /**
-     * @param mixed $val
+     * @param mixed $value
      * @return mixed @todo: change to null type
      */
-    public static function beNull(mixed $val): mixed {
+    public static function beNull(mixed $value): mixed {
         // @todo: add $message argument
-        self::beTruthy($val === null);
-        return $val;
+        self::beTruthy($value === null);
+        return $value;
     }
 
     /**
-     * @param mixed $val
+     * @param mixed $value
      * @return mixed
      */
-    public static function beNotNull(mixed $val): mixed {
+    public static function beNotNull(mixed $value): mixed {
         // @todo: add $message argument
-        self::beTruthy($val !== null);
-        return $val;
+        self::beTruthy($value !== null);
+        return $value;
     }
 
-    public static function beEmpty(mixed $val): mixed {
+    public static function beEmpty(mixed $value): mixed {
         // @todo: add $message argument
-        self::beTruthy(empty($val), 'The value must be empty');
-        return $val;
+        self::beTruthy(empty($value), 'The value must be empty');
+        return $value;
     }
 
-    public static function beNotEmpty(mixed $val): mixed {
+    public static function beNotEmpty(mixed $value): mixed {
         // @todo: add $message
-        self::beTruthy(!empty($val), 'The value must be non empty');
-        return $val;
+        self::beTruthy(!empty($value), 'The value must be non empty');
+        return $value;
     }
 
     /**

@@ -19,12 +19,12 @@ class Converter {
      */
     public static function toBytes(string $valWithUnit): int {
         $unit = preg_replace('/[^bkmgtpezy]/i', '', $valWithUnit);
-        $val = preg_replace('/[^0-9\.]/', '', $valWithUnit);
+        $value = preg_replace('/[^0-9\.]/', '', $valWithUnit);
         if ($unit) {
             // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-            $b = round($val * pow(1024, stripos('bkmgtpezy', $unit[0])));
+            $b = round($value * pow(1024, stripos('bkmgtpezy', $unit[0])));
         } else {
-            $b = round($val);
+            $b = round($value);
         }
         return (int) $b;
     }

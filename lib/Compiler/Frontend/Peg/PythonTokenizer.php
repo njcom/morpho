@@ -65,12 +65,12 @@ class PythonTokenizer {
                 if (preg_match('~' . $endProgRe . '~AsDu', $line, $match, 0, $pos)) {
                     $pos = $end = mb_strlen($match[0]);
                     /** @var int $end */
-                    yield new Token(TokenType::STRING, $contStr . mb_substr($line, 0, $end), $strStart, [$lineNum, $end], $contLine . $line);
+                    yield new Token(TokenType::String, $contStr . mb_substr($line, 0, $end), $strStart, [$lineNum, $end], $contLine . $line);
                     $contStr = '';
                     $needCont = 0;
                     $contLine = null;
                 } elseif ($needCont && !str_ends_with($line, "\\\n") && !str_ends_with($line, "\\\r\n")) {
-                    yield new Token(TokenType::ERRORTOKEN, $contStr . $line, $strStart, [$lineNum, mb_strlen($line)], $contLine);
+                    yield new Token(TokenType::ErrorToken, $contStr . $line, $strStart, [$lineNum, mb_strlen($line)], $contLine);
                     $contStr = '';
                     $contLine = null;
                     continue;
@@ -102,7 +102,7 @@ class PythonTokenizer {
                 if (str_contains("#\r\n", $line[$pos])) { // skip comments or blank lines
                     if ($line[$pos] === '#') {
                         $commentToken = rtrim(mb_substr($line, $pos), "\r\n");
-                        yield new Token(TokenType::COMMENT, $commentToken, [$lineNum, $pos], [$lineNum, $pos + mb_strlen($commentToken)], $line);
+                        yield new Token(TokenType::Comment, $commentToken, [$lineNum, $pos], [$lineNum, $pos + mb_strlen($commentToken)], $line);
                         $pos += mb_strlen($commentToken);
                     }
                     yield new Token(TokenType::NL, mb_substr($line, $pos), [$lineNum, $pos], [$lineNum, mb_strlen($line)], $line);
@@ -110,14 +110,14 @@ class PythonTokenizer {
                 }
                 if ($column > last($indents)) { // count indents or dedents
                     $indents[] = $column;
-                    yield new Token(TokenType::INDENT, mb_substr($line, 0, $pos), [$lineNum, 0], [$lineNum, $pos], $line);
+                    yield new Token(TokenType::Indent, mb_substr($line, 0, $pos), [$lineNum, 0], [$lineNum, $pos], $line);
                 }
                 while ($column < last($indents)) {
                     if (!in_array($column, $indents)) {
                         throw new IndentationException("Unindent does not match any outer indentation level", $lineNum, $pos, $line);
                     }
                     $indents = array_slice($indents, 0, -1);
-                    yield new Token(TokenType::DEDENT, '', [$lineNum, $pos], [$lineNum, $pos], $line);
+                    yield new Token(TokenType::Dedent, '', [$lineNum, $pos], [$lineNum, $pos], $line);
                 }
             } else { // continued statement
                 if ('' === $line) {
@@ -141,16 +141,16 @@ class PythonTokenizer {
                     $initial = mb_substr($line, $start, 1);
 
                     if (str_contains($numChars, $initial) || ($initial === '.' && $token != '.' && $token != '...')) {
-                        yield new Token(TokenType::NUMBER, $token, $spos, $epos, $line);
+                        yield new Token(TokenType::Number, $token, $spos, $epos, $line);
                     } elseif (str_contains("\r\n", $initial)) {
                         if ($parenLevel > 0) {
                             yield new Token(TokenType::NL, $token, $spos, $epos, $line);
                         } else {
-                            yield new Token(TokenType::NEWLINE, $token, $spos, $epos, $line);
+                            yield new Token(TokenType::NewLine, $token, $spos, $epos, $line);
                         }
                     } elseif ($initial == '#') {
                         Must::beTruthy(!str_ends_with($token, "\n"));
-                        yield new Token(TokenType::COMMENT, $token, $spos, $epos, $line);
+                        yield new Token(TokenType::Comment, $token, $spos, $epos, $line);
                     } elseif (in_array($token, $tripleQuoted)) {
                         $endProgRe = $endPatterns[$token];
                         if (preg_match('~' . $endProgRe . '~AsDu', $line, $match, PREG_OFFSET_CAPTURE, $pos))  { # all on one line
@@ -159,7 +159,7 @@ class PythonTokenizer {
                             }
                             $pos = mb_strlen($match[0]);
                             $token = mb_substr($line, $start, $end - $start);
-                            yield new Token(TokenType::STRING, $token, $spos, [$lineNum, $pos], $line);
+                            yield new Token(TokenType::String, $token, $spos, [$lineNum, $pos], $line);
                         } else {
                             $strStart = [$lineNum, $start]; # multiple lines
                             $contStr = mb_substr($line, $start);
@@ -199,10 +199,10 @@ class PythonTokenizer {
                             $contLine = $line;
                             break;
                         } else {
-                            yield new Token(TokenType::STRING, $token, $spos, $epos, $line); # ordinary string
+                            yield new Token(TokenType::String, $token, $spos, $epos, $line); # ordinary string
                         }
                     } elseif (PythonTokenizerRe::isIdentifier($initial)) { # ordinary name
-                        yield new Token(TokenType::NAME, $token, $spos, $epos, $line);
+                        yield new Token(TokenType::Name, $token, $spos, $epos, $line);
                     } elseif ($initial == '\\') { # continued stmt
                         $continued = 1;
                     }
@@ -212,26 +212,25 @@ class PythonTokenizer {
                         } elseif (str_contains(')]}', $initial)) {
                             $parenLevel--;
                         }
-                        yield new Token(TokenType::OP, $token, $spos, $epos, $line);
+                        yield new Token(TokenType::Op, $token, $spos, $epos, $line);
                     }
                 } else {
-                    yield new Token(TokenType::ERRORTOKEN, $line[$pos], [$lineNum, $pos], [$lineNum, $pos + 1], $line);
+                    yield new Token(TokenType::ErrorToken, $line[$pos], [$lineNum, $pos], [$lineNum, $pos + 1], $line);
                     $pos++;
                 }
             }
         }
-        // Add an implicit NEWLINE if the input doesn't end in one
+        // Add an implicit new line if the input doesn't end in one.
         if (false !== $lastLine && strlen($lastLine) && !(str_ends_with($lastLine, "\r") || str_ends_with($lastLine, "\n") || str_ends_with($lastLine, "\r\n")) && !str_starts_with(trim($lastLine), '#')) {
-            yield new Token(TokenTYpe::NEWLINE, '', [$lineNum - 1, mb_strlen($lastLine)], [$lineNum - 1, mb_strlen($lastLine) + 1], '');
+            yield new Token(TokenType::NewLine, '', [$lineNum - 1, mb_strlen($lastLine)], [$lineNum - 1, mb_strlen($lastLine) + 1], $lastLine);
         }
         foreach (array_slice($indents, 1) as $_) { // pop remaining indent levels
-            yield new Token(TokenType::DEDENT, '', [$lineNum, 0], [$lineNum, 0], '');
+            yield new Token(TokenType::Dedent, '', [$lineNum, 0], [$lineNum, 0], '');
         }
-        yield new Token(TokenType::ENDMARKER, '', [$lineNum, 0], [$lineNum, 0], '');
+        yield new Token(TokenType::EndMarker, '', [$lineNum, 0], [$lineNum, 0], '');
         if (!feof($stream)) {
             throw new RuntimeException('Unexpected end of the stream');
         }
-
         fclose($stream);
     }
 

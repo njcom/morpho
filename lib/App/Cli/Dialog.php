@@ -23,13 +23,13 @@ class Dialog {
 
     public static function checkList(iterable $items, string $title = null, string $text = null): array {
         $normalizedItems = [];
-        foreach ($items as $key => $val) {
+        foreach ($items as $key => $value) {
             if (is_numeric($key)) {
                 $checked = false;
             } else {
-                $checked = (bool)$val;
+                $checked = (bool)$value;
             }
-            $normalizedItems[$key] = escapeshellarg(caseVal($val)) . ($checked ? ' on' : ' off');
+            $normalizedItems[$key] = escapeshellarg(caseVal($value)) . ($checked ? ' on' : ' off');
         }
         $checkedItemsAsText = (string)sh(
             'dialog --stdout --no-items --title ' . escapeshellarg((string)$title) . ' --checklist ' . escapeshellarg((string)$text) . ' 0 0 0 ' . implode(' ', $normalizedItems),
@@ -99,8 +99,8 @@ class Dialog {
 
     public static function menu(iterable $items, $defaultKey = null, string $title = null, string $text = null): array|false {
         $normalizedItems = [];
-        foreach ($items as $key => $val) {
-            $normalizedItems[$key] = caseVal($val);
+        foreach ($items as $key => $value) {
+            $normalizedItems[$key] = caseVal($value);
         }
         $defaultItem = null;
         if (null !== $defaultKey) {
@@ -159,8 +159,8 @@ class Dialog {
     public static function radiolist(iterable $items, $defaultKey = null, string $title = null, string $text = null) {
         /*
         $normalizedItems = [];
-        foreach ($items as $key => $val) {
-            $normalizedItems[$key] = caseVal($val);
+        foreach ($items as $key => $value) {
+            $normalizedItems[$key] = caseVal($value);
         }
         $defaultItem = null;
         if (null !== $defaultKey) {

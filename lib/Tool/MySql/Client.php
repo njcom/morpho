@@ -31,8 +31,8 @@ class Client extends BaseClient {
         $transportStr = null !== $conf['sockFilePath'] ? 'unix_socket=' . $conf['sockFilePath'] : "host={$conf['host']};port={$conf['port']}";
         $dsn = "mysql:$transportStr;dbname={$conf['db']};charset={$conf['charset']}";
         $pdo = new PDO($dsn, $conf['user'], $conf['password']);
-        foreach ($conf['pdoConf'] ?? $this->pdoConf as $name => $val) {
-            $pdo->setAttribute($name, $val);
+        foreach ($conf['pdoConf'] ?? $this->pdoConf as $name => $value) {
+            $pdo->setAttribute($name, $value);
         }
         $this->pdo = $pdo;
     }

@@ -143,19 +143,20 @@ class Rule implements IGrammarNode, IRenderingActions {
 }
 
 abstract readonly class Leaf implements IGrammarNode {
-    public string $val;
+    public string $value;
 
-    public function __construct(string $val) {
-        $this->val = $val;
+    public function __construct(string $value) {
+        $this->value = $value;
     }
 
     public function __toString(): string {
-        return $this->val;
+        return $this->value;
     }
 
     // def __iter__(self) -> Iterable[str]:
     public function getIterator(): Traversable {
         if (false) {
+            /** @noinspection PhpUnreachableStatementInspection */
             yield;
         }
     }
@@ -163,21 +164,21 @@ abstract readonly class Leaf implements IGrammarNode {
 
 readonly class NameLeaf extends Leaf {
     public function __toString(): string {
-        if ($this->val == 'ENDMARKER') {
+        if ($this->value == 'ENDMARKER') {
             return '$';
         }
         return parent::__toString();
     }
 
     public function repr(): string {
-        return 'NameLeaf(' . q($this->val) . ')';
+        return 'NameLeaf(' . q($this->value) . ')';
     }
 }
 
 // The value is a string literal, including quotes.
 readonly class StringLeaf extends Leaf {
     public function repr(): string {
-        return 'StringLeaf(' . qq($this->val) . ')';
+        return 'StringLeaf(' . qq($this->value) . ')';
     }
 }
 
@@ -253,11 +254,11 @@ class Alt implements IGrammarNode, IRenderingActions {
     public function repr(): string {
         $repr = function (array $items): string {
             $result = [];
-            foreach ($items as $val) {
-                if ($val instanceof IGrammarNode) {
-                    $result[] = $val->repr();
+            foreach ($items as $value) {
+                if ($value instanceof IGrammarNode) {
+                    $result[] = $value->repr();
                 } else {
-                    $result[] = (string)$val;
+                    $result[] = (string)$value;
                 }
             }
             return '[' . implode(', ', $result) . ']';
@@ -455,14 +456,14 @@ readonly class Repeat0 extends Repeat {
 
 readonly class Repeat1 extends Repeat {
     public function __toString(): string {
-        throw new NotImplementedException();
-        /*def __str__(self) -> str:
-            s = str(self.node)
-            # TODO: Decide whether to use (X)+ or X+ based on type of X
-            if " " in s:
-                return f"({s})+"
-            else:
-                return f"{s}+"*/
+        // TODO: Decide whether to use (X)+ or X+ based on type of X
+        $s = $this->node->__toString();
+        if (str_contains($s, ' ')) {
+            // f"({s})+"
+            return '(' . $s . ')+';
+        }
+        // f"{s}+"
+        return 's+';
     }
 
     public function repr(): string {
@@ -497,7 +498,8 @@ readonly class Group implements IGrammarNode {
     }
 
     public function __toString(): string {
-        //return f"({self.rhs})"
+        // f"({self.rhs})"
+        return '(' . $this->rhs . ')';
         throw new NotImplementedException();
     }
 
@@ -546,8 +548,8 @@ Item = Union[Plain, Opt, Repeat, Forced, Lookahead, Rhs, Cut]
 
 // RuleName = Tuple[str, str]
 class RuleName extends ArrayObject implements IGrammarNode {
-    public function __construct(string $val, ?string $annotation) {
-        parent::__construct([$val, $annotation]);
+    public function __construct(string $value, ?string $annotation) {
+        parent::__construct([$value, $annotation]);
     }
 
     public function __toString(): string {
@@ -561,8 +563,8 @@ class RuleName extends ArrayObject implements IGrammarNode {
 
 // MetaTuple = Tuple[str, Optional[str]]
 /*class MetaTuple extends ArrayObject implements IGrammarNode {
-    public function __construct(string $name, ?string $val) {
-        $this->foo = [$name, $val];
+    public function __construct(string $name, ?string $value) {
+        $this->foo = [$name, $value];
     }
 
     public function __toString(): string {
@@ -607,11 +609,11 @@ class RuleList extends ArrayObject implements IGrammarNode {
  *
  * public function repr(): string {
  * $items = [];
- * foreach ($this as $val) {
- * if ($val instanceof IGrammarNode) {
- * $items[] = $val->repr();
+ * foreach ($this as $value) {
+ * if ($value instanceof IGrammarNode) {
+ * $items[] = $value->repr();
  * } else {
- * $items[] = (string)$val;
+ * $items[] = (string)$value;
  * }
  * }
  * return '[' . implode(', ', $items) . ']';

@@ -92,12 +92,15 @@ clean-container-env:
 #	sudo sh -c 'rm -rfv $(backend-dir-path)/localhost/cache/router'
 
 update-peg:
-	curl -fLo $(CURDIR)/lib/Tech/Python/python.token 'https://raw.githubusercontent.com/python/cpython/main/Grammar/Tokens'
-	curl -fLo $(CURDIR)/lib/Tech/Python/python.gram 'https://raw.githubusercontent.com/python/cpython/main/Grammar/python.gram'
-	curl -fLo $(CURDIR)/lib/Tech/Python/meta.gram 'https://raw.githubusercontent.com/python/cpython/main/Tools/peg_generator/pegen/metagrammar.gram'
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.token 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Grammar/Tokens'
+	echo "Written file $(CURDIR)/lib/Tool/Python/python.token"
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.gram 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Grammar/python.gram'
+	echo "Written file $(CURDIR)/lib/Tool/Python/python.gram"
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/meta.gram 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Tools/peg_generator/pegen/metagrammar.gram'
+	echo "Written file $(CURDIR)/lib/Tool/Python/meta.gram"
 	target_file_path=$(CURDIR)/test/Unit/Compiler/Frontend/Peg/test-data/PythonTokenizerTest/meta-token \
-		&& cat $(CURDIR)/lib/Tech/Python/meta.gram | $(CURDIR)/bin/gen-py-tokens > "$$target_file_path" \
-		&& echo "Written '$$target_file_path'"
+		&& cat $(CURDIR)/lib/Tool/Python/meta.gram | $(CURDIR)/bin/peg gen-py-tokens > "$$target_file_path" \
+		&& echo "Written file $$target_file_path"
 
 setup: update-peg
 	composer require --dev psalm/plugin-phpunit

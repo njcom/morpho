@@ -103,11 +103,11 @@ class Debugger {
         return $this->formatLine($output);
     }
 
-    protected function describeGen(Generator $val): string {
+    protected function describeGen(Generator $value): string {
         $out = '';
         $i = 0;
-        foreach ($val as $key => $value) {
-            $out .= rtrim($this->describeVal($key), ';') . ' => ' . rtrim($this->describeVal($value)) . "\n";
+        foreach ($value as $key => $v) {
+            $out .= rtrim($this->describeVal($key), ';') . ' => ' . rtrim($this->describeVal($v)) . "\n";
             if ($i > 100) {
                 $out .= "...\n";
                 break;
@@ -118,7 +118,7 @@ class Debugger {
         return $out;
     }
 
-    protected function describeVal($val, bool $stripNumericKeys = true): string {
+    protected function describeVal($value, bool $stripNumericKeys = true): string {
         $res = preg_replace(
                 [
                     '~=>\s+array~si',
@@ -128,7 +128,7 @@ class Debugger {
                     '=> array',
                     'array(',
                 ],
-                var_export($val, true)
+                var_export($value, true)
             ) . ';';
         if ($stripNumericKeys) {
             $res = preg_replace('~^(\s+)\d+.*=> ~mi', '\\1', $res);

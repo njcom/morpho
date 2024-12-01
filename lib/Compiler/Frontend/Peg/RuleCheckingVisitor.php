@@ -15,21 +15,25 @@ class RuleCheckingVisitor extends GrammarVisitor {
     /**
      * @var array Dict[str, Rule]
      */
-    private array $rules;
+    public array $rules;
 
     /**
      * @var array Set[str]
      */
     private array $tokens;
 
-    public function __construct(array $rules, array $tokens) {
-        $this->rules = $rules;
+    public function __construct(array $tokens) {
         $this->tokens = $tokens;
     }
 
     protected function visitNameLeaf(NameLeaf $node): void {
-        if (!isset($this->rules[$node->val]) && !in_array($node->val, $this->tokens, true)) {
-            throw new GrammarException('Dangling reference to rule ' . q($node->val));
+        $value = match ($node->value) {
+            'NEWLINE' => TokenType::NewLine->name,
+            'NUMBER' => TokenType::Number->name,
+            default => $node->value,
+        };
+        if (!isset($this->rules[$value]) && !in_array($value, $this->tokens, true)) {
+            throw new GrammarException('Dangling reference to rule ' . q($value));
         }
     }
 

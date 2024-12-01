@@ -1,6 +1,7 @@
-# Composer's files:
+# Tools' files:
 /vendor/
 .vscode/
+.ipynb_checkpoints/
 
 # Generated files:
 cache/*

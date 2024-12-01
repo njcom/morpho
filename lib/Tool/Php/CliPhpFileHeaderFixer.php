@@ -6,6 +6,7 @@
  */
 namespace Morpho\Tool\Php;
 
+use Morpho\App\Web\PhpFileHeaderFixer;
 use Morpho\Base\Err;
 use Morpho\Base\NotImplementedException;
 use Morpho\Base\Ok;
@@ -32,7 +33,7 @@ class CliPhpFileHeaderFixer {
     public function fixFiles(array $constructArgs, iterable $files, array $context, Result $prevResult = null): Result {
         $fixer = new PhpFileHeaderFixer(...$constructArgs);
         if ($prevResult) {
-            $stats = $prevResult->val();
+            $stats = $prevResult->value();
             $ok = $prevResult->isOk();
         } else {
             $stats = ['processed' => ['num' => 0], 'fixed' => ['num' => 0, 'filePaths' => []]];
@@ -44,8 +45,8 @@ class CliPhpFileHeaderFixer {
             if (!$result->isOk()) {
                 errorLine("Unable to fix the file " . q($filePath) . "\n" . print_r($result, true));
             }
-            if (isset($result->val()['text'])) {
-                showLine(indent($result->val()['text']));
+            if (isset($result->value()['text'])) {
+                showLine(indent($result->value()['text']));
                 $stats['fixed']['num']++;
                 $stats['fixed']['filePaths'][] = $filePath;
             }
@@ -57,11 +58,11 @@ class CliPhpFileHeaderFixer {
     }
 
     public function showResult(Result $result): void {
-        showLine("\nNumber of processed files: " . $result->val()['processed']['num']);
-        showLine("Number of fixed files: " . $result->val()['fixed']['num']);
+        showLine("\nNumber of processed files: " . $result->value()['processed']['num']);
+        showLine("Number of fixed files: " . $result->value()['fixed']['num']);
         showLine(
-            "List of fixed files: " . ($result->val()['fixed']['num'] > 0 ? "\n" . indent(
-                    implode("\n", $result->val()['fixed']['filePaths']),
+            "List of fixed files: " . ($result->value()['fixed']['num'] > 0 ? "\n" . indent(
+                    implode("\n", $result->value()['fixed']['filePaths']),
                     4
                 ) : '-')
         );

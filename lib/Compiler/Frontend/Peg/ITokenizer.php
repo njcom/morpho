@@ -6,19 +6,20 @@
  */
 namespace Morpho\Compiler\Frontend\Peg;
 
-interface ITokenizer {
+use IteratorAggregate;
+
+interface ITokenizer extends IteratorAggregate {
     /**
      * Returns the next token and updates the index.
      * getnext() in Python
      */
-    public function nextToken(): Token;
+    public function nextToken(): ?Token;
 
     /**
      * Returns the next token *without* updating the index.
      * peek() in Python
-     * @return \Morpho\Compiler\Frontend\Peg\Token
      */
-    public function peekToken(): Token;
+    public function peekToken(): ?Token;
 
     public function index(): int;
 

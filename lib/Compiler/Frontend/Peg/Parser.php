@@ -9,6 +9,8 @@ namespace Morpho\Compiler\Frontend\Peg;
 use Closure;
 use Morpho\Base\NotImplementedException;
 use Morpho\Compiler\Frontend\SyntaxError;
+use WeakMap;
+
 use function Morpho\Base\last;
 
 /**
@@ -19,10 +21,8 @@ abstract class Parser {
     protected ITokenizer $tokenizer;
     private int $level;
     private array $cache;
-    private const KEYWORDS = [];
-    private const SOFT_KEYWORDS = ['memo'];
-    // @todo: remove after PHP 8.3 (
-    private static array $tokenTypes = [];
+    private const array KEYWORDS = [];
+    private const array SOFT_KEYWORDS = ['memo'];
 
     public function __construct(ITokenizer $tokenizer) {
         $this->tokenizer = $tokenizer;
@@ -53,7 +53,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::NAME && !in_array($tok->val, self::KEYWORDS)) {
+                if ($tok->type == TokenType::Name && !in_array($tok->value, self::KEYWORDS)) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -66,7 +66,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::NUMBER) {
+                if ($tok->type == TokenType::Number) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -79,7 +79,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::STRING) {
+                if ($tok->type == TokenType::String) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -92,7 +92,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::OP) {
+                if ($tok->type == TokenType::Op) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -105,7 +105,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::COMMENT) {
+                if ($tok->type == TokenType::Comment) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -118,7 +118,7 @@ abstract class Parser {
             __METHOD__,
             function () {
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::NAME && in_array($tok->val, self::SOFT_KEYWORDS)) {
+                if ($tok->type == TokenType::Name && in_array($tok->value, self::SOFT_KEYWORDS)) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -126,38 +126,36 @@ abstract class Parser {
         );
     }
 
-    protected function expect(string $type): ?Token {
+    protected function expect($expected): ?Token {
         return $this->memoize(
             __METHOD__,
-            function ($type) {
+            function ($expected) {
+                // @todo: replace TokenType with SpecialWord enum
+                $specialWords = [
+                    'NEWLINE' => TokenType::NewLine,
+                    'ENDMARKER' => TokenType::EndMarker,
+                    'INDENT' => TokenType::Indent,
+                    'DEDENT' => TokenType::Dedent,
+                    // @todo: ASYNC, AWAIT
+                    // @todo: NAME, NUMBER, STRING, OP, TYPE_COMMENT
+                    // @todo: SOFT_KEYWORD
+                ];
+                if (isset($specialWords[$expected])) {
+                    $expected = $specialWords[$expected];
+                }
+
                 $tok = $this->tokenizer->peekToken();
-                if ($tok->val === $type) {
+                if ($tok->value === $expected) { // Compare by token value
                     return $this->tokenizer->nextToken();
                 }
-                $exactTokenTypes = TokenType::exactTypes();
-                if (isset($exactTokenTypes[$type])) {
-                    if ($tok->type === $exactTokenTypes[$type]) {
+                if ($expected instanceof TokenType) {
+                    if ($tok->type == $expected) { // Compare by token type
                         return $this->tokenizer->nextToken();
                     }
                 }
-                if (PHP_VERSION_ID > 803000) {
-                    throw new NotImplementedException('Use Foo::{$bar} to check if enum case exists');
-                }
-                if (!self::$tokenTypes) {
-                    self::$tokenTypes = [];
-                    foreach (TokenType::cases() as $case) {
-                        self::$tokenTypes[last($case->name, ':')] = $case->value;
-                    }
-                }
-                if (isset(self::$tokenTypes[$type]) && $tok->type->value === self::$tokenTypes[$type]) {
-                    return $this->tokenizer->nextToken();
-                }
-                if ($tok->type === TokenType::OP && $tok->val === $type) {
-                    return $this->tokenizer->nextToken();
-                }
                 return null;
             },
-            $type,
+            $expected,
         );
     }
 

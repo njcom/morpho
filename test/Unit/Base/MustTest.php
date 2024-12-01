@@ -204,9 +204,9 @@ class MustTest extends TestCase {
     }
 
     #[DataProvider('dataHaveExactKeys_Invalid')]
-    public function testHaveExactKeys_Invalid($val, $keys) {
+    public function testHaveExactKeys_Invalid($value, $keys) {
         $this->expectExceptionObject(new MustException('The array must have the items with the specified keys and no other items'));
-        Must::haveExactKeys($val, $keys);
+        Must::haveExactKeys($value, $keys);
     }
 
     public static function dataHaveExactKeys_Valid(): iterable {

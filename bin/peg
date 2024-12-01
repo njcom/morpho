@@ -1,0 +1,250 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+namespace Morpho\App\Cli;
+
+require __DIR__ . '/../vendor/autoload.php';
+bootstrap();
+
+use RuntimeException;
+
+use function Morpho\Base\symDiff;
+
+use const Morpho\Base\INDENT;
+
+/*function tokenize($stream): void {
+    foreach (PythonTokenizer::tokenize($stream) as $token) {
+        showLine($token);
+    }
+}*/
+
+/**
+ * @param array    $argv
+ * @param callable $fread Callable[[Resource], None], e.g. processStdinOrArgs(array_slice($_SERVER['argv'], 1), function ($stream) { stream_get_contents($stream, offset: 0); });
+ * @return void
+ */
+function processStdinOrArgs(array $argv, callable $fread): void {
+    if (count($argv) < 1) {
+        $fread(STDIN);
+    } else {
+        foreach ($argv as $arg) {
+            if ($arg == '-') {
+                // `-` means read from stdin
+                $fread(STDIN);
+            } else {
+                // List of files as arguments
+                $stream = fopen($arg, 'r');
+                $fread($stream);
+                fclose($stream);
+            }
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Commands
+
+function genPyTokens(array $argv): void {
+    processStdinOrArgs($argv, function ($stream) {
+        $descriptors = [
+            0 => ["pipe", "r"],  // stdin is a pipe that the child will read from
+            1 => ["pipe", "w"],
+            2 => STDERR,
+            //1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
+            //2 => ["pipe", "w"], // stderr
+        ];
+        $process = proc_open("python -c 'import tokenize, sys\nfor token in tokenize.generate_tokens(sys.stdin.readline): print(token)'", $descriptors, $pipes);
+        if (!$process) {
+            throw new RuntimeException();
+        }
+        fwrite($pipes[0], stream_get_contents($stream, offset: 0)); // input file
+        fclose($pipes[0]);
+
+        //$stream = fopen('php://memory', 'r+');
+        $output = stream_get_contents($pipes[1]);
+        echo preg_replace('~^TokenInfo\\(~m', 'Token(', $output);
+        fclose($pipes[1]);
+
+        $exitCode = proc_close($process);
+        if ($exitCode) {
+            throw new RuntimeException();
+        }
+    });
+}
+
+function genTokenType(): void {
+    $cases = [
+        "Ampersand"        => "AMPER",
+        "AmpersandEqual"   => "AMPEREQUAL",
+        "Async"            => "ASYNC",
+        "At"               => "AT",
+        "AtEqual"          => "ATEQUAL",
+        "Await"            => "AWAIT",
+        "Circumflex"       => "CIRCUMFLEX",
+        "CircumflexEqual"  => "CIRCUMFLEXEQUAL",
+        "Colon"            => "COLON",
+        "ColonEqual"       => "COLONEQUAL",
+        "Comma"            => "COMMA",
+        "Comment"          => "COMMENT",
+        "Dedent"           => "DEDENT",
+        "Dot"              => "DOT",
+        "DoubleSlash"      => "DOUBLESLASH",
+        "DoubleSlashEqual" => "DOUBLESLASHEQUAL",
+        "DoubleStar"       => "DOUBLESTAR",
+        "DoubleStarEqual"  => "DOUBLESTAREQUAL",
+        "Ellipsis"         => "ELLIPSIS",
+        "Encoding"         => "ENCODING",
+        "EndMarker"        => "ENDMARKER",
+        "Equal"            => "EQUAL",
+        "EqualEqual"       => "EQEQUAL",
+        "ErrorToken"       => "ERRORTOKEN",
+        "Exclamation"      => "EXCLAMATION",
+        'FstringEnd'       => "FSTRING_END",
+        'FstringMiddle'    => "FSTRING_MIDDLE",
+        'FStringStart'     => "FSTRING_START",
+        "Greater"          => "GREATER",
+        "GreaterEqual"     => "GREATEREQUAL",
+        "Indent"           => "INDENT",
+        "LeftBrace"        => "LBRACE",
+        "LeftParen"        => "LPAR",
+        "LeftShift"        => "LEFTSHIFT",
+        "LeftShiftEqual"   => "LEFTSHIFTEQUAL",
+        "LeftSquareBrace"  => "LSQB",
+        "Less"             => "LESS",
+        "LessEqual"        => "LESSEQUAL",
+        "Minus"            => "MINUS",
+        "MinusEqual"       => "MINEQUAL",
+        "NL"               => "NL",
+        "NTokens"          => 'N_TOKENS',
+        "Name"             => "NAME",
+        "NewLine"          => "NEWLINE",
+        "NotEqual"         => "NOTEQUAL",
+        "NtOffset"         => 'NT_OFFSET',
+        "Number"           => "NUMBER",
+        "Op"               => "OP",
+        "Percent"          => "PERCENT",
+        "PercentEqual"     => "PERCENTEQUAL",
+        "Plus"             => "PLUS",
+        "PlusEqual"        => "PLUSEQUAL",
+        "RightArrow"       => "RARROW",
+        "RightBrace"       => "RBRACE",
+        "RightParen"       => "RPAR",
+        "RightShift"       => "RIGHTSHIFT",
+        "RightShiftEqual"  => "RIGHTSHIFTEQUAL",
+        "RightSquareBrace" => "RSQB",
+        "Semicolon"        => "SEMI",
+        "Slash"            => "SLASH",
+        "SlashEqual"       => "SLASHEQUAL",
+        "SoftKeyword"      => "SOFT_KEYWORD",
+        "Star"             => "STAR",
+        "StarEqual"        => "STAREQUAL",
+        "String"           => "STRING",
+        "Tilde"            => "TILDE",
+        "TypeComment"      => "TYPE_COMMENT",
+        "TypeIgnore"       => "TYPE_IGNORE",
+        "VertBar"          => "VBAR",
+        "VertBarEqual"     => "VBAREQUAL",
+    ];
+    $tokens = [];
+    $ignored = [];
+    foreach (explode(', ', trim(sh('python -c "import token; print(token.tok_name)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
+        [$val, $name] = explode(': ', $tokenOutput);
+        $name = trim($name, '"\'');
+        if (in_array($name, $ignored)) {
+            continue;
+        }
+        $tokens[$name] = $val;
+    }
+    ksort($tokens);
+
+    $diff = symDiff(array_values($cases), array_keys($tokens));
+    if ($diff) {
+        throw new \UnexpectedValueException(print_r($diff, true));
+    }
+
+    $out = rtrim(
+            '<?php declare(strict_types=1);' . "\n" . <<<'OUT'
+    /**
+     * This file is part of njcom/framework
+     * It is distributed under the 'Apache License Version 2.0' license.
+     * See the https://github.com/njcom/framework/blob/main/LICENSE for the full license text.
+     */
+    // This file was generated by the bin/peg script. 
+    namespace Morpho\Compiler\Frontend\Peg;
+    
+    /**
+     * https://github.com/python/cpython/blob/3.12/Lib/token.py
+     */
+    enum TokenType: int {
+    OUT
+        ) . "\n";
+    foreach ($cases as $name => $alias) {
+        $out .= INDENT . 'case ' . $name . ' = ' . $tokens[$alias] . ";\n";
+    }
+    $out .= rtrim(
+            <<<OUT
+
+        /**
+         * EXACT_TOKEN_TYPES in Python
+         */
+        public static function exactTypes(): array {
+            return [
+    OUT
+        ) . "\n";
+    $exactTypes = [];
+    $cases1 = array_combine(array_values($cases), array_keys($cases));
+    foreach ($tokens as $key => $value) {
+        $exactTypes[$value] = $cases1[$key];
+    }
+    foreach (explode(', ', trim(sh('python -c "from token import EXACT_TOKEN_TYPES; print(EXACT_TOKEN_TYPES)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
+        $pos = strrpos($tokenOutput, ': ');
+        if (false === $pos) {
+            throw new \UnexpectedValueException($tokenOutput);
+        }
+        $token = trim(substr($tokenOutput, 0, $pos), '"\'');
+        $value = substr($tokenOutput, $pos + 2);
+        $out .= str_repeat(INDENT, 3) . var_export($token, true) . ' => self::' . $exactTypes[$value] . ",\n";
+    }
+    $out .= rtrim(
+            <<<OUT
+            ];
+        }
+    }
+
+    OUT
+        ) . "\n";
+    echo $out;
+}
+
+function usage(bool $error) {
+    $msg = "Usage: " . $_SERVER['argv'][0] . ' (gen-py-tokens | gen-token-type | usage)';
+    if ($error) {
+        errorLine($msg);
+    } else {
+        showLine($msg);
+        exit();
+    }
+}
+
+/*function dumpAst() {
+    // @todo: https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/ast_dump.py
+    throw new NotImplementedException();
+}*/
+
+switch ($argv[1] ?? null) {
+    case 'gen-py-tokens':
+        genPyTokens(array_slice($argv, 2));
+        break;
+
+    case 'gen-token-type':
+        genTokenType();
+        break;
+
+    case 'usage':
+        usage(false);
+        break;
+
+    default:
+        showErrorLine("Unknown command");
+        usage(true);
+        break;
+}

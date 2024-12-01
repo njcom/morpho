@@ -1,17 +1,16 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
-namespace Morpho\Infra;
+require 'cli.php';
 
-require __DIR__ . '/../vendor/autoload.php';
+use PhpParser\PrettyPrinter;
 
-use Morpho\Compiler\Frontend\Peg\PythonTokenizer;
-
-use function Morpho\App\Cli\showLine;
+use function Morpho\Tech\Php\parse;
 
 function process($stream): void {
-    foreach (PythonTokenizer::tokenize($stream) as $token) {
-        showLine($token);
-    }
+    $contents = stream_get_contents($stream, offset: 0);
+    $ast = parse($contents);
+    $prettyPrinter = new PrettyPrinter\Standard;
+    echo $prettyPrinter->prettyPrintFile($ast);
 }
 
 if ($argc === 1) {

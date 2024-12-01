@@ -13,5 +13,5 @@ interface IContainer {
     /**
      * @return mixed
      */
-    public function val();
+    public function value();
 }

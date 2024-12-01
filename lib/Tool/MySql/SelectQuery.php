@@ -32,7 +32,7 @@ class SelectQuery extends Query implements ISelectQuery {
         $sql = [];
         $columns = [];
 
-        $quoteIdentifier = fn ($column) => $column instanceof Expr ? $column->val() : $this->db->quoteIdentifier($column);
+        $quoteIdentifier = fn ($column) => $column instanceof Expr ? $column->value() : $this->db->quoteIdentifier($column);
 
         if ($this->columns) {
             foreach ($this->columns as $column) {

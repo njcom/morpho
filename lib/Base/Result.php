@@ -22,7 +22,7 @@ abstract class Result extends Monad implements JsonSerializable {
             return $this;
         }
         if ($this instanceof Ok) {
-            return $fn($this->val);
+            return $fn($this->value);
         }
         throw new UnexpectedValueException();
     }
@@ -30,7 +30,7 @@ abstract class Result extends Monad implements JsonSerializable {
     public function apply(IFunctor $functor): Result {
         return $functor->map(
             function ($fn) {
-                return $fn($this->val);
+                return $fn($this->value);
             }
         );
     }

@@ -121,7 +121,7 @@ class FunctionsTest extends TestCase {
         $called = [];
         $this->assertTrue(
             all(
-                function ($val, $key) use (&$called) {
+                function ($value, $key) use (&$called) {
                     $called[] = func_get_args();
                     return true;
                 },
@@ -438,24 +438,24 @@ class FunctionsTest extends TestCase {
     }
 
     public function testCompose_Closure_2Args() {
-        $g = function ($val) {
-            return 'g' . $val;
+        $g = function ($value) {
+            return 'g' . $value;
         };
-        $f = function ($val) {
-            return 'f' . $val;
+        $f = function ($value) {
+            return 'f' . $value;
         };
         $this->assertEquals('fghello', compose($f, $g)('hello'));
     }
 
     public function testCompose_Closure_3Args() {
-        $g = function ($val) {
-            return 'g' . $val;
+        $g = function ($value) {
+            return 'g' . $value;
         };
-        $f = function ($val) {
-            return 'f' . $val;
+        $f = function ($value) {
+            return 'f' . $value;
         };
-        $k = function ($val) {
-            return 'k' . $val;
+        $k = function ($value) {
+            return 'k' . $value;
         };
         $this->assertEquals('kfghello', compose($k, $f, $g)('hello'));
     }
@@ -494,24 +494,24 @@ class FunctionsTest extends TestCase {
     }
 
     public function testRcompose_Closure_2Args() {
-        $g = function ($val) {
-            return 'g' . $val;
+        $g = function ($value) {
+            return 'g' . $value;
         };
-        $f = function ($val) {
-            return 'f' . $val;
+        $f = function ($value) {
+            return 'f' . $value;
         };
         $this->assertEquals('gfhello', rcompose($f, $g)('hello'));
     }
 
     public function testRcompose_Closure_3Args() {
-        $g = function ($val) {
-            return 'g' . $val;
+        $g = function ($value) {
+            return 'g' . $value;
         };
-        $f = function ($val) {
-            return 'f' . $val;
+        $f = function ($value) {
+            return 'f' . $value;
         };
-        $k = function ($val) {
-            return 'k' . $val;
+        $k = function ($value) {
+            return 'k' . $value;
         };
         $this->assertEquals('gfkhello', rcompose($k, $f, $g)('hello'));
     }
@@ -694,9 +694,9 @@ class FunctionsTest extends TestCase {
                 return 'returnedFromInvoke';
             }
         };
-        $val = 'foo';
-        $this->assertSame('returnedFromInvoke', with($disposable, $val));
-        $this->assertSame([$val], $disposable->invokeArgs);
+        $value = 'foo';
+        $this->assertSame('returnedFromInvoke', with($disposable, $value));
+        $this->assertSame([$value], $disposable->invokeArgs);
         $this->assertSame([], $disposable->disposeArgs);
     }
 
@@ -713,9 +713,9 @@ class FunctionsTest extends TestCase {
                 throw new RuntimeException('Some error');
             }
         };
-        $val = 'bar';
+        $value = 'bar';
         try {
-            with($disposable, $val);
+            with($disposable, $value);
             $this->fail();
         } catch (RuntimeException $e) {
             $this->assertSame('Some error', $e->getMessage());
@@ -1026,8 +1026,8 @@ OUT;
 
     public function testUnsetOne_StringKeys() {
         $this->assertEquals(
-            ['one' => 'first-val'],
-            unsetOne(['one' => 'first-val', 'two' => 'second-val'], 'second-val')
+            ['one' => 'first-value'],
+            unsetOne(['one' => 'first-value', 'two' => 'second-value'], 'second-value')
         );
     }
 

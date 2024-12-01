@@ -32,8 +32,8 @@ class ResultTest extends TestCase {
         $ok2Val = 'bar';
         $res = (new Ok($ok1Val))
             ->bind(
-                function ($val) use (&$captured, $ok2Val) {
-                    $captured = $val;
+                function ($value) use (&$captured, $ok2Val) {
+                    $captured = $value;
                     return new Ok($ok2Val);
                 }
             );
@@ -45,8 +45,8 @@ class ResultTest extends TestCase {
         $okVal = 'foo';
         $errVal = 'bar';
         $res = (new Ok($okVal))->bind(
-            function ($val) use (&$captured, $errVal) {
-                $captured = $val;
+            function ($value) use (&$captured, $errVal) {
+                $captured = $value;
                 return new Err($errVal);
             }
         );
@@ -108,11 +108,11 @@ class ResultTest extends TestCase {
             return $reqResult->bind($validateName)
                 ->bind($validateEmail)
                 ->bind(
-                    function ($val) use ($expected) {
+                    function ($value) use ($expected) {
                         if ($expected instanceof Err) {
                             throw new RuntimeException("Must not be called");
                         }
-                        return new Ok($val);
+                        return new Ok($value);
                     }
                 );
         };
@@ -122,20 +122,20 @@ class ResultTest extends TestCase {
     }
 
     public function testVal() {
-        $this->assertNull((new Ok())->val());
-        $this->assertNull((new Err())->val());
-        $this->assertSame(3, (new Ok(3))->val());
-        $this->assertSame(4, (new Err(4))->val());
+        $this->assertNull((new Ok())->value());
+        $this->assertNull((new Err())->value());
+        $this->assertSame(3, (new Ok(3))->value());
+        $this->assertSame(4, (new Err(4))->value());
     }
 
     public function testMonadLaws_LeftIdentity() {
         $fn = function ($v) {
             return new Ok($v);
         };
-        $val = 'abc';
+        $value = 'abc';
         $this->assertEquals(
-            $fn($val),
-            (new Ok($val))->bind($fn),
+            $fn($value),
+            (new Ok($value))->bind($fn),
         );
     }
 
@@ -165,9 +165,9 @@ class ResultTest extends TestCase {
 
     // Functor
     public function testMap() {
-        $res = (new Ok(2))->map(fn ($val) => $val - 3);
+        $res = (new Ok(2))->map(fn ($value) => $value - 3);
         $this->assertInstanceOf(IFunctor::class, $res);
-        $this->assertSame(-1, $res->val());
+        $this->assertSame(-1, $res->value());
     }
 
     // Applicative
@@ -175,7 +175,7 @@ class ResultTest extends TestCase {
         $fn = fn ($v) => $v - 2;
         $res = (new Ok(5))->apply(new Ok($fn));
         $this->assertInstanceOf(Ok::class, $res);
-        $this->assertSame(3, $res->val());
+        $this->assertSame(3, $res->value());
     }
 
     public function testIsOk() {
@@ -184,14 +184,14 @@ class ResultTest extends TestCase {
     }
 
     public function testJsonSerialization() {
-        $val = ['foo' => 'bar'];
+        $value = ['foo' => 'bar'];
 
-        $result = new Ok($val);
+        $result = new Ok($value);
         $this->assertInstanceOf(JsonSerializable::class, $result);
-        $this->assertJsonStringEqualsJsonString(json_encode(['ok' => $val]), json_encode($result));
+        $this->assertJsonStringEqualsJsonString(json_encode(['ok' => $value]), json_encode($result));
 
-        $result = new Err($val);
+        $result = new Err($value);
         $this->assertInstanceOf(JsonSerializable::class, $result);
-        $this->assertJsonStringEqualsJsonString(json_encode(['err' => $val]), json_encode($result));
+        $this->assertJsonStringEqualsJsonString(json_encode(['err' => $value]), json_encode($result));
     }
 }

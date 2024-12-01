@@ -51,8 +51,8 @@ class PipeTest extends TestCase {
             }
         };
         $i = 0;
-        foreach ($pipe as $key => $val) {
-            $this->assertSame($steps[$key], $val);
+        foreach ($pipe as $key => $value) {
+            $this->assertSame($steps[$key], $value);
             $i++;
         }
         $this->assertCount(2, $pipe);

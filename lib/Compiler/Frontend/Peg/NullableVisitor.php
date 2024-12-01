@@ -91,8 +91,8 @@ class NullableVisitor extends GrammarVisitor {
     }
 
     protected function visitNameLeaf(NameLeaf $node): bool {
-        if (isset($this->rules[$node->val])) {
-            return $this->visit($this->rules[$node->val]);
+        if (isset($this->rules[$node->value])) {
+            return $this->visit($this->rules[$node->value]);
         }
         // Token or unknown; never empty.
         return false;
@@ -100,6 +100,6 @@ class NullableVisitor extends GrammarVisitor {
 
     protected function visitStringLeaf(StringLeaf $node): bool {
         // The string token '' is considered empty.
-        return $node->val == '';
+        return $node->value == '';
     }
 }

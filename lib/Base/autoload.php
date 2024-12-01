@@ -97,15 +97,15 @@ const WAIT_INTERVAL_MICRO_SEC = 200000;
  */
 
 /**
- * @param mixed $val
- * @return bool Returns true if the $val is one of `enum` `case` values.
+ * @param mixed $value
+ * @return bool Returns true if the $value is one of `enum` `case` values.
  */
-function isEnumCase(mixed $val): bool {
-    return is_object($val) && enum_exists($val::class);
+function isEnumCase(mixed $value): bool {
+    return is_object($value) && enum_exists($value::class);
 }
 
-function caseVal(mixed $val): mixed {
-    return isEnumCase($val) ? $val->value : $val;
+function caseVal(mixed $value): mixed {
+    return isEnumCase($value) ? $value->value : $value;
 }
 
 function enumVals(string $enumClass, bool $preserveNames = true): array {
@@ -184,8 +184,8 @@ function partial(callable $fn, ...$args1): Closure {
  * @return bool
  */
 function all(callable $predicate, iterable|string|Stringable $list): bool {
-    foreach (toIt($list) as $key => $val) {
-        if (!$predicate($val, $key)) {
+    foreach (toIt($list) as $key => $value) {
+        if (!$predicate($value, $key)) {
             return false;
         }
     }
@@ -570,11 +570,11 @@ function toStr(iterable $it, string $eol = "\n"): string {
     return $result;
 }
 
-function toJson(mixed $val, int $flags = null): string {
+function toJson(mixed $value, int $flags = null): string {
     if (null === $flags) {
         $flags = -1;
     }
-    return json_encode($val, $flags & JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    return json_encode($value, $flags & JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 }
 
 function fromJson(string $json, bool $objectsToArrays = true): mixed {
@@ -585,8 +585,8 @@ function fromJson(string $json, bool $objectsToArrays = true): mixed {
     return $res;
 }
 
-function toYaml(mixed $val): string {
-    return Yaml::dump($val, 9999, 2);
+function toYaml(mixed $value): string {
+    return Yaml::dump($value, 9999, 2);
 }
 
 function fromYaml(string $yaml): mixed {
@@ -761,7 +761,7 @@ function not(callable $predicate): Closure {
 /**
  * @todo: support up to 10 functions.
  * Left composition.
- * Returns a new function which will call $f after $g with some value $val: $f($g($val)).
+ * Returns a new function which will call $f after $g with some value $value: $f($g($value)).
  */
 function compose(callable $a, callable $b, callable $c = null): Closure {
     $n = func_num_args();
@@ -818,12 +818,12 @@ function formatBytes(string $bytes, string $format = null): string {
     return $s;
 }
 
-function formatFloat($val): string {
-    if (empty($val)) {
-        $val = 0;
+function formatFloat($value): string {
+    if (empty($value)) {
+        $value = 0;
     }
-    $val = str_replace(',', '.', (string)$val);
-    return number_format(round(floatval($val), 2), 2, '.', ' ');
+    $value = str_replace(',', '.', (string)$value);
+    return number_format(round(floatval($value), 2), 2, '.', ' ');
 }
 
 function hash(mixed $var): string {
@@ -882,7 +882,7 @@ function apply(callable $fn, $iter): void {
     }
 }
 
-function pipe($iter, mixed $val): mixed {
+function pipe($iter, mixed $value): mixed {
     if (is_string($iter)) {
         // todo: use mb_*
         if ($iter !== '') {
@@ -890,10 +890,10 @@ function pipe($iter, mixed $val): mixed {
         }
     } else {
         foreach ($iter as $v) {
-            $val = $v($val);
+            $value = $v($value);
         }
     }
-    return $val;
+    return $value;
 }
 
 /**
@@ -1409,9 +1409,9 @@ function symDiff(array $a, array $b, bool $asUnion = true): array {
     return [];
 }
 
-function unsetOne(array $arr, mixed $val, bool $resetIntKeys = true, bool $allOccur = false, bool $strict = true): array {
+function unsetOne(array $arr, mixed $value, bool $resetIntKeys = true, bool $allOccur = false, bool $strict = true): array {
     while (true) {
-        $key = array_search($val, $arr, $strict);
+        $key = array_search($value, $arr, $strict);
         if (false === $key) {
             break;
         }
@@ -1427,13 +1427,13 @@ function unsetOne(array $arr, mixed $val, bool $resetIntKeys = true, bool $allOc
 
 function unsetMany(
     array $arr,
-    iterable $val,
+    iterable $value,
     bool $resetIntKeys = true,
     bool $allOccur = false,
     bool $strict = true
 ): array {
-    // NB: unsetMany() can't merged with unsetOne() as $val in unsetOne() can be array (iterable), i.e. unsetOne() has to support unsetting arrays.
-    foreach ($val as $v) {
+    // NB: unsetMany() can't merged with unsetOne() as $value in unsetOne() can be array (iterable), i.e. unsetOne() has to support unsetting arrays.
+    foreach ($value as $v) {
         while (true) {
             $key = array_search($v, $arr, $strict);
             if (false === $key) {
@@ -1475,12 +1475,12 @@ function flatten(array $arr): array {
     }
     */
     $result = [];
-    foreach ($arr as $val) {
-        if (is_array($val)) {
-            $result = array_merge($result, flatten($val));
+    foreach ($arr as $value) {
+        if (is_array($value)) {
+            $result = array_merge($result, flatten($value));
         } else {
-            // @todo: add $preserveKeys argument or $asList, normalize argument name across all base functions: $result[$key] = $val;
-            $result[] = $val;
+            // @todo: add $preserveKeys argument or $asList, normalize argument name across all base functions: $result[$key] = $value;
+            $result[] = $value;
         }
     }
     return $result;
@@ -1548,9 +1548,9 @@ function isUtf8Text(string $text): bool {
     return (bool)preg_match('/.*/us', $text); // [u/PCRE_UTF8](https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php)
 }
 
-function with(IDisposable $disposable, mixed $val = null): mixed {
+function with(IDisposable $disposable, mixed $value = null): mixed {
     try {
-        $result = $disposable($val);
+        $result = $disposable($value);
     } finally {
         $disposable->dispose();
     }

@@ -232,11 +232,11 @@ class Uri {
         $uriStr = '';
 
         $shouldReturnOnly = function (string $partName) use ($conf) {
-            $val = $conf[$partName];
+            $value = $conf[$partName];
             unset($conf[$partName]);
-            return $val && all(
-                    function ($val) {
-                        return !$val;
+            return $value && all(
+                    function ($value) {
+                        return !$value;
                     },
                     $conf
                 );

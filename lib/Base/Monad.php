@@ -9,8 +9,8 @@ namespace Morpho\Base;
 abstract class Monad extends Container implements IMonad {
     public function map(callable $fn): IFunctor {
         return $this->bind(
-            function ($val) use ($fn) {
-                return new static($fn($val));
+            function ($value) use ($fn) {
+                return new static($fn($value));
             }
         );
     }

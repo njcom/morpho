@@ -26,11 +26,11 @@ class VarExportFileCache extends PhpFileCache {
 
         $cacheFilePath = $this->cacheFilePath($key);
 
-        $val = [
+        $value = [
             'lifetime' => $lifeTime,
             'data'     => $data,
         ];
-        $code = '<?php return ' . var_export($val, true) . ';';
+        $code = '<?php return ' . var_export($value, true) . ';';
         return $this->writeFile($cacheFilePath, $code);
     }
 }

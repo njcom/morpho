@@ -29,11 +29,11 @@ abstract class CacheTest extends TestCase {
     public function testCaching($data) {
         // @TODO: get, set, delete, clear, getMultiple, setMultiple, deleteMultiple, has
         $cache = $this->mkCache();
-        $key = 'my-val';
+        $key = 'my-value';
         $this->assertFalse($cache->has($key));
         $this->assertNull($cache->get($key));
         $this->assertSame('abc', $cache->get($key, 'abc'));
-        $this->assertTrue($cache->set('my-val', $data));
+        $this->assertTrue($cache->set('my-value', $data));
         if (is_object($data)) {
             $this->assertEquals($data, $cache->get($key));
         } else {

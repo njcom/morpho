@@ -114,14 +114,14 @@ class SchemaTest extends DbTestCase {
         }
 
         public function testAvailableCharsetsOfServer() {
-            $checkVal = function ($val, $expectedType) {
-                $this->assertNotEmpty($val);
+            $checkVal = function ($value, $expectedType) {
+                $this->assertNotEmpty($value);
                 switch ($expectedType) {
                     case STRING_TYPE:
-                        $this->assertIsString($val);
+                        $this->assertIsString($value);
                         break;
                     case INT_TYPE:
-                        $this->assertIsInt($val);
+                        $this->assertIsInt($value);
                         break;
                     default:
                         throw new \UnexpectedValueException();

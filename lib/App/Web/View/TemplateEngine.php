@@ -370,9 +370,9 @@ class TemplateEngine extends ArrPipe {
      * @htmlSafe
      */
     public function textareaControl(array $attribs): string {
-        $val = $attribs['value'];
+        $value = $attribs['value'];
         unset($attribs['value']);
-        return $this->tag('textarea', $val, $this->addCommonAttribsOfControl($attribs));
+        return $this->tag('textarea', $value, $this->addCommonAttribsOfControl($attribs));
     }
 
     /**
@@ -407,11 +407,11 @@ class TemplateEngine extends ArrPipe {
         $html = '';
         if (null === $selectedOption || is_scalar($selectedOption)) {
             $selectedVal = (string)$selectedOption;
-            foreach ($options as $val => $text) {
-                $val = (string)$val;
+            foreach ($options as $value => $text) {
+                $value = (string)$value;
                 $html .= '<option value="' . $this->e(
-                        $val
-                    ) . '"' . ($val === $selectedVal ? ' selected' : '') . '>' . $this->e($text) . '</option>';
+                        $value
+                    ) . '"' . ($value === $selectedVal ? ' selected' : '') . '>' . $this->e($text) . '</option>';
             }
             return $html;
         }
@@ -423,9 +423,9 @@ class TemplateEngine extends ArrPipe {
             $newOptions[(string)$value] = $text;
         }
         $selectedOptions = [];
-        foreach ($selectedOption as $val) {
-            $val = (string)$val;
-            $selectedOptions[$val] = true;
+        foreach ($selectedOption as $value) {
+            $value = (string)$value;
+            $selectedOptions[$value] = true;
         }
         foreach ($newOptions as $value => $text) {
             $html .= '<option value="' . $this->e(
@@ -554,8 +554,8 @@ class TemplateEngine extends ArrPipe {
         return $this->request['jsConf'];
     }
 
-    public function toJson(mixed $val): string {
-        return toJson($val);
+    public function toJson(mixed $value): string {
+        return toJson($value);
     }
 
     public function __call(string $pluginName, array $args) {

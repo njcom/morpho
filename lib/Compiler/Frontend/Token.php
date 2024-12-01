@@ -15,13 +15,13 @@ class Token {
      * Value of the token, lexeme.
      * @var string
      */
-    public readonly string $val;
+    public readonly string $value;
     public readonly mixed $location;
     public array $meta = [];
 
-    public function __construct($type, string $val, mixed $location, array $meta = []) {
+    public function __construct($type, string $value, mixed $location, array $meta = []) {
         $this->type = $type;
-        $this->val = $val;
+        $this->value = $value;
         $this->location = $location;
         $this->meta = $meta;
     }

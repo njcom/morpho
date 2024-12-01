@@ -45,8 +45,8 @@ trait TDbTestCase {
             PDO::ATTR_EMULATE_PREPARES   => 0,
             PDO::ATTR_STRINGIFY_FETCHES  => 0,
         ];
-        foreach ($pdoConf as $name => $val) {
-            $pdo->setAttribute($name, $val);
+        foreach ($pdoConf as $name => $value) {
+            $pdo->setAttribute($name, $value);
         }
         return $pdo;
     }

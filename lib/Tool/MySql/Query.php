@@ -82,8 +82,8 @@ abstract class Query implements IQuery {
             $sql = preg_replace_callback(
                 '~\\?~s',
                 function ($match) use (&$args): string {
-                    $val = array_shift($args);
-                    return $this->db->quote((string) $val); // NB: this may be not safe due SQL-injection.
+                    $value = array_shift($args);
+                    return $this->db->quote((string) $value); // NB: this may be not safe due SQL-injection.
                 },
                 $sql
             );
@@ -96,7 +96,7 @@ abstract class Query implements IQuery {
         $sql = [];
         foreach ($this->tables as $table) {
             if ($table instanceof Expr) {
-                $sql[] = $table->val();
+                $sql[] = $table->value();
             } elseif (is_array($table)) {
                 $tables = [];
                 foreach ($table as $name => $alias) {

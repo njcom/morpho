@@ -45,9 +45,9 @@ class FunctionsTest extends TestCase {
     }
 
     public function testShowLine_IterableArg() {
-        $val = new ArrayIterator(['foo', 'bar', 'baz']);
+        $value = new ArrayIterator(['foo', 'bar', 'baz']);
         ob_start();
-        showLine($val);
+        showLine($value);
         $this->assertEquals("foo\nbar\nbaz\n", ob_get_clean());
     }
 
@@ -184,12 +184,12 @@ OUT
 
     public function testSh_EnvVarsConfParam() {
         $var = 'v' . md5(__METHOD__);
-        $val = 'hello';
+        $value = 'hello';
         $this->assertSame(
-            $val . "\n",
+            $value . "\n",
             sh(
                 'echo $' . $var,
-                ['envVars' => [$var => $val], 'capture' => true, 'show' => false]
+                ['envVars' => [$var => $value], 'capture' => true, 'show' => false]
             )->stdOut()
         );
     }

@@ -45,11 +45,11 @@ class VarExportFileCacheTest extends TestCase {
     public function testCaching($data) {
         $cache = new VarExportFileCache($this->createTmpDir());
 
-        $key = 'my-val';
+        $key = 'my-value';
         $this->assertFalse($cache->has($key));
         $this->assertNull($cache->get($key));
         $this->assertSame('abc', $cache->get($key, 'abc'));
-        $this->assertTrue($cache->set('my-val', $data));
+        $this->assertTrue($cache->set('my-value', $data));
         if (is_object($data)) {
             $this->assertEquals($data, $cache->get($key));
         } else {

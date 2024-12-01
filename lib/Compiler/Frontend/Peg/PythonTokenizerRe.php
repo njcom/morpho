@@ -6,7 +6,10 @@
  */
 namespace Morpho\Compiler\Frontend\Peg;
 
+use UnexpectedValueException;
+
 use function iter\rewindable\product;
+use function Morpho\Base\map;
 use function Morpho\Base\permutations;
 
 /**
@@ -14,23 +17,23 @@ use function Morpho\Base\permutations;
  * https://github.com/python/cpython/blob/fc94d55ff453a3101e4c00a394d4e38ae2fece13/Lib/tokenize.py#L65
  */
 class PythonTokenizerRe {
-    public const COMMENT_RE = '#[^\r\n]*';
-    public const WHITESPACE_RE = '[ \f\t]*';
-    public const NAME_RE = '\w+';
+    public const string COMMENT_RE = '#[^\r\n]*';
+    public const string WHITESPACE_RE = '[ \f\t]*';
+    public const string NAME_RE = '\w+';
     // Numbers
-    public const HEX_NUMBER_RE = '0[xX](?:_?[0-9a-fA-F])+';
-    public const BIN_NUMBER_RE = '0[bB](?:_?[01])+';
-    public const OCT_NUMBER_RE = '0[oO](?:_?[0-7])+';
-    public const DEC_NUMBER_RE = '(?:0(?:_?0)*|[1-9](?:_?[0-9])*)';
+    public const string HEX_NUMBER_RE = '0[xX](?:_?[0-9a-fA-F])+';
+    public const string BIN_NUMBER_RE = '0[bB](?:_?[01])+';
+    public const string OCT_NUMBER_RE = '0[oO](?:_?[0-7])+';
+    public const string DEC_NUMBER_RE = '(?:0(?:_?0)*|[1-9](?:_?[0-9])*)';
 
     # Tail end of ' string.
-    public const TAIL_END_OF_SINGLE_QUOTE = "[^'\\\\]*(?:\\\\.[^'\\\\]*)*'";
+    public const string TAIL_END_OF_SINGLE_QUOTE = "[^'\\\\]*(?:\\\\.[^'\\\\]*)*'";
     # Tail end of " string.
-    public const TAIL_END_OF_DOUBLE_QUOTE = '[^"\\\\]*(?:\\\\.[^"\\\\]*)*"';
+    public const string TAIL_END_OF_DOUBLE_QUOTE = '[^"\\\\]*(?:\\\\.[^"\\\\]*)*"';
     # Tail end of ''' string.
-    public const TAIL_END_OF_SINGLE3_QUOTE = "[^'\\\\]*(?:(?:\\\\.|'(?!''))[^'\\\\]*)*'''";
+    public const string TAIL_END_OF_SINGLE3_QUOTE = "[^'\\\\]*(?:(?:\\\\.|'(?!''))[^'\\\\]*)*'''";
     # Tail end of """ string.
-    public const TAIL_END_OF_DOUBLE3_QUOTE = '[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*"""';
+    public const string TAIL_END_OF_DOUBLE3_QUOTE = '[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*"""';
 
     public static function isIdentifier(string $v): bool {
         // @todo: support non ASCII identifiers https://docs.python.org/3/reference/lexical_analysis.html#identifiers
@@ -38,18 +41,18 @@ class PythonTokenizerRe {
     }
 
     public static function endPatterns(): array {
-        $endpats = [];
+        $endPatterns = [];
         $single = self::TAIL_END_OF_SINGLE_QUOTE;
         $double = self::TAIL_END_OF_DOUBLE_QUOTE;
         $single3 = self::TAIL_END_OF_SINGLE3_QUOTE;
         $double3 = self::TAIL_END_OF_DOUBLE3_QUOTE;
         foreach (self::allStringPrefixes() as $prefix) {
-            $endpats[$prefix . "'"] = $single;
-            $endpats[$prefix . '"'] = $double;
-            $endpats[$prefix . "'''"] = $single3;
-            $endpats[$prefix . '"""'] = $double3;
+            $endPatterns[$prefix . "'"] = $single;
+            $endPatterns[$prefix . '"'] = $double;
+            $endPatterns[$prefix . "'''"] = $single3;
+            $endPatterns[$prefix . '"""'] = $double3;
         }
-        return $endpats;
+        return $endPatterns;
     }
 
     public static function tripleQuotedPrefixes(): array {
@@ -84,7 +87,7 @@ class PythonTokenizerRe {
      */
     public static function anyRe(...$choices): string {
         if (!count($choices)) {
-            throw new \UnexpectedValueException("RE can't be empty");
+            throw new UnexpectedValueException("RE can't be empty");
         }
         return self::groupRe(...$choices) . '*';
     }
@@ -95,7 +98,7 @@ class PythonTokenizerRe {
      */
     public static function maybeRe(...$choices): string {
         if (!count($choices)) {
-            throw new \UnexpectedValueException("RE can't be empty");
+            throw new UnexpectedValueException("RE can't be empty");
         }
         return self::groupRe(...$choices) . '?';
     }
@@ -170,7 +173,7 @@ class PythonTokenizerRe {
         $escapeReSpecialChars = function (string $re): string {
             return preg_quote($re, '~');
         };
-        $specialRe = self::groupRe(...\Morpho\Base\map($escapeReSpecialChars, $exactTokenTypes));
+        $specialRe = self::groupRe(...map($escapeReSpecialChars, $exactTokenTypes));
         return self::groupRe('\\r?\\n', $specialRe);
     }
 

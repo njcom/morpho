@@ -163,10 +163,10 @@ abstract class TestCase extends BaseTestCase {
         return substr($class, 0, strrpos($class, '\\'));
     }
 
-    protected function assertIntString($val): void {
+    protected function assertIntString($value): void {
         $this->assertMatchesRegularExpression(
             '~^[-+]?\d+$~si',
-            $val,
+            $value,
             "The value is not either an integer or an integer string"
         );
     }

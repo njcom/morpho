@@ -74,7 +74,7 @@ class InitialNameVisitor extends GrammarVisitor {
 
     // def visit_NameLeaf(self, node: NameLeaf) -> Set[Any]:
     protected function visit_NameLeaf(NameLeaf $leaf): string {
-        return $leaf->val;
+        return $leaf->value;
     }
 
     protected function visit_StringLeaf(StringLeaf $leaf): array {

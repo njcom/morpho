@@ -11,14 +11,14 @@ namespace Morpho\Compiler\Frontend\Peg;
  */
 class InvalidNodeVisitor extends GrammarVisitor {
     protected function visitNameLeaf(NameLeaf $node): bool {
-        return str_starts_with($node->val, 'invalid');
+        return str_starts_with($node->value, 'invalid');
     }
 
     protected function visitStringLeaf(StringLeaf $node): bool {
         return false;
     }
 
-    protected function visitNamedItem(NamedItem $node): bool {
+    protected function visitNamedItem(NamedItem $node): bool|null {
         return $this->visit($node->item);
     }
 

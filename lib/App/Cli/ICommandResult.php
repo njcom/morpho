@@ -33,5 +33,5 @@ interface ICommandResult extends IteratorAggregate, Stringable, Countable {
     /**
      * The value is mutable - can be changed by caller.
      */
-    public function val(): ArrayObject;
+    public function value(): ArrayObject;
 }

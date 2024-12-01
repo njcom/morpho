@@ -7,13 +7,13 @@
 namespace Morpho\Test\Unit\Compiler\Frontend\Peg;
 
 class ParserTestHelper {
-    public function sortRecursive(array $val): array {
-        ksort($val);
-        $sortedKeys = array_keys($val);
-        array_multisort($val);
+    public function sortRecursive(array $value): array {
+        ksort($value);
+        $sortedKeys = array_keys($value);
+        array_multisort($value);
         $sorted = [];
         foreach ($sortedKeys as $key) {
-            $v = $val[$key];
+            $v = $value[$key];
             $sorted[$key] = is_array($v) ? $this->sortRecursive($v) : $v;
         }
         return $sorted;

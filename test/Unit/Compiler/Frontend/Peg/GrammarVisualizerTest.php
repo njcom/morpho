@@ -93,7 +93,7 @@ class GrammarVisualizerTest extends TestCase {
         $grammar = Peg::parseGrammar($grammarSource);
         $grammarVisualizer = new GrammarVisualizer();
         $lines = [];
-        $grammarVisualizer->write($grammar, function ($line) use (&$lines) {
+        $grammarVisualizer->__invoke($grammar, function ($line) use (&$lines) {
             $lines[] = $line;
         });
         $output = implode("\n", $lines);

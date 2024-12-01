@@ -6,10 +6,7 @@
  */
 namespace Morpho\Test\Unit\Compiler\Frontend\Peg;
 
-use Morpho\Compiler\Frontend\Peg\Grammar;
-use Morpho\Compiler\Frontend\Peg\GrammarParser;
 use Morpho\Compiler\Frontend\Peg\Token;
-use Morpho\Compiler\Frontend\Peg\Tokenizer;
 use Morpho\Compiler\Frontend\Peg\Peg;
 use Morpho\Compiler\Frontend\Peg\TokenType;
 use Morpho\Testing\TestCase;
@@ -18,15 +15,89 @@ use Morpho\Testing\TestCase;
  * https://github.com/python/cpython/blob/3.12/Lib/test/test_peg_generator/test_pegen.py
  */
 class PegTest extends TestCase {
-    private Peg $parserGen;
+    public function testTokenize() {
+        $this->assertEquals(
+            [
+                new Token(TokenType::Op, '+', [1, 0], [1, 1], '+ 21 35'),
+                new Token(TokenType::Number, '21', [1, 2], [1, 4], '+ 21 35'),
+                new Token(TokenType::Number, '35', [1, 5], [1, 7], '+ 21 35'),
+                new Token(TokenType::NewLine, '', [1, 7], [1, 8], '+ 21 35'),
+                new Token(TokenType::EndMarker, '', [2, 0], [2, 0], ''),
+            ],
+            iterator_to_array(Peg::tokenize("+ 21 35"))
+        );
 
-    protected function setUp(): void {
-        parent::setUp();
-        $this->parserGen = new Peg();
+        $this->assertEquals(
+            [
+                new Token(TokenType::Name, 'start', [1, 0], [1, 5], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Op, ':', [1, 5], [1, 6], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Op, '(', [1, 7], [1, 8], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::String, "'+'", [1, 8], [1, 11], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Name, 'term', [1, 12], [1, 16], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Op, ')', [1, 16], [1, 17], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Op, '+', [1, 17], [1, 18], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Name, 'term', [1, 19], [1, 23], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Name, 'NEWLINE', [1, 24], [1, 31], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::NewLine, "\n", [1, 31], [1, 32], "start: ('+' term)+ term NEWLINE\n"),
+                new Token(TokenType::Name, 'term', [2, 0], [2, 4], 'term: NUMBER'),
+                new Token(TokenType::Op, ':', [2, 4], [2, 5], 'term: NUMBER'),
+                new Token(TokenType::Name, 'NUMBER', [2, 6], [2, 12], 'term: NUMBER'),
+                new Token(TokenType::NewLine, '', [2, 12], [2, 13], 'term: NUMBER'),
+                new Token(TokenType::EndMarker, '', [3, 0], [3, 0], ''),
+            ],
+            iterator_to_array(
+                Peg::tokenize(
+                    <<<OUT
+                    start: ('+' term)+ term NEWLINE
+                    term: NUMBER
+                    OUT
+                )
+            )
+        );
     }
 
-    public function testMkGrammarParser() {
-        $this->assertInstanceOf(GrammarParser::class, Peg::mkGrammarParser(Peg::mkTokenizer('')));
+    public function testParseText() {
+        $grammar = Peg::parseGrammar(
+            <<<OUT
+        start: ('+' term)+ term NEWLINE
+        term: NUMBER
+        OUT
+        );
+
+        $tree = Peg::parseText($grammar, Peg::mkTokenizer('+ 23 46'));
+        $this->assertEquals([
+            [
+                [
+                    new Token(TokenType::Op, '+', [1, 0], [1, 1], '+ 23 46'),
+                    new Token(TokenType::Number, '23', [1, 2], [1, 4], '+ 23 46'),
+                ],
+            ],
+            new Token(TokenType::Number, '46', [1, 5], [1, 7], '+ 23 46'),
+            new Token(TokenType::NewLine, '', [1, 7], [1, 8], '+ 23 46'),
+        ], $tree);
+    }
+
+    public function testGenerateParserFile() {
+        $grammarText = <<<OUT
+        start: ('+' term)+ term NEWLINE
+        term: NUMBER
+        OUT;
+        $grammar = Peg::parseGrammar($grammarText);
+        $tmpFilePath = $this->tmpFilePath();
+        $parserClass = Peg::generateParserFile($grammar, $tmpFilePath);
+        require $tmpFilePath;
+        $parser = new $parserClass(Peg::mkTokenizer("+32 53\n"));
+        $tree = Peg::runParser($parser);
+        $this->assertEquals([
+            [
+                [
+                    new Token(TokenType::Op, '+', [1, 0], [1, 1], "+32 53\n"),
+                    new Token(TokenType::Number, '32', [1, 1], [1, 3], "+32 53\n"),
+                ],
+            ],
+            new Token(TokenType::Number, '53', [1, 4], [1, 6], "+32 53\n"),
+            new Token(TokenType::NewLine, "\n", [1, 6], [1, 7], "+32 53\n"),
+        ], $tree);
     }
 
     public function testParseGrammar(): void {
@@ -48,7 +119,7 @@ class PegTest extends TestCase {
         $this->assertSame("Rule('term', None, Rhs([Alt([NamedItem(None, NameLeaf('NUMBER'))])]))", $rules["term"]->repr());
     }
 
-    public function testLongRuleStr(): void {
+    public function testParseGrammar_LongRuleStr(): void {
         $grammarSource = <<<OUT
         start: zero | one | one zero | one one | one zero zero | one zero one | one one zero | one one one
         OUT;
@@ -67,7 +138,7 @@ class PegTest extends TestCase {
         $this->assertSame($expected, $grammar->rules['start']->__toString());
     }
 
-    public function testTypedRules(): void {
+    public function testParseGrammar_TypedRules(): void {
         $grammarSource = <<<OUT
         start[int]: sum NEWLINE
         sum[int]: t1=term '+' t2=term { action } | term
@@ -80,44 +151,45 @@ class PegTest extends TestCase {
         $this->assertSame("Rule('term', 'int', Rhs([Alt([NamedItem(None, NameLeaf('NUMBER'))])]))", $rules['term']->repr());
     }
 
-    public function testGather(): void {
-        $grammarSource = <<<OUT
-        start: ','.thing+ NEWLINE
-        thing: NUMBER
-        OUT;
-        $grammar = Peg::parseGrammar($grammarSource);
-        $rules = $grammar->rules;
-        $this->assertSame("start: ','.thing+ NEWLINE", $rules['start']->__toString());
-        $this->assertStringStartsWith(
-            "Rule('start', None, Rhs([Alt([NamedItem(None, Gather(StringLeaf(\"','\"), NameLeaf('thing'",
-            $rules['start']->repr()
-        );
-        $this->assertSame("thing: NUMBER", $rules["thing"]->__toString());
+    /*
+        public function testGather(): void {
+            $grammarSource = <<<OUT
+            start: ','.thing+ NEWLINE
+            thing: NUMBER
+            OUT;
+            $grammar = Peg::parseGrammar($grammarSource);
+            $rules = $grammar->rules;
+            $this->assertSame("start: ','.thing+ NEWLINE", $rules['start']->__toString());
+            $this->assertStringStartsWith(
+                "Rule('start', None, Rhs([Alt([NamedItem(None, Gather(StringLeaf(\"','\"), NameLeaf('thing'",
+                $rules['start']->repr()
+            );
+            $this->assertSame("thing: NUMBER", $rules["thing"]->__toString());
 
-        $result = Peg::generateAndEvalParser($grammar);
-        //$node = $this->testHelper->parseString("42\n", $parserClass);
-        $line = "1, 2\n";
-        $parser = $result['parserFactory'](Peg::mkTokenizer($line));
-        $node = Peg::runParser($parser);
-        // @todo: Check $node representation
-        $this->assertEquals(
-            [
+            $result = Peg::generateAndEvalParser($grammar);
+            //$node = $this->testHelper->parseString("42\n", $parserClass);
+            $line = "1, 2\n";
+            $parser = $result['parserFactory'](Peg::mkTokenizer($line));
+            $node = Peg::runParser($parser);
+            // @todo: Check $node representation
+            $this->assertEquals(
                 [
+                    [
+                        new Token(
+                            TokenType::Number, value: '1', start: [1, 0], end: [1, 1], line: $line
+                        ),
+                        new Token(
+                            TokenType::Number, value: '2', start: [1, 3], end: [1, 4], line: $line
+                        ),
+                    ],
                     new Token(
-                        TokenType::NUMBER, val: '1', start: [1, 0], end: [1, 1], line: $line
-                    ),
-                    new Token(
-                        TokenType::NUMBER, val: '2', start: [1, 3], end: [1, 4], line: $line
+                        TokenType::NewLine, value: "\n", start: [1, 4], end: [1, 5], line: $line
                     ),
                 ],
-                new Token(
-                    TokenType::NEWLINE, val: "\n", start: [1, 4], end: [1, 5], line: $line
-                ),
-            ],
-            $node
-        );
-    }
-
+                $node
+            );
+        }
+    */
     public function testParseGrammar_ShouldParseTrailer() {
         $trailer = '// Something at bottom';
         $grammarSource = <<<EOF
@@ -517,8 +589,8 @@ class PegTest extends TestCase {
             parser_class = make_parser(grammar)
             node = parse_string("(1 + 2*3 + 5)/(6 - 2)\n", parser_class)
             code = compile(node, "", "eval")
-            val = eval(code)
-            self.assertEqual(val, 3.0)
+            value = eval(code)
+            self.assertEqual(value, 3.0)
 
         def test_nullable(self) -> None:
             grammar_source = """

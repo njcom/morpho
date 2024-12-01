@@ -17,14 +17,14 @@ use function Morpho\Base\qq;
  */
 readonly class Token implements Stringable {
     public TokenType $type;
-    public string $val;
+    public string $value;
     public array $start;
     public array $end;
     public string $line;
 
-    public function __construct(TokenType $type, string $val, array $start, array $end, string $line) {
+    public function __construct(TokenType $type, string $value, array $start, array $end, string $line) {
         $this->type = $type;
-        $this->val = $val;
+        $this->value = $value;
         $this->start = $start;
         $this->end = $end;
         $this->line = $line;
@@ -56,7 +56,6 @@ readonly class Token implements Stringable {
             }
             return q($s);
         };
-        // @todo: rename `string` to `val`, TokenInfo to Token
-        return 'TokenInfo(type=' . $this->type->value . ' (' . ($this->type->name) . '), string=' . $q($this->val) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
+        return 'Token(type=' . $this->type->value . ' (' . (strtoupper($this->type->name)) . '), string=' . $q($this->value) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
     }
 }

@@ -81,7 +81,7 @@ class FirstSetCalculator extends GrammarVisitor {
             }
         }
         // Do not allow the empty string to propagate.
-        return array_values(array_filter($result, fn($val) => $val !== ''));
+        return array_values(array_filter($result, fn($value) => $value !== ''));
     }
 
     /**
@@ -161,15 +161,15 @@ class FirstSetCalculator extends GrammarVisitor {
      * @return array Set[str]
      */
     protected function visitNameLeaf(NameLeaf $item): array {
-        if (!isset($this->rules[$item->val])) {
-            return [$item->val];
+        if (!isset($this->rules[$item->value])) {
+            return [$item->value];
         }
-        if (!isset($this->firstSets[$item->val])) {
-            $this->firstSets[$item->val] = $this->visit($this->rules[$item->val]);
-        } elseif (isset($this->inProcess[$item->val])) {
+        if (!isset($this->firstSets[$item->value])) {
+            $this->firstSets[$item->value] = $this->visit($this->rules[$item->value]);
+        } elseif (isset($this->inProcess[$item->value])) {
             return [];
         }
-        return $this->firstSets[$item->val];
+        return $this->firstSets[$item->value];
     }
 
     /**
@@ -177,7 +177,7 @@ class FirstSetCalculator extends GrammarVisitor {
      * @return array Set[str]
      */
     protected function visitStringLeaf(StringLeaf $item): array {
-        return [$item->val];
+        return [$item->value];
     }
 
     /**

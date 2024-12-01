@@ -37,15 +37,9 @@ namespace Morpho\Tool\Php {
 
     use Composer\Autoload\ClassLoader;
     use PhpParser\Node;
-
-    /*    use PhpParser\Node\Stmt\Class_ as ClassStmt;
-        use PhpParser\Node\Stmt\Interface_ as InterfaceStmt;
-        use PhpParser\Node\Stmt\Trait_ as TraitStmt;
-        use PhpParser\Node\Stmt\Enum_ as EnumStmt;*/
     use PhpParser\NodeTraverser;
     use PhpParser\NodeVisitorAbstract;
     use PhpParser\ParserFactory;
-    use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
     use RuntimeException;
 
     use function file_get_contents;

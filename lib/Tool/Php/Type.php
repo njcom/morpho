@@ -86,7 +86,7 @@ enum Type: string {
             | [$obj, 'method'](...);
             | [Foo::class, 'method'](...);
 
-            Any value which can be called with `call_user_func($val)`
+            Any value which can be called with `call_user_func($value)`
             https://wiki.php.net/rfc/deprecate_partially_supported_callables
             https://wiki.php.net/rfc/first_class_callable_syntax
     */

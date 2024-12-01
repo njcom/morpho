@@ -12,10 +12,6 @@ require_once __DIR__ . '/Grammar.php';
  * https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/grammar_parser.py
  */
 class GrammarParser extends Parser {
-    /*     public function __invoke(mixed $context): ?Grammar {
-            return $this->start();
-        } */
-
     /**
      * start: grammar $
      */
@@ -31,6 +27,26 @@ class GrammarParser extends Parser {
                 return null;
             }
         );
+    }
+
+    /**
+     * ast.literal_eval() in Python
+     * @todo: move somewhere, find better place that this class.
+     */
+    public static function _literalEval(string $literal): string {
+        // Handle ''' and """ Python strings
+        if (preg_match('~^(\'\'\'|""")(?P<value>.*)(\\1)$~s', $literal, $match)) {
+            $literal = '"' . $match['value'] . '"';
+        }
+        if ($literal === "''" || $literal === '""') {
+            return '';
+        }
+        /*        try {
+                    return eval('return ' . $literal . ';');
+                } catch (\ParseError $e) {
+                    d($literal);
+                }*/
+        return eval('return ' . $literal . ';');
     }
 
     /**
@@ -84,15 +100,15 @@ class GrammarParser extends Parser {
             function (): ?array {
                 $index = $this->tokenizer->index();
                 if ($this->expect('@') && ($name = $this->name()) && $this->expect('NEWLINE')) {
-                    return [$name->val, null];
+                    return [$name->value, null];
                 }
                 $this->tokenizer->reset($index);
                 if ($this->expect('@') && ($a = $this->name()) && ($b = $this->name()) && $this->expect('NEWLINE')) {
-                    return [$a->val, $b->val];
+                    return [$a->value, $b->value];
                 }
                 $this->tokenizer->reset($index);
                 if ($this->expect('@') && ($name = $this->name()) && ($string = $this->string()) && $this->expect('NEWLINE')) {
-                    return [$name->val, Peg::_literalEval($string->val)];
+                    return [$name->value, self::_literalEval($string->value)];
                 }
                 $this->tokenizer->reset($index);
                 return null;
@@ -181,11 +197,11 @@ class GrammarParser extends Parser {
             function (): ?RuleName {
                 $index = $this->tokenizer->index();
                 if (($name = $this->name()) && ($annotation = $this->annotation())) {
-                    return new RuleName($name->val, $annotation);
+                    return new RuleName($name->value, $annotation);
                 }
                 $this->tokenizer->reset($index);
                 if ($name = $this->name()) {
-                    return new RuleName($name->val, null);
+                    return new RuleName($name->value, null);
                 }
                 $this->tokenizer->reset($index);
                 return null;
@@ -331,7 +347,7 @@ class GrammarParser extends Parser {
                     && ($cut = true)
                     && ($item = $this->item())
                 ) {
-                    return new NamedItem($name->val, $item, $annotation);
+                    return new NamedItem($name->value, $item, $annotation);
                 }
                 $this->tokenizer->reset($index);
                 if ($cut) {
@@ -342,7 +358,7 @@ class GrammarParser extends Parser {
                     && $this->expect('=')
                     && ($cut = true)
                     && ($item = $this->item())) {
-                    return new NamedItem($name->val, $item);
+                    return new NamedItem($name->value, $item);
                 }
                 $this->tokenizer->reset($index);
                 if ($cut) {
@@ -488,11 +504,11 @@ class GrammarParser extends Parser {
                     return null;
                 }
                 if ($name = $this->name()) {
-                    return new NameLeaf($name->val);
+                    return new NameLeaf($name->value);
                 }
                 $this->tokenizer->reset($index);
                 if ($string = $this->string()) {
-                    return new StringLeaf($string->val);
+                    return new StringLeaf($string->value);
                 }
                 $this->tokenizer->reset($index);
                 return null;
@@ -591,19 +607,19 @@ class GrammarParser extends Parser {
                     return null;
                 }
                 if (($name = $this->name()) && $this->expect('*')) {
-                    return $name->val . '*';
+                    return $name->value . '*';
                 }
                 $this->tokenizer->reset($index);
                 if ($name = $this->name()) {
-                    return $name->val;
+                    return $name->value;
                 }
                 $this->tokenizer->reset($index);
                 if ($number = $this->number()) {
-                    return $number->val;
+                    return $number->value;
                 }
                 $this->tokenizer->reset($index);
                 if ($string = $this->string()) {
-                    return $string->val;
+                    return $string->value;
                 }
                 $this->tokenizer->reset($index);
                 if ($this->expect('?"')) {
@@ -615,7 +631,7 @@ class GrammarParser extends Parser {
                 }
                 $this->tokenizer->reset($index);
                 if ($this->negativeLookahead($this->expect(...), '}') && $this->negativeLookahead($this->expect(...), ']') && ($op = $this->op())) {
-                    return $op->val;
+                    return $op->value;
                 }
                 $this->tokenizer->reset($index);
                 return null;

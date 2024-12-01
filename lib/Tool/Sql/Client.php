@@ -119,7 +119,7 @@ abstract class Client implements IClient {
 
     public function nameValArgs(array $args): array {
         $placeholders = [];
-        foreach ($args as $name => $val) {
+        foreach ($args as $name => $value) {
             if (!is_string($name)) {
                 throw new UnexpectedValueException();
             }
@@ -132,7 +132,7 @@ abstract class Client implements IClient {
         // @see http://dev.mysql.com/doc/refman/5.7/en/identifiers.html
         $quoteIdentifier = function ($identifiers): string {
             if ($identifiers instanceof Expr) {
-                return $identifiers->val();
+                return $identifiers->value();
             }
             $quoted = [];
             $parts = explode('.', $identifiers);

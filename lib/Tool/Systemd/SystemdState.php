@@ -25,7 +25,7 @@ enum SystemdState: string {
     // The operational state could not be determined, due to lack of resources or another error cause. Exit code: > 0
     case Unknown = 'unknown';
 
-    public static function isRunning(SystemdState $val): bool {
-        return $val === SystemdState::Running;
+    public static function isRunning(SystemdState $value): bool {
+        return $value === SystemdState::Running;
     }
 }

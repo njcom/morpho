@@ -17,6 +17,6 @@ class TokenInfoTest extends TestCase {
         $this->assertEquals([1, 1], $tokenInfo->start);
         $this->assertEquals([1, 2], $tokenInfo->end);
         $this->assertSame("foo\n", $tokenInfo->line);
-        $this->assertSame('TokenInfo(type=62 (NL), string=\'\\n\', start=(1, 1), end=(1, 2), line=\'foo\\n\')', (string) $tokenInfo);
+        $this->assertSame('Token(type=65 (NL), string=\'\\n\', start=(1, 1), end=(1, 2), line=\'foo\\n\')', (string) $tokenInfo);
     }
 }

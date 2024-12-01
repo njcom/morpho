@@ -6,9 +6,6 @@
  */
 namespace Morpho\Compiler\Frontend\Peg;
 
-use function Morpho\Base\camelize;
-use function Morpho\Base\last;
-
 /**
  * https://github.com/python/cpython/blob/main/Tools/peg_generator/pegen/grammar.py
  */
@@ -19,7 +16,14 @@ class GrammarVisitor implements IGrammarVisitor {
      * @todo: make $args array
      */
     public function visit(mixed $node, ...$args): mixed {
-        $method = 'visit' . camelize(last(get_class($node), '\\'), true);
+        $class = get_class($node);
+        $lastPos = strrpos($class, '\\');
+        if (false !== $lastPos) {
+            $method = substr($class, $lastPos + 1);
+            $method = 'visit' . $method;//camelize($method, true);
+        } else {
+            $method = 'visit' . $class;//camelize($class, true);
+        }
         if (method_exists($this, $method)) {
             return $this->$method($node, ...$args);
         }

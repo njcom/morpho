@@ -8,11 +8,13 @@ namespace Morpho\Compiler\Frontend\Peg;
 
 use Iterator;
 use Morpho\Base\NotImplementedException;
+use Traversable;
 
 /**
  * Based on https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/tokenizer.py
  */
 class Tokenizer implements ITokenizer {
+    // @todo: make public internal after switching to PHP 8.4 and remove index() method.
     private int $index = 0;
 
     /**
@@ -26,25 +28,29 @@ class Tokenizer implements ITokenizer {
         $this->tokenIt = $tokenIt;
     }
 
-    /*
-    def shorttok(tok: tokenize.TokenInfo) -> str:
-        return "%-25.25s" % f"{tok.start[0]}.{tok.start[1]}: {token.tok_name[tok.type]}:{tok.string!r}"
-    */
+    public function getIterator(): Traversable {
+        while ($tok = $this->nextToken()) {
+            yield $tok;
+        }
+    }
 
-    public function nextToken(): Token {
+    public function nextToken(): ?Token {
         $tok = $this->peekToken();
         $this->index++;
         return $tok;
     }
 
-    public function peekToken(): Token {
+    public function peekToken(): ?Token {
         while ($this->index === count($this->tokens)) {
             $tok = $this->tokenIt->current();
             $this->tokenIt->next();
-            if (in_array($tok->type, [TokenType::NL, TokenType::COMMENT])) {
+            if (!$tok) {
+                return null;
+            }
+            if (in_array($tok->type, [TokenType::NL, TokenType::Comment])) {
                 continue;
             }
-            if ($tok->type === TokenType::ERRORTOKEN && ctype_space($tok->val)) {
+            if ($tok->type === TokenType::ErrorToken && ctype_space($tok->value)) {
                 continue;
             }
             $this->tokens[] = $tok;
@@ -76,6 +82,9 @@ class Tokenizer implements ITokenizer {
     public function lines(array $lineNumbers): array {
         throw new NotImplementedException();
     }
+
+    def shorttok(tok: tokenize.TokenInfo) -> str:
+        return "%-25.25s" % f"{tok.start[0]}.{tok.start[1]}: {token.tok_name[tok.type]}:{tok.string!r}"
      */
 
     /**

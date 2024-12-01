@@ -110,14 +110,14 @@ class DateTime extends DateTimeImmutable implements Stringable {
     }
 
     /**
-     * @param string $val
+     * @param string $value
      * @return string
      */
-    protected function stripLeadingZero($val) {
-        if (strlen($val) > 1 && $val[0] == 0) {
-            $val = substr($val, 1);
+    protected function stripLeadingZero($value) {
+        if (strlen($value) > 1 && $value[0] == 0) {
+            $value = substr($value, 1);
         }
-        return $val;
+        return $value;
     }
 
     public function minute() {

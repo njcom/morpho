@@ -8,46 +8,33 @@ namespace Morpho\Compiler\Frontend;
 
 enum Lexeme: string {
     case At = '@';
-    // Back quote
-    case Backtick = '`';
     case BackSlash = '\\';
+    case Backtick = '`';
     case Caret = '^';
-    // Closing angle bracket
-    case CloseAngleBracket = '>';
-    // Closing curly brace
-    case CloseBrace = '}';
-    // Closing square bracket
-    case CloseBracket = ']';
-    // Closing parenthesis
-    case CloseParen = ')';
-    case Comma = ',';
     case Colon = ':';
+    case Comma = ',';
     case Dollar = '$';
     case Dot = '.';
-    // Double quote
     case DoubleQuote = '"';
     case Equal = '=';
     case Exclamation = '!';
     case Hash = '#';
-    // Aka Dash/Hyphen
-    case Minus = '-';
-    // Opening angle bracket
-    case OpenAngleBracket = '<';
-    // Opening curly brace
-    case OpenBrace = '{';
-    // Opening square bracket
-    case OpenBracket = '[';
-    // Opening parenthesis
-    case OpenParen = '(';
-    case Question = '?';
+    case LAngleBracket = '<';
+    case LBrace = '{';
+    case LBracket = '[';
+    case LParen = '(';
+    case Minus = '-'; // aka dash, hyphen
     case Percent = '%';
     case Plus = '+';
+    case Question = '?';
+    case RAngleBracket = '>';
+    case RBrace = '}';
+    case RBracket = ']';
+    case RParen = ')';
     case Semicolon = ';';
-    // Aka Apostrophe
-    case SingleQuote = "'";
+    case SingleQuote = "'"; // aka apostrophe
     case Slash = '/';
-    // Aka Asterisk
-    case Star = '*';
+    case Star = '*'; // asterisk
     case Tilde = '~';
     case VerticalBar = '|';
 }

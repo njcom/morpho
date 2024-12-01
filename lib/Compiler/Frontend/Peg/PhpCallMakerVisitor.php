@@ -30,7 +30,7 @@ class PhpCallMakerVisitor extends GrammarVisitor {
      * @noinspection PhpUnused
      */
     protected function visitNameLeaf(NameLeaf $node): array {
-        $name = $node->val;
+        $name = $node->value;
         switch (true) {
             case $name === 'SOFT_KEYWORD':
                 return ["soft_keyword", $this->softKeyword()];
@@ -51,7 +51,7 @@ class PhpCallMakerVisitor extends GrammarVisitor {
      * @noinspection PhpUnused
      */
     protected function visitStringLeaf(StringLeaf $node): array {
-        return ['literal', '$this->expect(' . $node->val . ')'];
+        return ['literal', '$this->expect(' . $node->value . ')'];
     }
 
     /**
@@ -144,14 +144,12 @@ class PhpCallMakerVisitor extends GrammarVisitor {
      * @noinspection PhpUnusedParameterInspection
      */
     protected function visitRepeat1(Repeat1 $node): array {
-        throw new NotImplementedException();
-        /*
-              if node in self.cache:
-                  return self.cache[node]
-              name = self.gen.artificial_rule_from_repeat(node.node, True)
-              self.cache[node] = name, f"self.{name}()"  # But no trailing comma here!
-              return self.cache[node]
-      */
+        if (isset($this->cache[$node])) {
+            return $this->cache[$node];
+        }
+        $name = $this->gen->artificialRuleFromRepeat($node->node, true);
+        $this->cache[$node] = [$name, '$this->' . $name . '()']; // But no trailing comma here!
+        return $this->cache[$node];
     }
 
     /**
@@ -192,8 +190,8 @@ class PhpCallMakerVisitor extends GrammarVisitor {
     protected function visitForced(Forced $node): array {
         /*
             if isinstance(node.node, Group):
-                _, val = self.visit(node.node.rhs)
-                return "forced", f"self.expect_forced({val}, '''({node.node.rhs!s})''')"
+                _, value = self.visit(node.node.rhs)
+                return "forced", f"self.expect_forced({value}, '''({node.node.rhs!s})''')"
             else:
                 return (
                     "forced",
