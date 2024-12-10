@@ -153,7 +153,7 @@ class PythonTokenizer {
                         yield new Token(TokenType::Comment, $token, $spos, $epos, $line);
                     } elseif (in_array($token, $tripleQuoted)) {
                         $endProgRe = $endPatterns[$token];
-                        if (preg_match('~' . $endProgRe . '~AsDu', $line, $match, PREG_OFFSET_CAPTURE, $pos))  { # all on one line
+                        if (preg_match('~' . $endProgRe . '~AsDu', $line, $match, PREG_OFFSET_CAPTURE, $pos)) { # all on one line
                             if (count($match) !== 1) {
                                 throw new UnexpectedValueException();
                             }
@@ -205,8 +205,7 @@ class PythonTokenizer {
                         yield new Token(TokenType::Name, $token, $spos, $epos, $line);
                     } elseif ($initial == '\\') { # continued stmt
                         $continued = 1;
-                    }
-                    else {
+                    } else {
                         if (str_contains('([{', $initial)) {
                             $parenLevel++;
                         } elseif (str_contains(')]}', $initial)) {
@@ -214,6 +213,9 @@ class PythonTokenizer {
                         }
                         yield new Token(TokenType::Op, $token, $spos, $epos, $line);
                     }
+/*                } elseif ($line[$pos] == '?') {
+                    yield new Token(TokenType::Op, $line[$pos], [$lineNum, $pos], [$lineNum, $pos + 1], $line);
+                    $pos++;*/
                 } else {
                     yield new Token(TokenType::ErrorToken, $line[$pos], [$lineNum, $pos], [$lineNum, $pos + 1], $line);
                     $pos++;

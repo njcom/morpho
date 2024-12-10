@@ -7,7 +7,6 @@
 namespace Morpho\Test\Unit\Compiler\Frontend\Peg;
 
 use Iterator;
-use Morpho\Compiler\Frontend\Peg\Peg;
 use Morpho\Compiler\Frontend\Peg\Token;
 use Morpho\Compiler\Frontend\Peg\TokenException;
 use Morpho\Compiler\Frontend\Peg\PythonTokenizer;
@@ -98,18 +97,19 @@ EOF,
         $this->checkTokens(file_get_contents($this->getTestDirPath() . '/meta-token'), $tokens);
     }
 
-    public function testTokenize_ErrorTokenBugForSpecificCase() {
+    public function testTokenize_ErrorTokenInsteadOfOpToken_Bug() {
         $grammar = 'start: foo?';
-        $this->markTestIncomplete();
-        d($this->tokensToStr($this->tokenizer->tokenize($grammar)));
-/* Must produce
-[TokenInfo(type=1 (NAME), string='start', start=(1, 0), end=(1, 5), line='start: foo?'),
- TokenInfo(type=55 (OP), string=':', start=(1, 5), end=(1, 6), line='start: foo?'),
- TokenInfo(type=1 (NAME), string='foo', start=(1, 7), end=(1, 10), line='start: foo?'),
- TokenInfo(type=55 (OP), string='?', start=(1, 10), end=(1, 11), line='start: foo?'),
- TokenInfo(type=4 (NEWLINE), string='', start=(1, 11), end=(1, 12), line='start: foo?'),
- TokenInfo(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')]
- */
+        $this->assertTokensStr(
+            <<<'EOF'
+            Token(type=1 (NAME), string='start', start=(1, 0), end=(1, 5), line='start: foo?')
+            Token(type=55 (OP), string=':', start=(1, 5), end=(1, 6), line='start: foo?')
+            Token(type=1 (NAME), string='foo', start=(1, 7), end=(1, 10), line='start: foo?')
+            Token(type=55 (OP), string='?', start=(1, 10), end=(1, 11), line='start: foo?')
+            Token(type=4 (NEWLINE), string='', start=(1, 11), end=(1, 12), line='start: foo?')
+            Token(type=0 (ENDMARKER), string='', start=(2, 0), end=(2, 0), line='')
+            EOF,
+            $this->tokenizer->tokenize($grammar)
+        );
     }
 
     private function checkTokens(string $expected, iterable $tokens): void {

@@ -7,6 +7,8 @@ bootstrap();
 
 use RuntimeException;
 
+use UnexpectedValueException;
+
 use function Morpho\Base\symDiff;
 
 use const Morpho\Base\INDENT;
@@ -72,78 +74,6 @@ function genPyTokens(array $argv): void {
 }
 
 function genTokenType(): void {
-    $cases = [
-        "Ampersand"        => "AMPER",
-        "AmpersandEqual"   => "AMPEREQUAL",
-        "Async"            => "ASYNC",
-        "At"               => "AT",
-        "AtEqual"          => "ATEQUAL",
-        "Await"            => "AWAIT",
-        "Circumflex"       => "CIRCUMFLEX",
-        "CircumflexEqual"  => "CIRCUMFLEXEQUAL",
-        "Colon"            => "COLON",
-        "ColonEqual"       => "COLONEQUAL",
-        "Comma"            => "COMMA",
-        "Comment"          => "COMMENT",
-        "Dedent"           => "DEDENT",
-        "Dot"              => "DOT",
-        "DoubleSlash"      => "DOUBLESLASH",
-        "DoubleSlashEqual" => "DOUBLESLASHEQUAL",
-        "DoubleStar"       => "DOUBLESTAR",
-        "DoubleStarEqual"  => "DOUBLESTAREQUAL",
-        "Ellipsis"         => "ELLIPSIS",
-        "Encoding"         => "ENCODING",
-        "EndMarker"        => "ENDMARKER",
-        "Equal"            => "EQUAL",
-        "EqualEqual"       => "EQEQUAL",
-        "ErrorToken"       => "ERRORTOKEN",
-        "Exclamation"      => "EXCLAMATION",
-        'FstringEnd'       => "FSTRING_END",
-        'FstringMiddle'    => "FSTRING_MIDDLE",
-        'FStringStart'     => "FSTRING_START",
-        "Greater"          => "GREATER",
-        "GreaterEqual"     => "GREATEREQUAL",
-        "Indent"           => "INDENT",
-        "LeftBrace"        => "LBRACE",
-        "LeftParen"        => "LPAR",
-        "LeftShift"        => "LEFTSHIFT",
-        "LeftShiftEqual"   => "LEFTSHIFTEQUAL",
-        "LeftSquareBrace"  => "LSQB",
-        "Less"             => "LESS",
-        "LessEqual"        => "LESSEQUAL",
-        "Minus"            => "MINUS",
-        "MinusEqual"       => "MINEQUAL",
-        "NL"               => "NL",
-        "NTokens"          => 'N_TOKENS',
-        "Name"             => "NAME",
-        "NewLine"          => "NEWLINE",
-        "NotEqual"         => "NOTEQUAL",
-        "NtOffset"         => 'NT_OFFSET',
-        "Number"           => "NUMBER",
-        "Op"               => "OP",
-        "Percent"          => "PERCENT",
-        "PercentEqual"     => "PERCENTEQUAL",
-        "Plus"             => "PLUS",
-        "PlusEqual"        => "PLUSEQUAL",
-        "RightArrow"       => "RARROW",
-        "RightBrace"       => "RBRACE",
-        "RightParen"       => "RPAR",
-        "RightShift"       => "RIGHTSHIFT",
-        "RightShiftEqual"  => "RIGHTSHIFTEQUAL",
-        "RightSquareBrace" => "RSQB",
-        "Semicolon"        => "SEMI",
-        "Slash"            => "SLASH",
-        "SlashEqual"       => "SLASHEQUAL",
-        "SoftKeyword"      => "SOFT_KEYWORD",
-        "Star"             => "STAR",
-        "StarEqual"        => "STAREQUAL",
-        "String"           => "STRING",
-        "Tilde"            => "TILDE",
-        "TypeComment"      => "TYPE_COMMENT",
-        "TypeIgnore"       => "TYPE_IGNORE",
-        "VertBar"          => "VBAR",
-        "VertBarEqual"     => "VBAREQUAL",
-    ];
     $tokens = [];
     $ignored = [];
     foreach (explode(', ', trim(sh('python -c "import token; print(token.tok_name)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
@@ -154,11 +84,84 @@ function genTokenType(): void {
         }
         $tokens[$name] = $val;
     }
-    ksort($tokens);
+    $cases = [
+        "AMPER" => "Ampersand",
+        "AMPEREQUAL" => "AmpersandEqual",
+        "ASYNC" => "Async",
+        "AT" => "At",
+        "ATEQUAL" => "AtEqual",
+        "AWAIT" => "Await",
+        "CIRCUMFLEX" => "Circumflex",
+        "CIRCUMFLEXEQUAL" => "CircumflexEqual",
+        "COLON" => "Colon",
+        "COLONEQUAL" => "ColonEqual",
+        "COMMA" => "Comma",
+        "COMMENT" => "Comment",
+        "DEDENT" => "Dedent",
+        "DOT" => "Dot",
+        "DOUBLESLASH" => "DoubleSlash",
+        "DOUBLESLASHEQUAL" => "DoubleSlashEqual",
+        "DOUBLESTAR" => "DoubleStar",
+        "DOUBLESTAREQUAL" => "DoubleStarEqual",
+        "ELLIPSIS" => "Ellipsis",
+        "ENCODING" => "Encoding",
+        "ENDMARKER" => "EndMarker",
+        "EQUAL" => "Equal",
+        "EQEQUAL" => "EqualEqual",
+        "ERRORTOKEN" => "ErrorToken",
+        "EXCLAMATION" => "Exclamation",
+        "FSTRING_END" => "FstringEnd",
+        "FSTRING_MIDDLE" => "FstringMiddle",
+        "FSTRING_START" => "FStringStart",
+        "GREATER" => "Greater",
+        "GREATEREQUAL" => "GreaterEqual",
+        "INDENT" => "Indent",
+        "LBRACE" => "LeftBrace",
+        "LPAR" => "LeftParen",
+        "LEFTSHIFT" => "LeftShift",
+        "LEFTSHIFTEQUAL" => "LeftShiftEqual",
+        "LSQB" => "LeftSquareBrace",
+        "LESS" => "Less",
+        "LESSEQUAL" => "LessEqual",
+        "MINUS" => "Minus",
+        "MINEQUAL" => "MinusEqual",
+        "NL" => "NL",
+        "N_TOKENS" => "NTokens",
+        "NAME" => "Name",
+        "NEWLINE" => "NewLine",
+        "NOTEQUAL" => "NotEqual",
+        "NT_OFFSET" => "NtOffset",
+        "NUMBER" => "Number",
+        "OP" => "Op",
+        "PERCENT" => "Percent",
+        "PERCENTEQUAL" => "PercentEqual",
+        "PLUS" => "Plus",
+        "PLUSEQUAL" => "PlusEqual",
+        "RARROW" => "RightArrow",
+        "RBRACE" => "RightBrace",
+        "RPAR" => "RightParen",
+        "RIGHTSHIFT" => "RightShift",
+        "RIGHTSHIFTEQUAL" => "RightShiftEqual",
+        "RSQB" => "RightSquareBrace",
+        "SEMI" => "Semicolon",
+        "SLASH" => "Slash",
+        "SLASHEQUAL" => "SlashEqual",
+        "SOFT_KEYWORD" => "SoftKeyword",
+        "STAR" => "Star",
+        "STAREQUAL" => "StarEqual",
+        "STRING" => "String",
+        "TILDE" => "Tilde",
+        "TYPE_COMMENT" => "TypeComment",
+        "TYPE_IGNORE" => "TypeIgnore",
+        "VBAR" => "VertBar",
+        "VBAREQUAL" => "VertBarEqual",
+    ];
 
-    $diff = symDiff(array_values($cases), array_keys($tokens));
+    $tokens1 = $tokens;
+    ksort($tokens1);
+    $diff = symDiff(array_keys($cases), array_keys($tokens1));
     if ($diff) {
-        throw new \UnexpectedValueException(print_r($diff, true));
+        throw new UnexpectedValueException(print_r($diff, true));
     }
 
     $out = rtrim(
@@ -177,28 +180,26 @@ function genTokenType(): void {
     enum TokenType: int {
     OUT
         ) . "\n";
-    foreach ($cases as $name => $alias) {
-        $out .= INDENT . 'case ' . $name . ' = ' . $tokens[$alias] . ";\n";
+    $exactTypes = [];
+    foreach ($tokens as $name => $value) {
+        $out .= INDENT . 'case ' . $cases[$name] . ' = ' . $value . ";\n";
+        $exactTypes[$value] = $cases[$name];
     }
-    $out .= rtrim(
-            <<<OUT
+    echo $out . "}\n";
 
+    $out = rtrim(<<<OUT
         /**
          * EXACT_TOKEN_TYPES in Python
          */
-        public static function exactTypes(): array {
+        private static function exactTypes(): array {
             return [
     OUT
         ) . "\n";
-    $exactTypes = [];
-    $cases1 = array_combine(array_values($cases), array_keys($cases));
-    foreach ($tokens as $key => $value) {
-        $exactTypes[$value] = $cases1[$key];
-    }
+    echo "---\n";
     foreach (explode(', ', trim(sh('python -c "from token import EXACT_TOKEN_TYPES; print(EXACT_TOKEN_TYPES)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
         $pos = strrpos($tokenOutput, ': ');
         if (false === $pos) {
-            throw new \UnexpectedValueException($tokenOutput);
+            throw new UnexpectedValueException($tokenOutput);
         }
         $token = trim(substr($tokenOutput, 0, $pos), '"\'');
         $value = substr($tokenOutput, $pos + 2);
@@ -208,10 +209,7 @@ function genTokenType(): void {
             <<<OUT
             ];
         }
-    }
-
-    OUT
-        ) . "\n";
+    OUT) . "\n";
     echo $out;
 }
 

@@ -125,7 +125,7 @@ class PythonTokenizerRe {
                 self::numberRe(),
                 self::funnyRe(),
                 self::contStr(),
-                self::NAME_RE
+                self::NAME_RE,
             );
     }
 
@@ -168,7 +168,57 @@ class PythonTokenizerRe {
                 String = group(StringPrefix + r"'[^\n'\\]*(?:\\.[^\n'\\]*)*'",
                                StringPrefix + r'"[^\n"\\]*(?:\\.[^\n"\\]*)*"')*/
         // Sorting in reverse order puts the long operators before their prefixes. Otherwise if = came before ==, == would get recognized as two instances of =.
-        $exactTokenTypes = array_keys(TokenType::exactTypes());
+        $exactTokenTypes = array_keys([
+            '?'   => TokenType::Op,
+            '!'   => TokenType::Exclamation,
+            '!='  => TokenType::NotEqual,
+            '%'   => TokenType::Percent,
+            '%='  => TokenType::PercentEqual,
+            '&'   => TokenType::Ampersand,
+            '&='  => TokenType::AmpersandEqual,
+            '('   => TokenType::LeftParen,
+            ')'   => TokenType::RightParen,
+            '*'   => TokenType::Star,
+            '**'  => TokenType::DoubleStar,
+            '**=' => TokenType::DoubleStarEqual,
+            '*='  => TokenType::StarEqual,
+            '+'   => TokenType::Plus,
+            '+='  => TokenType::PlusEqual,
+            ','   => TokenType::Comma,
+            '-'   => TokenType::Minus,
+            '-='  => TokenType::MinusEqual,
+            '->'  => TokenType::RightArrow,
+            '.'   => TokenType::Dot,
+            '...' => TokenType::Ellipsis,
+            '/'   => TokenType::Slash,
+            '//'  => TokenType::DoubleSlash,
+            '//=' => TokenType::DoubleSlashEqual,
+            '/='  => TokenType::SlashEqual,
+            ':'   => TokenType::Colon,
+            ':='  => TokenType::ColonEqual,
+            ';'   => TokenType::Semicolon,
+            '<'   => TokenType::Less,
+            '<<'  => TokenType::LeftShift,
+            '<<=' => TokenType::LeftShiftEqual,
+            '<='  => TokenType::LessEqual,
+            '='   => TokenType::Equal,
+            '=='  => TokenType::EqualEqual,
+            '>'   => TokenType::Greater,
+            '>='  => TokenType::GreaterEqual,
+            '>>'  => TokenType::RightShift,
+            '>>=' => TokenType::RightShiftEqual,
+            '@'   => TokenType::At,
+            '@='  => TokenType::AtEqual,
+            '['   => TokenType::LeftSquareBrace,
+            ']'   => TokenType::RightSquareBrace,
+            '^'   => TokenType::Circumflex,
+            '^='  => TokenType::CircumflexEqual,
+            '{'   => TokenType::LeftBrace,
+            '|'   => TokenType::VertBar,
+            '|='  => TokenType::VertBarEqual,
+            '}'   => TokenType::RightBrace,
+            '~'   => TokenType::Tilde,
+        ]);
         rsort($exactTokenTypes);
         $escapeReSpecialChars = function (string $re): string {
             return preg_quote($re, '~');
