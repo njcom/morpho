@@ -28,6 +28,7 @@ jobs:
 
       - name: 'Pull changes for PEG'
         run: |
+          composer --ignore-platform-reqs --no-ansi --no-interaction install
           make update-peg
 
       - name: Create a Pull Request
