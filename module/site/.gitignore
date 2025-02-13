@@ -1,0 +1,6 @@
+vendor/
+.phpunit*.cache
+selenium.log.*
+
+/frontend/localhost/lib/base/*.js
+!/frontend/localhost/lib/base/index.js

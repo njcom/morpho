@@ -1,0 +1,43 @@
+<?php declare(strict_types=1);
+/**
+ * @var $body
+ */
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/module/localhost/rc/favicon.ico">
+    <meta name="description" content="">
+    <?php if (isset($this->headTitle)) { ?>
+        <title><?= $this->e($this->headTitle) ?></title>
+    <?php } elseif (isset($this->pageTitle)) { ?>
+        <title><?= $this->e($this->pageTitle) ?></title>
+    <?php } ?>
+    <link rel="stylesheet" href="/module/localhost/node_modules/toastify-js/src/toastify.css">
+    <link href="/module/localhost/lib/base/index.css" rel="stylesheet">
+</head>
+<body id="<?= $this->pageHtmlId() ?>">
+<?php require __DIR__ . '/_main-menu.phtml' ?>
+<main class="container-fluid">
+    <?php if (isset($this->pageTitle)) { ?>
+        <h1 id="page-title"><?= $this->e($this->pageTitle) ?></h1>
+    <?php } ?>
+    <?= $this->messenger()->renderPageMessages(); ?>
+    <?= $body; ?>
+</main>
+<script type="importmap">
+{
+    "imports": {
+        "jquery": "/module/localhost/lib/jquery.js"
+    }
+}
+</script>
+<?php
+foreach ($this->scripts['after-main'] as $script) {
+    echo $this->tag('script', $script, '');
+}
+?>
+</body>
+</html>

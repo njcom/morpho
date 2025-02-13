@@ -1,21 +1,16 @@
-# Tools' files:
-/vendor/
-.vscode/
-.ipynb_checkpoints/
-
-# Generated files:
+# Morpho's special directories
 cache/*
 log/*
-selenium.log.*
-*.jar
-*.log
-*.bak
-geckodriver
-.phpunit*.cache
-*.tsbuildinfo
-/frontend/localhost/lib/base/*.js
-!/frontend/localhost/lib/base/index.js
-deno.lock
 
-# npm
+# General generated files
+*.bak
+*.log
+
+# Tools' files:
+*.jar
+*.tsbuildinfo
+.ipynb_checkpoints/
+.vscode/
+deno.lock
 node_modules/
+#/.devcontainer/devcontainer.json
