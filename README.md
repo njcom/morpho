@@ -1,6 +1,6 @@
 # njcom/framework
 
-Cybernetic framework for self-learning, self-organizing, self-development.
+Cybernetic framework for evolution - self-learning, self-organizing, self-development.
 
 ## Current status
 
