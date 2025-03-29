@@ -23,7 +23,7 @@ use function var_export;
 class PhpFileCache extends FileCache {
     protected const EXTENSION = '.cache.php';
 
-    public function __construct(string $dirPath, string $extension = null, int $umask = 0002) {
+    public function __construct(string $dirPath, string|null $extension = null, int $umask = 0002) {
         parent::__construct($dirPath, $extension ?: self::EXTENSION, $umask);
     }
 

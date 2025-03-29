@@ -43,7 +43,7 @@ class Request extends ArrayObject implements IRequest {
     public ArrayObject $headers;
     private ?bool $isAjax = null;
 
-    public function __construct(array $vals = null, array $trustedProxyIps = null) {
+    public function __construct(array|null $vals = null, array|null $trustedProxyIps = null) {
         parent::__construct((array)$vals);
         if (null !== $trustedProxyIps) {
             $this->trustedProxyIps = $trustedProxyIps;
@@ -54,7 +54,7 @@ class Request extends ArrayObject implements IRequest {
         $this->uri = $this->mkUri();
     }
 
-    public function redirect(string $uri = null, int $statusCode = null): IResponse {
+    public function redirect(string|null $uri = null, int|null $statusCode = null): IResponse {
         if (null === $uri) {
             $uri = $this->uri;
             $query = $uri->query();
@@ -70,7 +70,7 @@ class Request extends ArrayObject implements IRequest {
         return $this->response->mkRedirect($uri, $statusCode);
     }
 
-    public function isAjax(bool $flag = null): bool {
+    public function isAjax(bool|null $flag = null): bool {
         if (null !== $flag) {
             $this->isAjax = $flag;
         }

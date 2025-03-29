@@ -16,7 +16,7 @@ class GrammarVisualizer {
     /**
      * def print_grammar_ast(self, grammar: Grammar, printer: Callable[..., None] = print) -> None:
      */
-    public function __invoke(Grammar $grammar, callable $writer = null): void {
+    public function __invoke(Grammar $grammar, callable|null $writer = null): void {
         if (null === $writer) {
             $writer = static function (string $output): void {
                 echo $output . "\n";

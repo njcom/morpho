@@ -44,7 +44,7 @@ class ClassTypeDiscoverer {
         return $this->discoverStrategy()->classTypesDefinedInFile($filePath);
     }
 
-    public function classTypesDefinedInDir(string|iterable $dirPaths, callable|string $filter = null, bool $recursive = true): array {
+    public function classTypesDefinedInDir(string|iterable $dirPaths, callable|string|null $filter = null, bool $recursive = true): array {
         $map = [];
         if (is_string($filter)) {
             $filter = fn($filePath) => preg_match($filter, $filePath);

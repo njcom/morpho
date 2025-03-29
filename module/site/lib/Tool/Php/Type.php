@@ -35,7 +35,7 @@ enum Type: string {
         TProperty: TScalar | array | object | iterable | self | parent | mixed | TClassOrInterfaceOrEnum | TUnion | TNullable
             Can be used in class definition as property type hint.
             object: contains TClassOrInterfaceOrEnum
-            mixed: contains null, but null can't e used as standalone type hint here
+            mixed: contains all other types
 
         TParam: TProperty | static | callable
             Can be used in function definition as formal parameter type hint.

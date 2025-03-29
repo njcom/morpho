@@ -130,7 +130,7 @@ EOF,
         return $result;
     }
 
-    private function assertTokensStr(string $expected, Iterator $tokens, TokenException $expectedEx = null): void {
+    private function assertTokensStr(string $expected, Iterator $tokens, TokenException|null $expectedEx = null): void {
         $expected = explode("\n", trim($expected));
         $j = 0;
         try {

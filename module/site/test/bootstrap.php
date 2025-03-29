@@ -11,7 +11,7 @@ use Morpho\Testing\Env;
 use function date_default_timezone_set;
 use function is_file;
 
-use const Morpho\App\{AUTOLOAD_FILE_NAME, VENDOR_DIR_NAME};
+use const Morpho\App\{VENDOR_DIR_NAME};
 
 date_default_timezone_set('UTC');
 define(__NAMESPACE__ . '\\BASE_DIR_PATH', dirname(__DIR__));
@@ -22,7 +22,7 @@ define(__NAMESPACE__ . '\\BASE_DIR_PATH', dirname(__DIR__));
     $classLoader->addPsr4(__NAMESPACE__ . '\\', __DIR__);
     */
     foreach (Env::instance()->backendModuleDirPaths() as $moduleDirPath) {
-        $autoloadFilePath = $moduleDirPath . '/' . VENDOR_DIR_NAME . '/' . AUTOLOAD_FILE_NAME;
+        $autoloadFilePath = $moduleDirPath . '/' . VENDOR_DIR_NAME . '/autoload.php';
         if (is_file($autoloadFilePath)) {
             require $autoloadFilePath;
         }

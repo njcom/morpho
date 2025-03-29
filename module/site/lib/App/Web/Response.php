@@ -19,7 +19,7 @@ class Response extends ArrayObject implements IResponse {
     //public bool $allowAjax = false;
     public StatusLine $statusLine;
 
-    public function __construct(array $vals = null) {
+    public function __construct(array|null $vals = null) {
         parent::__construct((array) $vals);
         $this->headers = new ArrayObject();
         $this->statusLine = new StatusLine();
@@ -34,7 +34,7 @@ class Response extends ArrayObject implements IResponse {
         return isset($this->headers['Location']) && 300 <= $statusCode && $statusCode < 400;
     }
 
-    public function mkRedirect(string|Uri $uri, StatusCode $statusCode = null): static {
+    public function mkRedirect(string|Uri $uri, StatusCode|null $statusCode = null): static {
         $response = new static();
         $response->headers->offsetSet('Location', is_string($uri) ? $uri : $uri->toStr(null, true));
         $response->statusLine = $this->mkStatusLine(null !== $statusCode ? $statusCode : StatusCode::Found);

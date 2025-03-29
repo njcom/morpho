@@ -37,23 +37,23 @@ class Client extends BaseClient {
         $this->pdo = $pdo;
     }
 
-    public function insert(array $spec = null): IInsertQuery {
+    public function insert(array|null $spec = null): IInsertQuery {
         return new InsertQuery($this, $spec);
     }
 
-    public function select(array $spec = null): ISelectQuery {
+    public function select(array|null $spec = null): ISelectQuery {
         return new SelectQuery($this, $spec);
     }
 
-    public function update(array $spec = null): IUpdateQuery {
+    public function update(array|null $spec = null): IUpdateQuery {
         return new UpdateQuery($this, $spec);
     }
 
-    public function delete(array $spec = null): IDeleteQuery {
+    public function delete(array|null $spec = null): IDeleteQuery {
         return new DeleteQuery($this, $spec);
     }
 
-    public function replace(array $spec = null): IReplaceQuery {
+    public function replace(array|null $spec = null): IReplaceQuery {
         return new ReplaceQuery($this, $spec);
     }
 

@@ -6,7 +6,7 @@
  */
 namespace Morpho\App;
 
-$baseDirPath = realpath(__DIR__ . '/..');
+$thisModuleDirPath = dirname(__DIR__);
 return [
     'siteFactory' => function (App $app) {
         return PHP_SAPI === 'cli' ? new Cli\SiteFactory($app->conf) : new Web\SiteFactory($app->conf);
@@ -20,8 +20,8 @@ return [
                 '127.0.0.1'
             ],
             'paths' => [
-                'dirPath'      => $baseDirPath . '/' . MODULE_DIR_NAME . '/localhost',
-                'confFilePath' => $baseDirPath . '/' . MODULE_DIR_NAME . '/localhost/' . CONF_DIR_NAME . '/' . SITE_CONF_FILE_NAME,
+                'dirPath'      => $thisModuleDirPath,
+                'confFilePath' => $thisModuleDirPath . '/' . CONF_DIR_NAME . '/' . SITE_CONF_FILE_NAME,
             ],
         ],
     ],

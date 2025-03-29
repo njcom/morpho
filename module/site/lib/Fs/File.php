@@ -72,7 +72,7 @@ class File extends Entry {
      * Writes string to a file.
      * @return string File path of the written file.
      */
-    public static function write(string $filePath, string $content, array $conf = null): string {
+    public static function write(string $filePath, string $content, array|null $conf = null): string {
         if ($filePath === '') {
             throw new Exception("The file path is empty");
         }
@@ -191,7 +191,7 @@ class File extends Entry {
     /**
      * Reads file as string.
      */
-    public static function read(string $filePath, array $conf = null): string {
+    public static function read(string $filePath, array|null $conf = null): string {
         if (!is_file($filePath)) {
             throw new FileNotFoundException($filePath);
         }
@@ -228,8 +228,8 @@ class File extends Entry {
     public static function writeJson(
         string $filePath,
         mixed $json,
-        int $jsonFlags = null,
-        array $writeConf = null
+        int|null $jsonFlags = null,
+        array|null $writeConf = null
     ): string {
         return self::write($filePath, toJson($json, $jsonFlags), $writeConf);
     }
@@ -260,8 +260,8 @@ class File extends Entry {
     public static function prepend(
         string $filePath,
         string $content,
-        array $readConf = null,
-        array $writeConf = null
+        array|null $readConf = null,
+        array|null $writeConf = null
     ): string {
         $writeConf['append'] = false;
         return self::write(
@@ -274,7 +274,7 @@ class File extends Entry {
     /**
      * Appends content to the file and returns the file path.
      */
-    public static function append(string $filePath, string $content, array $conf = null): string {
+    public static function append(string $filePath, string $content, array|null $conf = null): string {
         return self::write($filePath, $content, Conf::check(['append' => true], (array) $conf));
     }
 
@@ -394,7 +394,7 @@ class File extends Entry {
         return $filePath;
     }
 
-    public static function usingTmp(callable $fn, string $tmpDirPath = null): mixed {
+    public static function usingTmp(callable $fn, string|null $tmpDirPath = null): mixed {
         $tmpFilePath = tempnam($tmpDirPath ?: Env::tmpDirPath(), 'using-tmp-');
         try {
             $res = $fn($tmpFilePath);

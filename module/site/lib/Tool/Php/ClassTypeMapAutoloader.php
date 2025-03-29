@@ -21,7 +21,7 @@ class ClassTypeMapAutoloader extends Autoloader {
 
     protected string $cacheKey;
 
-    public function __construct(string|iterable $searchDirPaths, string|callable $filter = null, ICache $cache = null) {
+    public function __construct(string|iterable $searchDirPaths, string|callable|null $filter = null, ICache|null $cache = null) {
         $this->searchDirPaths = $searchDirPaths;
         $this->filter = $filter;
         $this->cache = $cache;

@@ -30,7 +30,7 @@ class CliPhpFileHeaderFixer {
         return $result;
     }
 
-    public function fixFiles(array $constructArgs, iterable $files, array $context, Result $prevResult = null): Result {
+    public function fixFiles(array $constructArgs, iterable $files, array $context, Result|null $prevResult = null): Result {
         $fixer = new PhpFileHeaderFixer(...$constructArgs);
         if ($prevResult) {
             $stats = $prevResult->value();

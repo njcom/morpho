@@ -47,7 +47,7 @@ class SchemaTest extends DbTestCase {
         $this->assertContains('mysql', $this->schema->dbNames());
     }
 
-    private function createDb($dbName, string $charset = null, string $collation = null): string {
+    private function createDb($dbName, string|null $charset = null, string|null $collation = null): string {
         $this->dbs[] = $dbName;
         $this->db->eval(
             "CREATE DATABASE $dbName CHARACTER SET " . ($charset ?: Schema::CHARSET) . " COLLATE " . ($collation ?: Schema::COLLATION)

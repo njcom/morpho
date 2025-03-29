@@ -42,7 +42,7 @@ class BackendModule extends Module {
     }
 
     public function autoloadFilePath(): string {
-        return $this->vendorDirPath() . '/' . AUTOLOAD_FILE_NAME;
+        return $this->vendorDirPath() . '/autoload.php';
     }
 
     public function vendorDirPath(): string {

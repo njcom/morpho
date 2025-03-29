@@ -19,7 +19,7 @@ abstract class Query implements IQuery {
     protected array $where = [];
     protected array $args = [];
 
-    public function __construct(IClient $db, array $spec = null) {
+    public function __construct(IClient $db, array|null $spec = null) {
         $this->db = $db;
         if (null !== $spec) {
             $this->build($spec);
@@ -43,7 +43,7 @@ abstract class Query implements IQuery {
         return $this->db->expr($expr);
     }
 
-    public function where(array|Stringable|string $condition, $args = null): static {
+    public function where(array|Stringable|string $condition, array|null $args = null): static {
         if (null === $args) {
             // $args not specified => $condition contains arguments
             if (is_array($condition)) {

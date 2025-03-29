@@ -10,9 +10,9 @@ use Morpho\App\IMessage;
 use Morpho\Uri\Uri;
 
 interface IRequest extends IMessage {
-    public function redirect(string $uri = null, int $statusCode = null): IResponse;
+    public function redirect(string|null $uri = null, int|null $statusCode = null): IResponse;
 
-    public function isAjax(bool $flag = null): bool;
+    public function isAjax(bool|null $flag = null): bool;
 
     public function prependWithBasePath(string $path): Uri;
 }

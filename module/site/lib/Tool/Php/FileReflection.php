@@ -171,7 +171,7 @@ class NamespaceReflection {
      * @return iterable Iterable over \ReflectionClass
      * @throws \ReflectionException
      */
-    public function classTypes(callable $filter = null): iterable {
+    public function classTypes(callable|null $filter = null): iterable {
         $this->requireFile($this->filePath);
         foreach ($this->classTypes as $class) {
             $rClass = new ClassTypeReflection($class);

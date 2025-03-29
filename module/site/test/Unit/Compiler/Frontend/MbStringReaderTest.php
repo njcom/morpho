@@ -15,7 +15,7 @@ class MbStringReaderTest extends AsciiStringReaderTest {
         $this->assertInstanceOf(MbStringReader::class, $this->mkReader(''));
     }
 
-    protected function mkReader(string $input, bool $anchored = true, string $encoding = null): IStringReader {
+    protected function mkReader(string $input, bool $anchored = true, string|null $encoding = null): IStringReader {
         return new MbStringReader($input, $encoding, $anchored);
     }
 

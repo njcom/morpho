@@ -50,7 +50,7 @@ function bootstrap(): void {
     (new ErrorHandler([new DumpListener()]))->register();
 }
 
-function showLine(string|Stringable|iterable|int|float $text = null): void {
+function showLine(string|Stringable|iterable|int|float|null $text = null): void {
     if (null === $text) {
         echo "\n";
     } else {
@@ -64,7 +64,7 @@ function showLine(string|Stringable|iterable|int|float $text = null): void {
     }
 }
 
-function showOk(string|Stringable $prefix = null, string|Stringable $suffix = null): void {
+function showOk(string|Stringable|null $prefix = null, string|Stringable|null $suffix = null): void {
     showLine(
         (null !== $prefix ? $prefix . ' ' : '')
         . 'OK'
@@ -72,7 +72,7 @@ function showOk(string|Stringable $prefix = null, string|Stringable $suffix = nu
     );
 }
 
-function sep(string $ch = '-', int $n = CODE_WIDTH_1, string $prefix = null, string $suffix = null): string {
+function sep(string $ch = '-', int $n = CODE_WIDTH_1, string|null $prefix = null, string|null $suffix = null): string {
     if (null !== $prefix) {
         $n -= mb_strlen($prefix);
     }
@@ -90,7 +90,7 @@ function sep(string $ch = '-', int $n = CODE_WIDTH_1, string $prefix = null, str
  * @param bool        $stdErr
  * @return void
  */
-function showSep(string $ch = '-', int $n = CODE_WIDTH_1, string $prefix = null, string $suffix = null, bool $stdErr = false): void {
+function showSep(string $ch = '-', int $n = CODE_WIDTH_1, string|null $prefix = null, string|null $suffix = null, bool $stdErr = false): void {
     $sep = sep($ch, $n, $prefix, $suffix);
     if ($stdErr) {
         showError($sep);
@@ -103,7 +103,7 @@ function showError(string $errMessage): void {
     fwrite(STDERR, $errMessage);
 }
 
-function showErrorLine(string $errMessage = null): void {
+function showErrorLine(string|null $errMessage = null): void {
     showError($errMessage . "\n");
 }
 
@@ -112,7 +112,7 @@ function showErrorLine(string $errMessage = null): void {
  * @param string|null $errMessage
  * @param int|null    $exitCode
  */
-function error(string $errMessage = null, int $exitCode = null): never {
+function error(string|null $errMessage = null, int|null $exitCode = null): never {
     if ($errMessage) {
         showError($errMessage);
     }
@@ -124,7 +124,7 @@ function error(string $errMessage = null, int $exitCode = null): never {
  * @param string|null $errMessage
  * @param int|null    $exitCode
  */
-function errorLine(string $errMessage = null, int $exitCode = null): never {
+function errorLine(string|null $errMessage = null, int|null $exitCode = null): never {
     if ($errMessage) {
         showErrorLine($errMessage);
     }
@@ -209,23 +209,23 @@ function envVarsStr(array $envVars): string {
     return substr($str, 1);
 }
 
-function mkdir(string $args, array $conf = null): ICommandResult {
+function mkdir(string $args, array|null $conf = null): ICommandResult {
     return sh('mkdir -p ' . $args);
 }
 
-function mv(string $args, array $conf = null): ICommandResult {
+function mv(string $args, array|null $conf = null): ICommandResult {
     return sh('mv ' . $args, $conf);
 }
 
-function cp(string $args, array $conf = null): ICommandResult {
+function cp(string $args, array|null $conf = null): ICommandResult {
     return sh('cp -r ' . $args, $conf);
 }
 
-function rm(string $args, array $conf = null): ICommandResult {
+function rm(string $args, array|null $conf = null): ICommandResult {
     return sh('rm -rf ' . $args, $conf);
 }
 
-function sh(string $command, array $conf = null): ICommandResult {
+function sh(string $command, array|null $conf = null): ICommandResult {
     /*    if (isset($conf['capture'])) {
             if (!isset($conf['show'])) {
                 $conf['show'] = !$conf['capture'];
@@ -287,7 +287,7 @@ function sh(string $command, array $conf = null): ICommandResult {
     return new ShellCommandResult($command, $exitCode, $output, '');
 }
 
-function sudo(string $command, array $conf = null): ICommandResult {
+function sudo(string $command, array|null $conf = null): ICommandResult {
     return sh('sudo bash -c "' . str_replace('"', '\\"', $command) . '"', $conf);
 }
 
@@ -308,7 +308,7 @@ function rawSh(string $cmd, $env = null) {
     return pcntl_wexitstatus($status);
 }
 
-function checkExitCode(int $exitCode, string $errMessage = null): int {
+function checkExitCode(int $exitCode, string|null $errMessage = null): int {
     if ($exitCode !== 0) {
         throw new Exception(
             "Command returned non-zero exit code: " . (int)$exitCode . (null !== $errMessage ? '. ' . $errMessage : '')

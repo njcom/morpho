@@ -19,23 +19,23 @@ interface IClient {
 
     public function expr(mixed $expr): Expr;
 
-    public function where(array|string $condition, array $args = null): array;
+    public function where(array|string $condition, array|null $args = null): array;
 
-    public function insert(array $spec = null): IInsertQuery;
+    public function insert(array|null $spec = null): IInsertQuery;
 
-    public function select(array $spec = null): ISelectQuery;
+    public function select(array|null $spec = null): ISelectQuery;
 
-    public function update(array $spec = null): IUpdateQuery;
+    public function update(array|null $spec = null): IUpdateQuery;
 
-    public function delete(array $spec = null): IDeleteQuery;
+    public function delete(array|null $spec = null): IDeleteQuery;
 
-    public function replace(array $spec = null): IReplaceQuery;
+    public function replace(array|null $spec = null): IReplaceQuery;
 
     public function exec(string $sql): int;
 
-    public function eval(string $sql, array $args = null): Result;
+    public function eval(string $sql, array|null $args = null): Result;
 
-    public function lastInsertId(string $name = null): string;
+    public function lastInsertId(string|null $name = null): string;
 
     /**
      * @param callable $transaction

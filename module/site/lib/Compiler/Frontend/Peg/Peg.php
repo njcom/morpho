@@ -37,14 +37,14 @@ class Peg {
         return self::runParser(new GrammarParser(self::mkTokenizer($source)));
     }
 
-    public static function parseText(Grammar $grammar, $tokenizer, array $context = null) {
+    public static function parseText(Grammar $grammar, $tokenizer, array|null $context = null) {
         [$parserClass, $parserCode] = self::generateParser($grammar, $context, Peg::FORMAT_AS_FRAGMENT);
         eval('?><?php ' . $parserCode);
         $parser = new $parserClass($tokenizer);
         return self::runParser($parser);
     }
 
-    public static function generateParser(Grammar $grammar, array $context = null, int $format = self::FORMAT_AS_FILE): array {
+    public static function generateParser(Grammar $grammar, array|null $context = null, int $format = self::FORMAT_AS_FILE): array {
         $programStream = mkStream('');
         $gen = new PhpParserGenerator($grammar, $programStream, new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
         $parserClass = $gen->generate($context);
@@ -69,7 +69,7 @@ class Peg {
         return new Tokenizer(PythonTokenizer::tokenize($source));
     }
 
-    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array $context = null): string {
+    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $context = null): string {
         [$parserClass, $parserCode] = self::generateParser($grammar, $context);
         file_put_contents($targetFilePath, $parserCode);
         return $parserClass;

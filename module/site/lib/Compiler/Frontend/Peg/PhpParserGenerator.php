@@ -82,7 +82,7 @@ class PhpParserGenerator implements IGrammarVisitor {
     /**
      * __init__(self, grammar: grammar.Grammar, file: Optional[IO[Text]], tokens: Set[str] = set(token.tok_name.values()), location_formatting: Optional[str] = None,unreachable_formatting: Optional[str] = None)
      */
-    public function __construct(Grammar $grammar, $targetStream, RuleCheckingVisitor $ruleChecker, string $locationFormatting = null, string $unreachableFormatting = null) {
+    public function __construct(Grammar $grammar, $targetStream, RuleCheckingVisitor $ruleChecker, string|null $locationFormatting = null, string|null $unreachableFormatting = null) {
         $this->grammar = $grammar;
 
         $this->validateRuleNames($grammar->rules);
@@ -114,7 +114,7 @@ class PhpParserGenerator implements IGrammarVisitor {
      * @param array|null $context @todo: specify shape
      * @return string
      */
-    public function generate(array $context = null): string {
+    public function generate(array|null $context = null): string {
         $context = (array)$context;
         if (!isset($context['namespace'])) {
             $context['namespace'] = __NAMESPACE__ . '\\Generated' . str_replace([' ', '.'], '', microtime());
@@ -486,7 +486,7 @@ class PhpParserGenerator implements IGrammarVisitor {
             for line in lines.splitlines():
                 self.print(line)
     */
-    protected function write(Stringable|string $value = null): void {
+    protected function write(Stringable|string|null $value = null): void {
         if (null === $value) {
             fwrite($this->stream, "\n");
         } else {

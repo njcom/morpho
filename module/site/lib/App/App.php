@@ -18,7 +18,7 @@ class App implements IFn {
     public readonly array $conf;
     private ?ServiceManager $serviceManager = null;
 
-    public function __construct(array $conf = null) {
+    public function __construct(array|null $conf = null) {
         $this->conf = $conf ?? [];
     }
 

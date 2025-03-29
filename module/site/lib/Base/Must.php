@@ -13,7 +13,7 @@ use function array_keys;
 use function count;
 
 class Must {
-    public static function beTruthy(mixed $value, string $message = null): mixed {
+    public static function beTruthy(mixed $value, string|null $message = null): mixed {
         if (!$value) {
             throw new MustException((string)$message, $value);
         }
@@ -58,11 +58,11 @@ class Must {
      * @param string|null $message
      * @return void
      */
-    public static function contain($haystack, $needle, string $message = null): void {
+    public static function contain($haystack, $needle, string|null $message = null): void {
         self::beTruthy(contains($haystack, $needle), $message ?? 'A haystack does not contain a needle');
     }
 
-    public static function haveAtLeastKeys(array $arr, array $keys, string $message = null): array {
+    public static function haveAtLeastKeys(array $arr, array $keys, string|null $message = null): array {
         $intersection = array_intersect_key(array_flip($keys), $arr);
         if (count($intersection) != count($keys)) {
             throw new MustException($message ?? 'The array must have the items with the specified keys', ['arr' => $arr, 'keys' => $keys]);
@@ -70,7 +70,7 @@ class Must {
         return $arr;
     }
 
-    public static function haveExactKeys(array $arr, array $keys, string $message = null, bool $ordered = true): array {
+    public static function haveExactKeys(array $arr, array $keys, string|null $message = null, bool $ordered = true): array {
         if (!$ordered) {
             $invalid = !empty(symDiff(array_keys($arr), $keys));
         } else {

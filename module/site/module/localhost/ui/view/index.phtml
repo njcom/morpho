@@ -35,8 +35,8 @@
 }
 </script>
 <?php
-foreach ($this->scripts['after-main'] as $script) {
-    echo $this->tag('script', $script, '');
+foreach ($this->scripts['after-main'] as $attribs) {
+    echo $this->tag('script', null, $attribs);
 }
 ?>
 </body>

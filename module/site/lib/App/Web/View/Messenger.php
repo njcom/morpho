@@ -15,91 +15,73 @@ use function count;
 use function in_array;
 
 class Messenger implements Countable, IteratorAggregate {
-    public const ERROR = 'error';
-    public const INFO = 'info';
-    public const SUCCESS = 'success';
-    public const WARNING = 'warning';
+    public IMessageStorage $storage;
 
-    protected ?IMessageStorage $messageStorage = null;
-
-    protected array $allowedTypes = [
-        self::SUCCESS,
-        self::INFO,
-        self::WARNING,
-        self::ERROR,
-    ];
+    public function __construct(IMessageStorage|null $storage = null) {
+        if (null === $storage) {
+            $this->storage = new SessionMessageStorage(__CLASS__);
+        }
+    }
 
     public function clearMessages(): void {
-        $this->initMessageStorage();
-        $this->messageStorage->clear();
+        $this->storage->clear();
     }
 
-    protected function initMessageStorage(): void {
-        if (null === $this->messageStorage) {
-            $this->messageStorage = $this->mkMessageStorage();
-        }
-    }
-
-    protected function mkMessageStorage(): IMessageStorage {
-        return new SessionMessageStorage(__CLASS__);
-    }
-
-    public function addSuccessMessage(string $text, array $args = null): void {
-        $this->addMessage($text, $args, self::SUCCESS);
-    }
-
-    public function addMessage(string $text, array $args = null, $type = null): void {
+    public function addMessage(string $text, array|null $args = null, MessageType|null $type = null): void {
         if (null === $type) {
-            $type = self::SUCCESS;
+            $type = MessageType::Success;
         }
-        $this->checkMessageType($type);
-        $this->initMessageStorage();
-        if (!isset($this->messageStorage[$type])) {
-            $this->messageStorage[$type] = [];
+        $key = $type->value;
+        if (!isset($this->storage[$key])) {
+            $this->storage[$key] = [];
         }
-        $this->messageStorage[$type][] = [
+        $this->storage[$key][] = [
             'text' => $text,
             'args' => (array) $args,
         ];
     }
 
-    protected function checkMessageType($type): void {
-        if (!in_array($type, $this->allowedTypes)) {
-            throw new UnexpectedValueException();
-        }
+    public function addSuccessMessage(string $text, array|null $args = null): void {
+        $this->addMessage($text, $args, MessageType::Success);
     }
 
-    public function addInfoMessage(string $text, array $args = null): void {
-        $this->addMessage($text, $args, self::INFO);
+    public function hasSuccessMessages(): bool {
+        return $this->hasMessages(MessageType::Success);
     }
 
-    public function addWarningMessage(string $text, array $args = null): void {
-        $this->addMessage($text, $args, self::WARNING);
+    public function addInfoMessage(string $text, array|null $args = null): void {
+        $this->addMessage($text, $args, MessageType::Info);
     }
 
-    public function addErrorMessage(string $text, array $args = null): void {
-        $this->addMessage($text, $args, self::ERROR);
+    public function hasInfoMessages(): bool {
+        return $this->hasMessages(MessageType::Info);
+    }
+
+    public function addWarningMessage(string $text, array|null $args = null): void {
+        $this->addMessage($text, $args, MessageType::Warning);
     }
 
     public function hasWarningMessages(): bool {
-        return isset($this->messageStorage[self::WARNING]) && count($this->messageStorage[self::WARNING]) > 0;
+        return $this->hasMessages(MessageType::Warning);
+    }
+
+    public function addErrorMessage(string $text, array|null $args = null): void {
+        $this->addMessage($text, $args, MessageType::Error);
     }
 
     public function hasErrorMessages(): bool {
-        return isset($this->messageStorage[self::ERROR]) && count($this->messageStorage[self::ERROR]) > 0;
+        return $this->hasMessages(MessageType::Error);
+    }
+
+    public function hasMessages(MessageType $type): bool {
+        return !empty($this->storage[$type->value]);
     }
 
     public function getIterator(): Traversable {
-        $this->initMessageStorage();
-        return $this->messageStorage;
+        return $this->storage;
     }
 
     public function count(): int {
-        $this->initMessageStorage();
-        return count($this->messageStorage);
-    }
-
-    public function setMessageStorage(IMessageStorage $storage): void {
-        $this->messageStorage = $storage;
+        return count($this->storage);
     }
 }

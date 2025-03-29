@@ -230,7 +230,7 @@ function unpackArgs(array $args): array {
  * @todo: preserve structure, use fmap (map)
  * @todo: support short form wrap($prefix, $it)
  */
-function wrap(string $prefix, ?string $suffix, string|Stringable|iterable|int|float|BackedEnum $list = null): string|array|Closure {
+function wrap(string $prefix, ?string $suffix, string|Stringable|iterable|int|float|BackedEnum|null $list = null): string|array|Closure {
     if (null === $suffix) {
         $suffix = $prefix;
     }
@@ -268,7 +268,7 @@ function wrap(string $prefix, ?string $suffix, string|Stringable|iterable|int|fl
  * @return string|array|\Closure
  * @todo: preserve structure, use fmap (map)
  */
-function prepend(string $prefix, string|Stringable|iterable|int|float|BackedEnum $list = null): string|array|Closure {
+function prepend(string $prefix, string|Stringable|iterable|int|float|BackedEnum|null $list = null): string|array|Closure {
     if (null === $list) {
         return function (string|Stringable|int|float|BackedEnum $list) use ($prefix) {
             return prepend($prefix, $list);
@@ -290,7 +290,7 @@ function prepend(string $prefix, string|Stringable|iterable|int|float|BackedEnum
  * @return string|array|\Closure
  * @todo: preserve structure, use fmap (map)
  */
-function append(string $suffix, string|Stringable|iterable|int|float|BackedEnum $list = null): string|array|Closure {
+function append(string $suffix, string|Stringable|iterable|int|float|BackedEnum|null $list = null): string|array|Closure {
     if (null === $list) {
         return function (string|Stringable|int|float $list) use ($suffix) {
             return append($suffix, $list);
@@ -507,7 +507,7 @@ function sanitize(string|Stringable|int $list, string $allowedCharacters, bool $
 /**
  * extended trim/etrim: modified version of \trim() that removes all characters from the $chars and whitespaces until non of them will be present in the ends of the source string.
  */
-function etrim(string|Stringable|iterable|int|float $list, string $chars = null): string|array {
+function etrim(string|Stringable|iterable|int|float $list, string|null $chars = null): string|array {
     if (is_array($list)) {
         $r = [];
         foreach ($list as $k => $v) {
@@ -570,7 +570,7 @@ function toStr(iterable $it, string $eol = "\n"): string {
     return $result;
 }
 
-function toJson(mixed $value, int $flags = null): string {
+function toJson(mixed $value, int|null $flags = null): string {
     if (null === $flags) {
         $flags = -1;
     }
@@ -642,7 +642,7 @@ function capture(callable $fn): string {
     return ob_get_clean();
 }
 
-function tpl(string $__filePath, array $__vars = null): string {
+function tpl(string $__filePath, array|null $__vars = null): string {
     extract((array)$__vars, EXTR_SKIP);
     unset($__vars);
     ob_start();
@@ -763,7 +763,7 @@ function not(callable $predicate): Closure {
  * Left composition.
  * Returns a new function which will call $f after $g with some value $value: $f($g($value)).
  */
-function compose(callable $a, callable $b, callable $c = null): Closure {
+function compose(callable $a, callable $b, callable|null $c = null): Closure {
     $n = func_num_args();
     if ($n == 2) {
         return function ($v) use ($a, $b) {
@@ -781,7 +781,7 @@ function compose(callable $a, callable $b, callable $c = null): Closure {
 /**
  * Right composition.
  */
-function rcompose(callable $a, callable $b, callable $c = null): Closure {
+function rcompose(callable $a, callable $b, callable|null $c = null): Closure {
     $n = func_num_args();
     if ($n == 2) {
         return function ($v) use ($a, $b) {
@@ -808,7 +808,7 @@ function requireFile(string $__filePath, bool $__once = false) {
 
 // @TODO: Move to Byte??, merge with Converter, parseQuantity()
 
-function formatBytes(string $bytes, string $format = null): string {
+function formatBytes(string $bytes, string|null $format = null): string {
     $n = strlen($bytes);
     $s = '';
     $format = $format ?: '\x%02x';
@@ -1013,7 +1013,7 @@ function flatMap(callable $fn, $iter) {
 /**
  * For abcd returns a
  */
-function head($list, string $separator = null) {
+function head($list, string|null $separator = null) {
     if (is_array($list)) {
         if (!count($list)) {
             throw new Exception('Empty list');
@@ -1049,7 +1049,7 @@ function head($list, string $separator = null) {
 /**
  * For abcd returns abc
  */
-function init($list, string $separator = null) {
+function init($list, string|null $separator = null) {
     if (is_array($list)) {
         if (!count($list)) {
             throw new Exception('Empty list');
@@ -1084,7 +1084,7 @@ function init($list, string $separator = null) {
 /**
  * For abcd returns d
  */
-function last($list, string $separator = null) {
+function last($list, string|null $separator = null) {
     if (is_array($list)) {
         if (!count($list)) {
             throw new Exception('Empty list');
@@ -1119,7 +1119,7 @@ function last($list, string $separator = null) {
 /**
  * For abcd returns bcd
  */
-function tail($list, string $separator = null) {
+function tail($list, string|null $separator = null) {
     if (is_array($list)) {
         if (!count($list)) {
             throw new Exception('Empty list');
@@ -1540,7 +1540,7 @@ function underscoreKeys(array $arr): array {
  * @param array<string> $regexes
  * @return string
  */
-function compileRe(array $regexes, string $subpatternOpts = null): string {
+function compileRe(array $regexes, string|null $subpatternOpts = null): string {
     return '(' . $subpatternOpts . str_replace('~', '\~', implode('|', $regexes)) . ')';
 }
 
@@ -1557,7 +1557,7 @@ function with(IDisposable $disposable, mixed $value = null): mixed {
     return $result;
 }
 
-function withStream(callable $fn, string $bytes, string $source = null): mixed {
+function withStream(callable $fn, string $bytes, string|null $source = null): mixed {
     try {
         $stream = mkStream($bytes, $source);
         return $fn($stream);
@@ -1573,7 +1573,7 @@ function withStream(callable $fn, string $bytes, string $source = null): mixed {
  * @param string|null $fileName
  * @return resource
  */
-function mkStream(string $bytes = null, string $fileName = null) {
+function mkStream(string|null $bytes = null, string|null $fileName = null) {
     if (null === $fileName) {
         $fileName = 'php://memory';
     } else {
@@ -1601,7 +1601,7 @@ function reorderKeys(array $arr, array $keys): array {
 /**
  * @return mixed The truthy result from the predicate
  */
-function waitUntilNumOfAttempts(callable $predicate, int $waitIntervalMicroSec = null, int $numOfAttempts = 30) {
+function waitUntilNumOfAttempts(callable $predicate, int|null $waitIntervalMicroSec = null, int $numOfAttempts = 30) {
     if (null === $waitIntervalMicroSec) {
         $waitIntervalMicroSec = WAIT_INTERVAL_MICRO_SEC;
     }

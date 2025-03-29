@@ -1,0 +1,71 @@
+#version: '3.8'
+services:
+  # main:
+  #   build: ./main
+  #   image: localhost/morpho-main
+  #   #container_name: morpho-main
+  #   #hostname: morpho.local
+  #   volumes:
+  #     - ../:/workspace:cached
+  #   network_mode: service:postgres
+  #   #networks:
+  #   #  - postgres
+  #   command: sleep infinity
+  #   # environment:
+  #   #   DOCKER_BUILDKIT: 1
+  #   #   COMPOSE_DOCKER_CLI_BUILD: 1
+  #   env_file: .env
+
+  postgres:
+    build: ./postgres
+    image: localhost/morpho-postgres
+    #container_name: morpho-postgres
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file: .env
+
+volumes:
+  postgres-data:
+
+  #networks:
+
+
+# # services:
+#   nginx:
+#     build: src/nginx
+#     container_name: ${COMPOSE_PROJECT_NAME}_nginx
+#     ports:
+#       - ${HOST}$NGINX_HOST_PORT:$NGINX_CONTAINER_PORT
+#     volumes:
+#       - $MNT_DIR_PATH/nginx/etc:/etc/nginx
+#       - $MNT_DIR_PATH/project:/project
+
+#   php:
+#     build: src/php
+#     container_name: ${COMPOSE_PROJECT_NAME}_php
+#     ports:
+#       - $PHP_HOST_PORT:$PHP_CONTAINER_PORT
+#     volumes:
+#       - $MNT_DIR_PATH/php/etc:/usr/local/etc
+#       - $MNT_DIR_PATH/project:/project
+#     depends_on:
+#       - nginx
+#       - mysql
+
+#   mysql:
+#     build: src/mysql
+#     container_name: ${COMPOSE_PROJECT_NAME}_mysql
+#     ports:
+#       - ${HOST}$MYSQL_HOST_PORT:$MYSQL_CONTAINER_PORT
+#     volumes:
+#       - mysql:/var/lib/mysql
+#       - $MNT_DIR_PATH/mysql/etc:/etc/mysql
+#     environment:
+#       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+#       MYSQL_DATABASE: $MYSQL_DATABASE
+#       MYSQL_USER: $MYSQL_USER
+#       MYSQL_PASSWORD: $MYSQL_PASSWORD
+
+# volumes:
+#   mysql:

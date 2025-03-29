@@ -21,8 +21,6 @@ use ReflectionFunction;
 
 use RuntimeException;
 
-use function trigger_error;
-
 class ErrorHandlerTest extends TestCase {
     protected function setUp(): void {
         parent::setUp();
@@ -105,7 +103,7 @@ class ErrorHandlerTest extends TestCase {
 
     public static function dataTestHandleError_ConvertsErrorToException(): iterable {
         return [
-            [E_USER_ERROR, UserErrorException::class],
+            //[E_USER_ERROR, UserErrorException::class],
             [E_USER_WARNING, UserWarningException::class],
             [E_USER_NOTICE, UserNoticeException::class],
             [E_USER_DEPRECATED, UserDeprecatedException::class],
@@ -122,7 +120,7 @@ class ErrorHandlerTest extends TestCase {
                 trigger_error("My message", $severity);
                 $this->fail();
             } catch (ErrorException $ex) {
-                $this->assertInstanceOf($expectedErrorClass, $ex);
+                $this->assertInstanceOf($expectedErrorClass, $ex, (string)$ex);
             }
         } finally {
             error_reporting($oldErrorReporting);

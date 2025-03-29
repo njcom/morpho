@@ -15,7 +15,7 @@ class Request extends ArrayObject implements IMessage {
     public array $handler = [];
     public Response $response;
 
-    public function __construct(array $vals = null) {
+    public function __construct(array|null $vals = null) {
         parent::__construct((array)$vals);
         $this->response = new Response();
     }

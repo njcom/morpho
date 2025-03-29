@@ -263,12 +263,19 @@ class TemplateEngineTest extends TestCase {
         $this->assertEquals("<foo></foo>", $this->templateEngine->tag('foo', null, null, ['eol' => false]));
     }
 
-    public function testTag_EscapeConfParam_1() {
+    public function testTag_EscapeAttribsAndText() {
         $this->assertEquals(
-            '<foo>&quot;</foo>',
-            $this->templateEngine->tag('foo', '"', null, ['eol' => false, 'escape' => true])
+            '<foo ">&quot;</foo>',
+            $this->templateEngine->tag('foo', '"', '"', ['eol' => false, 'escape' => true])
         );
+
+        $this->assertEquals(
+            '<foo my-attr="&quot;">&quot;</foo>',
+            $this->templateEngine->tag('foo', '"', ['my-attr' => '"'], ['eol' => false, 'escape' => true])
+        );
+
         $this->assertEquals('<foo>&quot;</foo>', $this->templateEngine->tag('foo', '"', null, ['eol' => false]));
+
         $this->assertEquals(
             '<foo>"</foo>',
             $this->templateEngine->tag('foo', '"', null, ['eol' => false, 'escape' => false])
@@ -407,11 +414,11 @@ class TemplateEngineTest extends TestCase {
                 throw new NotImplementedException();
             }
 
-            #[Override] public function redirect(string $uri = null, int $statusCode = null): IResponse {
+            #[Override] public function redirect(string|null $uri = null, int|null $statusCode = null): IResponse {
                 throw new NotImplementedException();
             }
 
-            #[Override] public function isAjax(bool $flag = null): bool {
+            #[Override] public function isAjax(bool|null $flag = null): bool {
                 throw new NotImplementedException();
             }
 

@@ -30,7 +30,7 @@ class ServiceManager implements IServiceManager {
 
     private $loading = [];
 
-    public function __construct(array $services = null) {
+    public function __construct(array|null $services = null) {
         if (null !== $services) {
             foreach ($services as $id => $service) {
                 $this->set($id, $service);

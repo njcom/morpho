@@ -24,7 +24,7 @@ use function unserialize;
 class TextFileCache extends FileCache {
     protected const EXTENSION = '.cache';
 
-    public function __construct(string $dirPath, string $extension = null, int $umask = 0002) {
+    public function __construct(string $dirPath, string|null $extension = null, int $umask = 0002) {
         parent::__construct($dirPath, $extension ?: self::EXTENSION, $umask);
     }
 

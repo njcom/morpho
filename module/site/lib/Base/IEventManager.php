@@ -9,7 +9,7 @@ namespace Morpho\Base;
 interface IEventManager {
     public function on(string $eventName, callable $handler): void;
 
-    public function off(string $eventName, callable $handlerSelector = null): void;
+    public function off(string $eventName, callable|null $handlerSelector = null): void;
 
     /**
      * @param Event $event

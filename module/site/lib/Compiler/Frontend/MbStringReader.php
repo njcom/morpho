@@ -17,7 +17,7 @@ class MbStringReader extends AsciiStringReader {
      * @param string|null $encoding
      * @param bool $anchored Either use the `A` PCRE modifier (PCRE_ANCHORED) for all regular expressions or not.
      */
-    public function __construct(string $input, string $encoding = null, bool $anchored = true) {
+    public function __construct(string $input, string|null $encoding = null, bool $anchored = true) {
         parent::__construct($input, $anchored);
         $this->encoding = null === $encoding ? 'utf-8' : $encoding;
     }
@@ -26,7 +26,7 @@ class MbStringReader extends AsciiStringReader {
         return strlen($this->substr($this->input, 0, $this->offset));
     }
 
-    protected function re(string $re, bool $anchored = null): string {
+    protected function re(string $re, bool|null $anchored = null): string {
         if (null === $anchored) {
             return $this->anchored ? $re . 'Au' : $re;
         }

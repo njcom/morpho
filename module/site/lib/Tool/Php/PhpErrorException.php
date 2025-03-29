@@ -26,7 +26,6 @@ class PhpErrorException extends \ErrorException {
             E_USER_ERROR        => 'E_USER_ERROR',
             E_USER_WARNING      => 'E_USER_WARNING',
             E_USER_NOTICE       => 'E_USER_NOTICE',
-            E_STRICT            => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
             E_DEPRECATED        => 'E_DEPRECATED',
             E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
@@ -62,10 +61,7 @@ class WarningException extends ParseException {
 class NoticeException extends WarningException {
 }
 
-class StrictException extends NoticeException {
-}
-
-class DeprecatedException extends StrictException {
+class DeprecatedException extends NoticeException {
 }
 
 class UserErrorException extends ErrorException {

@@ -46,7 +46,7 @@ class Doc extends DOMDocument {
     ];
     private ?XPathQuery $xPath = null;
 
-    public static function parseFile(string $filePath, array $conf = null): Doc {
+    public static function parseFile(string $filePath, array|null $conf = null): Doc {
         if (!is_file($filePath) || !is_readable($filePath)) {
             throw new InvalidArgumentException("Unable to load DOM document from the file '$filePath'");
         }
@@ -54,7 +54,7 @@ class Doc extends DOMDocument {
         return self::parse($source, $conf);
     }
 
-    public static function parse(string $source, array $conf = null): Doc {
+    public static function parse(string $source, array|null $conf = null): Doc {
         $source = trim($source);
 
         $conf = (array) $conf;
@@ -86,7 +86,7 @@ class Doc extends DOMDocument {
         return $doc;
     }
 
-    public static function mk(array $conf = null): Doc {
+    public static function mk(array|null $conf = null): Doc {
         $conf = (array) $conf;
         $invalidConf = array_diff_key($conf, self::CREATE_CONFIG_PARAMS);
         if (count($invalidConf)) {

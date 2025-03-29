@@ -1,0 +1,294 @@
+services:
+  postgresql:
+    build:
+      context: ./postgresql
+    #container_name: ${PROJECT_NAME}-postgres
+    #restart: unless-stopped | always
+    #hostname: morpho.local
+    #network_mode: service:postgres
+    image: localhost/${PROJECT_NAME}-postgresql
+    ports:
+      - 10432:5432
+    networks:
+      - morpho
+    volumes:
+      - ${MOUNT_DIR_PATH}/postgres:/var/lib/postgresql/data
+      #- ../:/workspace:cached
+
+#  mariadb:
+#    build:
+#      context: ./mariadb
+#      args:
+#        - MARIADB_VERSION=${MARIADB_VERSION}
+#    image: localhost/${PROJECT_NAME}-mariadb
+#    #restart: unless-stopped
+#    volumes:
+#      - ${MOUNT_DIR_PATH}/mariadb:/var/lib/mysql
+#    ports:
+#      - "${MARIADB_PORT}:3306"
+#    networks:
+#      - morpho
+#    #env_file: mariadb/.env
+
+      #  nginx:
+      #    build:
+      #      context: ./nginx
+      #      args:
+      #        - NGINX_VERSION=${NGINX_VERSION}
+      #    image: localhost/${PROJECT_NAME}-nginx
+      #    #container_name: ${COMPOSE_PROJECT_NAME}_nginx
+      #    volumes:
+      #      - ${MOUNT_DIR_PATH}/nginx:/etc/nginx
+      #      - ${MOUNT_DIR_PATH}/frontend:/frontend
+      #    ports:
+      #      - ${NGINX_PORT}:80
+      #    networks:
+      #      - morpho
+      #
+      #  php:
+      #    build:
+      #      context: ./php
+      #      args:
+      #        - PHP_VERSION=${PHP_VERSION}
+      #    image: localhost/${PROJECT_NAME}-php
+      #    volumes:
+      #      - ${MOUNT_DIR_PATH}/php/
+      #    ports:
+      #      - ${PHP_PORT}:9000
+      #    networks:
+      #      - morpho
+      #
+      #      #     depends_on:
+      #      #       - nginx
+      #      #       - mysql
+
+#  dotnet:
+#    build:
+#      context: ./dotnet
+#      args:
+#        - DOTNET_VERSION=${DOTNET_VERSION}
+#    image: localhost/${PROJECT_NAME}-dotnet
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  go:
+#    build:
+#      context: ./go
+#      args:
+#        - GO_VERSION=${GO_VERSION}
+#    image: localhost/${PROJECT_NAME}-go
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  haskell:
+#    build:
+#      context: ./haskell
+#      args:
+#        - HASKELL_VERSION=${HASKELL_VERSION}
+#    image: localhost/${PROJECT_NAME}-haskell
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  ocaml:
+#    build:
+#      context: ./ocaml
+#      args:
+#        - OCAML_VERSION=${OCAML_VERSION}
+#    image: localhost/${PROJECT_NAME}-ocaml
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  perl:
+#    build:
+#      context: ./perl
+#      args:
+#        - PERL_VERSION=${PERL_VERSION}
+#    image: localhost/${PROJECT_NAME}-perl
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  ruby:
+#    build:
+#      context: ./ruby
+#      args:
+#        - RUBY_VERSION=${PERL_VERSION}
+#    image: localhost/${PROJECT_NAME}-ruby
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+
+#  python:
+#    build:
+#      context: ./python
+#      args:
+#        - PYTHON_VERSION=${PYTHON_VERSION}
+#    image: localhost/${PROJECT_NAME}-python
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+
+#  jvm:
+#    build:
+#      context: ./jvm
+#      args:
+#        - JVM_VERSION=${JVM_VERSION}
+#    image: localhost/${PROJECT_NAME}-jvm
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  nodejs:
+#    build:
+#      context: ./nodejs
+#      args:
+#        - NODEJS_VERSION=${NODEJS_VERSION}
+#    image: localhost/${PROJECT_NAME}-nodejs
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+
+#  mongodb:
+#    build:
+#      context: ./mongodb
+#      args:
+#        - MONGODB_VERSION=${MONGODB_VERSION}
+#    image: localhost/${PROJECT_NAME}-mongodb
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  memcached:
+#    build:
+#      context: ./memcached
+#      args:
+#        - MEMCACHED_VERSION=${MEMCACHED_VERSION}
+#    image: localhost/${PROJECT_NAME}-memcached
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  redis:
+#    build:
+#      context: ./redis
+#      args:
+#        - REDIS_VERSION=${REDIS_VERSION}
+#    image: localhost/${PROJECT_NAME}-redis
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    image: localhost/${PROJECT_NAME}-rabbitmq
+    volumes: []
+    ports:
+      - 15672:5672
+    networks:
+      - morpho
+#
+#  zeromq:
+#    build:
+#      context: ./zeromq
+#      args:
+#        - ZEROMQ_VERSION=${ZEROMQ_VERSION}
+#    image: localhost/${PROJECT_NAME}-zeromq
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+
+#  kafka:
+#    build:
+#      context: ./kafka
+#      args:
+#        - KAFKA_VERSION=${KAFKA_VERSION}
+#    image: localhost/${PROJECT_NAME}-kafka
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  elasticsearch:
+#    build:
+#      context: ./elasticsearch
+#      args:
+#        - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
+#    image: localhost/${PROJECT_NAME}-elasticsearch
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  logstash:
+#    build:
+#      context: ./logstash
+#      args:
+#        - LOGSTASH_VERSION=${LOGSTASH_VERSION}
+#    image: localhost/${PROJECT_NAME}-logstash
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  kibana:
+#    build:
+#      context: ./kibana
+#      args:
+#        - KIBANA_VERSION=${KIBANA_VERSION}
+#    image: localhost/${PROJECT_NAME}-kibana
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+#
+#  playwright:
+#    build:
+#      context: ./playwright
+#      args:
+#        - PLAYWRIGHT_VERSION=${PLAYWRIGHT_VERSION}
+#    image: localhost/${PROJECT_NAME}-playwright
+#    volumes: []
+#    ports: []
+#    networks:
+#      - morpho
+
+ #volumes:
+#  postgres:
+#    driver: ${VOLUMES_DRIVER}
+#  memcached:
+#    driver: ${VOLUMES_DRIVER}
+#  redis:
+#    driver: ${VOLUMES_DRIVER}
+#  neo4j:
+#    driver: ${VOLUMES_DRIVER}
+#  mariadb:
+#    driver: ${VOLUMES_DRIVER}
+#  mongo:
+#    driver: ${VOLUMES_DRIVER}
+#  elasticsearch:
+#    driver: ${VOLUMES_DRIVER}
+
+networks:
+  morpho:
+#    driver: ${NETWORKS_DRIVER}
+#  backend:
+#    driver: ${NETWORKS_DRIVER}
+

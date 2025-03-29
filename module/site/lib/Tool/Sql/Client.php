@@ -78,7 +78,7 @@ abstract class Client implements IClient {
         return $this->pdo->exec($sql);
     }
 
-    public function eval(string $sql, array $args = null): Result {
+    public function eval(string $sql, array|null $args = null): Result {
         /** @var $stmt Result */
         if ($args) {
             $stmt = $this->pdo->prepare($sql);
@@ -92,7 +92,7 @@ abstract class Client implements IClient {
         return $stmt;
     }
 
-    public function lastInsertId(string $name = null): string {
+    public function lastInsertId(string|null $name = null): string {
         return $this->pdo->lastInsertId($name);
     }
 
@@ -100,7 +100,7 @@ abstract class Client implements IClient {
         return new Expr($expr);
     }
 
-    public function where(array|string $condition, array $args = null): array {
+    public function where(array|string $condition, array|null $args = null): array {
         $where = [];
         if (null === $args) {
             // $args not specified => $condition contains arguments

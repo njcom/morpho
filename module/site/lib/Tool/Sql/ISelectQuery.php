@@ -27,5 +27,5 @@ interface ISelectQuery extends IQuery {
 
     public function orderBy(string|Expr|array $orderBy): static;
 
-    public function limit(int $numOfRows, int $offset = null): static;
+    public function limit(int $numOfRows, int|null $offset = null): static;
 }

@@ -49,7 +49,7 @@ abstract class TestCase extends BaseTestCase {
     private static array $classFilePaths = [];
     private ?string $prevTimezone = null;
 
-    /*    public function expectException(string $exceptionClass, $message = '', $code = null): void {
+    /*    public function expectException(string $exceptionClass, $message = '', mixed $code = null): void {
             parent::expectException($exceptionClass);
             if ($message !== null && $message !== '') {
                 $this->expectExceptionMessage($message);
@@ -95,7 +95,7 @@ abstract class TestCase extends BaseTestCase {
         return $tmpFilePath;
     }
 
-    protected function createTmpFile(string $prefix = null, string $suffix = null, bool $deleteOnTearDown = true): string {
+    protected function createTmpFile(string|null $prefix = null, string|null $suffix = null, bool $deleteOnTearDown = true): string {
         $prefix = (string)$prefix;
         $suffix = (string)$suffix;
         if ($prefix === '') {
@@ -147,7 +147,7 @@ abstract class TestCase extends BaseTestCase {
         return dirname($classFilePath) . '/' . TEST_DATA_DIR_NAME . '/' . pathinfo($classFilePath, PATHINFO_FILENAME);
     }
 
-    protected function createTmpDir(string $dirName = null): string {
+    protected function createTmpDir(string|null $dirName = null): string {
         $tmpDirPath = $this->tmpDirPath() . '/' . md5(uniqid('', true));
         $this->tmpDirPaths[] = $tmpDirPath;
         $tmpDirPath .= null !== $dirName ? '/' . $dirName : '';

@@ -214,7 +214,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @throws Throwable
      */
-    public function evalFile(string $sourceAbsFilePath, array $context = null): string {
+    public function evalFile(string $sourceAbsFilePath, array|null $context = null): string {
         $candidateDirPaths = [];
         for ($i = count($this->baseSourceDirPaths) - 1; $i >= 0; $i--) {
             $baseSourceDirPath = $this->baseSourceDirPaths[$i];
@@ -268,7 +268,7 @@ class TemplateEngine extends ArrPipe {
     /**
      * @htmlSafe: only for $text if $conf['escape'] == true. Tag names and attributes always HTML safe.
      */
-    public function tag(string $tagName, array $attribs, string $text = null, array $conf = null): string {
+    public function tag(string $tagName, string|null $text = null, array|string|null $attribs = null, array|null $conf = null): string {
         /*
         if (is_array($text)) {
             $conf = $attribs;
@@ -285,10 +285,12 @@ class TemplateEngine extends ArrPipe {
             (array)$conf
         );
         $output = $this->openTag($tagName, $attribs, $conf['xml']);
+        //if (null !== $text) {
         if (null !== $text) {
             $output .= $conf['escape'] ? $this->e($text) : $text;
-            $output .= $this->closeTag($tagName);
         }
+        $output .= $this->closeTag($tagName);
+        //}
         if ($conf['eol']) {
             $output .= "\n";
         }
@@ -300,9 +302,9 @@ class TemplateEngine extends ArrPipe {
      * @param array|string|null $attribs
      * @param bool       $isXml
      * @return string
-     * @htmlSafe
+     * @htmlSafe If $attribs is string, they won't be escaped and will be passed as is. Otherwise the both $tagName and $attribs are escaped.
      */
-    public function openTag(string $tagName, array|string $attribs = null, bool $isXml = false): string {
+    public function openTag(string $tagName, array|string|null $attribs = null, bool $isXml = false): string {
         $renderedAttribs = '';
         if ($attribs) {
             if (is_array($attribs)) {
@@ -329,6 +331,9 @@ class TemplateEngine extends ArrPipe {
      * @htmlSafe
      */
     public function attribs(?array $attribs): string {
+        if (null === $attribs) {
+            return '';
+        }
         $html = [];
         foreach ((array)$attribs as $key => $value) {
             $html[] = $this->attrib($key, $value);
@@ -377,7 +382,7 @@ class TemplateEngine extends ArrPipe {
         return $this->openTag('input', $this->addCommonAttribsOfControl($attribs));
     }
 
-    public function selectControl(?iterable $options, mixed $selectedOption = null, array $attribs = null): string {
+    public function selectControl(?iterable $options, mixed $selectedOption = null, array|null $attribs = null): string {
         $html = $this->openTag('select', $this->addCommonAttribsOfControl((array)$attribs));
         if (null !== $options) {
             $html .= $this->optionControls($options, $selectedOption);
@@ -427,7 +432,7 @@ class TemplateEngine extends ArrPipe {
     /**
      * @htmlSafe
      */
-    public function httpMethod(string $method = null, array $attribs = null): string {
+    public function httpMethod(string|null $method = null, array|null $attribs = null): string {
         return $this->hiddenControl(['name' => '_method', 'value' => $method] + (array)$attribs);
     }
 
@@ -447,7 +452,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @htmlSafe
      */
-    public function buttonControl(string $text, array $attribs = null): string {
+    public function buttonControl(string $text, array|null $attribs = null): string {
         return $this->tag('button', $text, $attribs);
     }
 
@@ -457,7 +462,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @htmlSafe
      */
-    public function submitControl(string $text, array $attribs = null): string {
+    public function submitControl(string $text, array|null $attribs = null): string {
         $attribs = (array)$attribs;
         $attribs['type'] = 'submit';
         return $this->tag('button', $text, $attribs);
@@ -480,7 +485,7 @@ class TemplateEngine extends ArrPipe {
      * Renders link - HTML `a` tag.
      * @htmlSafe: only for $text if $conf['escape'] == true (default value). Tag names and attributes always HTML safe.
      */
-    public function l(string|Uri $uri, string $text = null, array $attribs = null, array $conf = null): string {
+    public function l(string|Uri $uri, string|null $text = null, array|null $attribs = null, array|null $conf = null): string {
         $uriStr = is_string($uri) ? $uri : $uri->toStr(null, false);
         $attribs['href'] = $this->request->prependWithBasePath($uriStr)->toStr(null, false);
         if (null === $text) {
@@ -495,7 +500,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @htmlSafe
      */
-    public function ul(iterable $items, array $attribs = null): string {
+    public function ul(iterable $items, array|null $attribs = null): string {
         return '<ul ' . $this->attribs($attribs) . '>' . $this->list($items) . '</ul>';
     }
 
@@ -505,7 +510,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @htmlSafe
      */
-    public function ol(iterable $items, array $attribs = null): string {
+    public function ol(iterable $items, array|null $attribs = null): string {
         return '<ol ' . $this->attribs($attribs) . '>' . $this->list($items) . '</ol>';
     }
 
@@ -526,7 +531,7 @@ class TemplateEngine extends ArrPipe {
      * @return string
      * @htmlSafe
      */
-    public function copyright(string $brand, string|int $startYear = null): string {
+    public function copyright(string $brand, string|int|null $startYear = null): string {
         $currentYear = date('Y');
         if ($startYear === $currentYear) {
             $range = $currentYear;

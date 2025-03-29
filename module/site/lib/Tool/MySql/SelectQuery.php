@@ -114,7 +114,7 @@ class SelectQuery extends Query implements ISelectQuery {
         return $this;
     }
 
-    public function limit(int $numOfRows, int $offset = null): static {
+    public function limit(int $numOfRows, int|null $offset = null): static {
         $this->limit = [$offset, $numOfRows];
         return $this;
     }

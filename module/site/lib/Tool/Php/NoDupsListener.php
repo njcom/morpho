@@ -46,7 +46,7 @@ class NoDupsListener {
     protected int $period;
     protected bool $gcExecuted = false;
 
-    public function __construct(callable $listener, string $lockFileDirPath = null, int $periodSec = null) {
+    public function __construct(callable $listener, string|null $lockFileDirPath = null, int|null $periodSec = null) {
         if (null === $lockFileDirPath) {
             $lockFileDirPath = $this->defaultLockFileDirPath();
         }

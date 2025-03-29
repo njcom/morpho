@@ -60,10 +60,10 @@ class MessengerPlugin extends WidgetPlugin implements Countable {
 
     protected function messageTypeToCssClass(string $type): string {
         $type2CssClass = [
-            Messenger::ERROR   => 'danger',
-            Messenger::INFO    => 'info',
-            Messenger::SUCCESS => 'success',
-            Messenger::WARNING => 'warning',
+            MessageType::Error->value   => 'danger',
+            MessageType::Info->value    => 'info',
+            MessageType::Success->value => 'success',
+            MessageType::Warning->value => 'warning',
         ];
         return $type2CssClass[$type] ?? dasherize($type);
     }

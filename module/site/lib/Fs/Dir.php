@@ -21,7 +21,7 @@ class Dir {
         return $targetDirPath;
     }
 
-    public static function copy(string $sourceDirPath, string $targetDirPath, array $conf = null): string {
+    public static function copy(string $sourceDirPath, string $targetDirPath, array|null $conf = null): string {
         // @TODO: Handle dots and relative paths: '..', '.'
         // @TODO: Handle the case: cp module/system ../../dst/module should create ../../dst/module/system
         self::mustExist($sourceDirPath);
@@ -76,7 +76,7 @@ class Dir {
         return $targetDirPath;
     }
 
-    public static function create(string|array $dirPath, int $perms = null, bool $recursive = true): string|array {
+    public static function create(string|array $dirPath, int|null $perms = null, bool $recursive = true): string|array {
         if (is_array($dirPath)) {
             foreach ($dirPath as $path) {
                 self::recreate($path, $perms, $recursive);
@@ -98,7 +98,7 @@ class Dir {
         return $dirPath;
     }
 
-    public static function recreate(string|array $dirPath, int $perms = null, bool $recursive = true): string|array {
+    public static function recreate(string|array $dirPath, int|null $perms = null, bool $recursive = true): string|array {
         if (is_array($dirPath)) {
             foreach ($dirPath as $path) {
                 self::recreate($path, $perms, $recursive);
@@ -115,7 +115,7 @@ class Dir {
         return $dirPath;
     }
 
-    public static function delete(string $dirPath, bool|callable $selector = null): void {
+    public static function delete(string $dirPath, bool|callable|null $selector = null): void {
         static::_delete($dirPath, $selector);
     }
 
@@ -125,7 +125,7 @@ class Dir {
         }
     }
 
-    public static function emptyDirPaths(string $dirPath, bool $recursive = false, int $flags = null): iterable {
+    public static function emptyDirPaths(string $dirPath, bool $recursive = false, int|null $flags = null): iterable {
         foreach (self::dirPaths($dirPath, $recursive, $flags) as $maybeEmptyDirPath) {
             if (self::isEmpty($maybeEmptyDirPath)) {
                 yield $maybeEmptyDirPath;
@@ -139,7 +139,7 @@ class Dir {
      * @param ?int   $flags
      * @return \RecursiveIteratorIterator<string, \SplFileInfo>
      */
-    public static function it(string $dirPath, bool $recursive = false, int $flags = null): RecursiveIteratorIterator {
+    public static function it(string $dirPath, bool $recursive = false, int|null $flags = null): RecursiveIteratorIterator {
         $it = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dirPath, FilesystemIterator::UNIX_PATHS),
             $flags ?: RecursiveIteratorIterator::SELF_FIRST,
@@ -151,7 +151,7 @@ class Dir {
         return $it;
     }
 
-    public static function paths(string $dirPath, bool $recursive = false, int $flags = null): iterable {
+    public static function paths(string $dirPath, bool $recursive = false, int|null $flags = null): iterable {
         foreach (self::it($dirPath, $recursive, $flags) as $entry) {
             $fileName = $entry->getFileName();
             if ($fileName == '.' || $fileName == '..') {
@@ -161,7 +161,7 @@ class Dir {
         }
     }
 
-    public static function dirPaths(string $dirPath, bool $recursive = false, int $flags = null): iterable {
+    public static function dirPaths(string $dirPath, bool $recursive = false, int|null $flags = null): iterable {
         foreach (self::paths($dirPath, $recursive, $flags) as $path) {
             if (Stat::isDir($path)) {
                 yield $path;
@@ -282,7 +282,7 @@ class Dir {
         }
     }
 
-    private static function __delete(string $dirPath, callable $selector = null): void {
+    private static function __delete(string $dirPath, callable|null $selector = null): void {
         if (!file_exists($dirPath)) {
             return;
         }

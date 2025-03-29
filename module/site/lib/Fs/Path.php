@@ -70,7 +70,7 @@ class Path extends BasePath {
      * @param string|null $ext If null will guess it.
      * @return string
      */
-    public static function dropExt(string $path, string $ext = null): string {
+    public static function dropExt(string $path, string|null $ext = null): string {
         if (null !== $ext) {
             $ext = self::normalizeExt($ext);
             if (str_ends_with($path, $ext)) {
@@ -85,7 +85,7 @@ class Path extends BasePath {
         return $path;
     }
 
-    public static function changeExt(string $path, string $newExt, string $oldExt = null): string {
+    public static function changeExt(string $path, string $newExt, string|null $oldExt = null): string {
         if ($path === '' || $newExt === '') {
             throw new UnexpectedValueException("Path or extension can't be empty");
         }

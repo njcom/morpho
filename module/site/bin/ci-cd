@@ -4,10 +4,13 @@ set -eu
 
 SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 declare -r SCRIPT_DIR_PATH
-BASE_DIR_PATH=$(realpath -e "$SCRIPT_DIR_PATH"/../..)
-declare -r BASE_DIR_PATH
-declare -r MODULE_DIR_PATH="$BASE_DIR_PATH"/module
-declare -r FRONTEND_DIR_PATH="$BASE_DIR_PATH"/frontend
+#SCRIPT_FILE_NAME="$(basename "$0")"
+#declare -r SCRIPT_FILE_NAME
+#declare -r SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH"/"$SCRIPT_FILE_NAME"
+THIS_MODULE_DIR_PATH="$(realpath -e "$SCRIPT_DIR_PATH"/../..)"
+declare -r THIS_MODULE_DIR_PATH
+declare -r MODULE_DIR_PATH="$THIS_MODULE_DIR_PATH"/module
+declare -r FRONTEND_DIR_PATH="$THIS_MODULE_DIR_PATH"/frontend
 declare -r TEST_DB=test
 
 #WWW_USER=$(id -u)
@@ -19,7 +22,7 @@ declare -r WWW_GROUP="$WWW_USER"
 show_facts() {
 #    env
     pwd
-    ls -alh "$BASE_DIR_PATH"
+    ls -alh "$THIS_MODULE_DIR_PATH"
     id
     cat /etc/os-release
     which -a php

@@ -17,7 +17,7 @@ use function ob_end_clean;
 use function ob_get_level;
 
 class ErrorHandler extends BaseErrorHandler {
-    public function __construct(iterable $listeners = null) {
+    public function __construct(iterable|null $listeners = null) {
         parent::__construct($listeners);
         $this->listeners->append($this->mkListener());
     }

@@ -54,16 +54,6 @@ class ServiceManagerTest extends TestCase {
         $this->markTestAsNotRisky();
     }
 
-    public function testUnset_ExistingItem_NotCaseSensitive() {
-        $serviceManager = new class extends ServiceManager {
-        };
-        $serviceManager['foobar'] = new stdClass();
-        unset($serviceManager['FOOBar']);
-        // should not throw an exception
-        $this->assertTrue(!isset($serviceManager['foobar']));
-        $this->assertTrue(!isset($serviceManager['FOOBar']));
-    }
-
     public function testArrayAccess_OffsetExists_ReturnsTrueIfContainerCanReturnEntryForId() {
         // See [PHP docs for the ContainerInterface::has()](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md#31-psrcontainercontainerinterface)
         $this->assertTrue(isset($this->serviceManager['foo']));

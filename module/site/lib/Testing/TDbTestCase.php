@@ -33,7 +33,7 @@ trait TDbTestCase {
 
     abstract protected function ns(): string;
 
-    protected function mkPdo(array $conf = null): PDO {
+    protected function mkPdo(array|null $conf = null): PDO {
         if (!$conf) {
             $conf = $this->dbConf();
         }

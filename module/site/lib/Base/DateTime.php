@@ -25,7 +25,7 @@ class DateTime extends DateTimeImmutable implements Stringable {
      * @param null|string $time
      * @param null|string|DateTimeZone $timeZone
      */
-    public function __construct(string $time = null, $timeZone = null) {
+    public function __construct(string|null $time = null, $timeZone = null) {
         if (null === $time) {
             $time = 'now';
         }

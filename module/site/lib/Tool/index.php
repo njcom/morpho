@@ -6,5 +6,5 @@
  */
 namespace Morpho\Tool;
 
-require __DIR__ . '/Sql/autoload.php';
-require __DIR__ . '/Php/autoload.php';
+require __DIR__ . '/Sql/index.php';
+require __DIR__ . '/Php/index.php';

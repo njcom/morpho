@@ -53,7 +53,7 @@ class Terminal {
         return posix_isatty(STDOUT);
     }
 
-    public static function fzfChoice(iterable $items, string $prompt = null): false|string {
+    public static function fzfChoice(iterable $items, string|null $prompt = null): false|string {
         if (!is_array($items)) {
             /** @var \Traversable $items */
             $items = iterator_to_array($items, false);

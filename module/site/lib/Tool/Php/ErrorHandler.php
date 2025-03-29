@@ -141,7 +141,6 @@ class ErrorHandler {
             E_USER_ERROR        => 'UserErrorException',
             E_USER_WARNING      => 'UserWarningException',
             E_USER_NOTICE       => 'UserNoticeException',
-            E_STRICT            => 'StrictException',
             E_RECOVERABLE_ERROR => 'RecoverableErrorException',
             E_DEPRECATED        => 'DeprecatedException',
             E_USER_DEPRECATED   => 'UserDeprecatedException',

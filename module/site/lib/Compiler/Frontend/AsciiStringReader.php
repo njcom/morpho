@@ -270,7 +270,7 @@ class AsciiStringReader implements IStringReader {
         return strlen($s);
     }
 
-    protected function re(string $re, bool $anchored = null): string {
+    protected function re(string $re, bool|null $anchored = null): string {
         if (null === $anchored) {
             return $this->anchored ? $re . 'A' : $re;
         }

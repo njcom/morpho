@@ -15,7 +15,7 @@ class Authority implements IUriComponent {
     protected ?string $host = null;
     protected ?int $port = null;
 
-    public function __construct(string $authority = null) {
+    public function __construct(string|null $authority = null) {
         if (null !== $authority) {
             $authority = UriParser::parseOnlyAuthority($authority);
             $this->userInfo = $authority->userInfo;

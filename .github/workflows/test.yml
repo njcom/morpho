@@ -29,11 +29,17 @@ jobs:
 #          php -v
 #          #php -r "if(strpos(phpversion(), '${{ matrix.php-version }}') === false) throw new Exception('Wrong PHP version Installed');"
 
-      - name: Create a file to validate completion of tests
+      - name: Build
+        run: |
+          make build
+
+      - name: Test
         run: |
           #touch 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-          .github/workflows/test
+          make test
           #rm -fv 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-          #test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed 
-
+          #test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
+      - name: Deploy
+        run: |
+          make deploy
 

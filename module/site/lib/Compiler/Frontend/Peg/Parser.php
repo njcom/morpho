@@ -33,7 +33,7 @@ abstract class Parser {
     /**
      * make_syntax_error() in Python.
      */
-    public function mkSyntaxError(string $msg, string $filePath = null): SyntaxError {
+    public function mkSyntaxError(string $msg, string|null $filePath = null): SyntaxError {
         $tok = $this->tokenizer->lastReadToken();
         return new SyntaxError($msg, $filePath, $tok->start, $tok->end, $tok->line);
     }

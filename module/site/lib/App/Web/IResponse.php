@@ -14,7 +14,7 @@ interface IResponse extends IBaseResponse {
 
     public function isSuccess(): bool;
 
-    public function mkRedirect(string|Uri $uri, StatusCode $statusCode = null): static;
+    public function mkRedirect(string|Uri $uri, StatusCode|null $statusCode = null): static;
 
     public function mkStatusLine(StatusCode $statusCode): StatusLine;
 

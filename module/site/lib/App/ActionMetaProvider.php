@@ -19,7 +19,7 @@ abstract class ActionMetaProvider {
     protected $controllerFilter;
     protected $actionFilter;
 
-    public function __construct(callable $controllerFilter = null, callable $actionFilter = null) {
+    public function __construct(callable|null $controllerFilter = null, callable|null $actionFilter = null) {
         $this->controllerFilter = $controllerFilter;
         $this->actionFilter = $actionFilter;
     }

@@ -46,7 +46,7 @@ abstract class Rand {
      * Uses supplied character list for generating the new string.
      * If no character list provided - uses Base 64 character set.
      */
-    public static function randStr(int $length, string $charlist = null): string {
+    public static function randStr(int $length, string|null $charlist = null): string {
         if ($length < 1) {
             throw new InvalidArgumentException('Length should be >= 1');
         }

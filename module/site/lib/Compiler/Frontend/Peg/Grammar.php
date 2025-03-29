@@ -294,7 +294,7 @@ class NamedItem implements IGrammarNode, IRenderingActions {
     private bool $renderActions = false;
 
     // def __init__(self, name: Optional[str], item: Item, type: Optional[str] = None): $nullab;e
-    public function __construct(?string $name, Leaf|Group|Opt|Repeat|Forced|Lookahead|Rhs|Cut $item, string $type = null) {
+    public function __construct(?string $name, Leaf|Group|Opt|Repeat|Forced|Lookahead|Rhs|Cut $item, string|null $type = null) {
         $this->name = $name;
         $this->item = $item;
         $this->type = $type;

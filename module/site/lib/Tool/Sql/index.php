@@ -13,7 +13,7 @@ use UnexpectedValueException;
 const SQL_TRUE = 1;
 const SQL_FALSE = 0;
 
-function mkDbClient(array $conf = null): IClient {
+function mkDbClient(array|null $conf = null): IClient {
     $driverName = $conf['driver'] ?? 'mysql';
     unset($conf['driver']);
     switch ($driverName) {

@@ -11,8 +11,7 @@ declare -r SCRIPT_DIR_PATH
 BASE_DIR_PATH=$(realpath -e "$SCRIPT_DIR_PATH"/..)
 declare -r BASE_DIR_PATH
 declare -r TEST_DIR_PATH="$BASE_DIR_PATH/test"
-declare -r PHPUNIT_BIN_DIR_PATH="$BASE_DIR_PATH/vendor/phpunit/phpunit"
-declare -r PHPUNIT_BIN_FILE_PATH="$PHPUNIT_BIN_DIR_PATH/phpunit"
+declare -r PHPUNIT_BIN_FILE_PATH="$BASE_DIR_PATH/vendor/bin/phpunit"
 declare -r PHPUNIT_CONF_FILE_PATH="$TEST_DIR_PATH/phpunit.xml"
 #readonly seleniumLogFilePath="$TEST_DIR_PATH/selenium.log"
 #export SELENIUM_VERSION=latest

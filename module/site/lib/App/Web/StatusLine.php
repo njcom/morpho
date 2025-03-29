@@ -13,7 +13,7 @@ class StatusLine implements Stringable {
     public HttpVersion $httpVersion;
     public StatusCode $statusCode;
 
-    public function __construct(HttpVersion $httpVersion = null, StatusCode $statusCode = null) {
+    public function __construct(HttpVersion|null $httpVersion = null, StatusCode|null $statusCode = null) {
         $this->httpVersion = $httpVersion ?: Env::httpVersion();
         $this->statusCode = $statusCode ?: StatusCode::Ok;
     }

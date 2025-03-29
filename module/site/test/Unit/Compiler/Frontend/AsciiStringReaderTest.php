@@ -677,7 +677,7 @@ class AsciiStringReaderTest extends TestCase {
         $this->assertFalse($reader->isAnchored());
     }
 
-    protected function mkReader(string $input, bool $anchored = true, string $encoding = null): IStringReader {
+    protected function mkReader(string $input, bool $anchored = true, string|null $encoding = null): IStringReader {
         return new AsciiStringReader($input, $anchored);
     }
 

@@ -25,7 +25,7 @@ class Compiler extends Pipe implements ICompiler {
 
     public array $conf;
 
-    public function __construct(array $conf = null) {
+    public function __construct(array|null $conf = null) {
         $this->conf = $conf;
     }
 

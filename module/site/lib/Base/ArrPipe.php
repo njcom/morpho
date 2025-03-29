@@ -9,7 +9,7 @@ namespace Morpho\Base;
 class ArrPipe implements IPipe {
     protected array $steps;
 
-    public function __construct(array $steps = null) {
+    public function __construct(array|null $steps = null) {
         $this->steps = (array) $steps;
     }
 

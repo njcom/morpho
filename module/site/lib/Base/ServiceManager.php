@@ -28,7 +28,7 @@ class ServiceManager extends ArrayObject implements ArrayAccess {
     private array $loading = [];
     public mixed $conf;
 
-    public function __construct(array $services = null) {
+    public function __construct(array|null $services = null) {
         parent::__construct();
         if (null !== $services) {
             foreach ($services as $id => $service) {

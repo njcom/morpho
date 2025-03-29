@@ -153,7 +153,7 @@ class Debugger {
         return '<pre>' . htmlspecialchars($line, ENT_QUOTES | ENT_SUBSTITUTE) . '</pre>';
     }
 
-    public function isHtmlMode(bool $flag = null): bool {
+    public function isHtmlMode(bool|null $flag = null): bool {
         if (null !== $flag) {
             $this->isHtmlMode = $flag;
         } elseif (null === $this->isHtmlMode) {
@@ -316,7 +316,7 @@ OUT;
      * @param string|null $regexp
      * @param bool $sort Either sort result or not
      */
-    public function methods($object, $filter = null, $regexp = null, $sort = false) {
+    public function methods(string|object $object, int|null $filter = null, string|null $regexp = null, bool $sort = false) {
         if (null === $filter) {
             $filter = ReflectionMethod::IS_PUBLIC;
         }
@@ -384,7 +384,7 @@ OUT;
         echo $output;
     }
 
-    public function on(callable $errorHandlerCallback = null, int $errorLevel = null) {
+    public function on(callable|null $errorHandlerCallback = null, int|null $errorLevel = null) {
         throw new NotImplementedException();
         /*
         $this->oldDisplayErrors = ini_set('display_errors', 1);
@@ -396,7 +396,7 @@ OUT;
             throw new \InvalidArgumentException('Invalid callback was provided.');
         }
         if (null === $errorLevel) {
-            $errorLevel = E_ALL | E_STRICT;
+            $errorLevel = E_ALL;
         }
         $oldErrorHandler = set_error_handler($errorHandlerCallback, $errorLevel);
         if (null !== $oldErrorHandler) {
@@ -423,7 +423,7 @@ OUT;
         */
     }
 
-    public function ignoreCaller(string $filePath, int $lineNumber = null): static {
+    public function ignoreCaller(string $filePath, int|null $lineNumber = null): static {
         $this->ignoredFrames[] = ['filePath' => $filePath, 'line' => $lineNumber];
         return $this;
     }
@@ -455,7 +455,6 @@ OUT;
                     E_USER_ERROR        => 'User error',
                     E_USER_WARNING      => 'User warning',
                     E_USER_NOTICE       => 'User notice',
-                    E_STRICT            => 'Strict warning',
                     E_RECOVERABLE_ERROR => 'Recoverable fatal error',
                     E_DEPRECATED        => 'Deprecated notice',
                 ];

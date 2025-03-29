@@ -25,7 +25,7 @@ class Uri {
     protected ?string $fragment = null;
     private ?Authority $authority = null;
 
-    public function __construct(string $uriStr = null) {
+    public function __construct(string|null $uriStr = null) {
         if (null !== $uriStr) {
             $uri = (new UriParser())->__invoke($uriStr);
 

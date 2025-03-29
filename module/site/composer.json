@@ -18,7 +18,7 @@
         "compiler"
     ],
     "require": {
-        "php-64bit": ">=8.3",
+        "php-64bit": ">=8.4",
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-dom": "*",
@@ -44,10 +44,10 @@
             "Morpho\\": "lib/"
         },
         "files": [
-            "lib/App/autoload.php",
-            "lib/Base/autoload.php",
-            "lib/Caching/autoload.php",
-            "lib/Tool/autoload.php"
+            "lib/App/index.php",
+            "lib/Base/index.php",
+            "lib/Caching/index.php",
+            "lib/Tool/index.php"
         ]
     },
     "autoload-dev": {
@@ -69,6 +69,6 @@
         "issues": "https://github.com/njcom/framework/issues"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0"
+        "phpunit/phpunit": "^12.0"
     }
 }
