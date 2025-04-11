@@ -4,7 +4,7 @@ Cybernetic framework for evolution - self-learning, self-organizing, self-develo
 
 ## Current status
 
-Not ready (WIP). API is not stable [![.github/workflows/test.yml](https://github.com/njcom/framework/actions/workflows/test.yml/badge.svg)](https://github.com/njcom/framework/actions/workflows/test.yml)
+Not ready (WIP). API is not stable [![.github/workflows/index.yml](https://github.com/njcom/framework/actions/workflows/index.yml/badge.svg)](https://github.com/njcom/framework/actions/workflows/index.yml)
 
 [Board of tasks](https://github.com/orgs/njcom/projects/9)
 
