@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+declare -r SCRIPT_DIR_PATH
+SCRIPT_FILE_NAME="$(basename "$0")"
+declare -r SCRIPT_FILE_NAME
+declare -r SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH"/"$SCRIPT_FILE_NAME"
+
+echo todo $SCRIPT_DIR_PATH

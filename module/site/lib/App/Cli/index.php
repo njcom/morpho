@@ -353,6 +353,8 @@ function askYesNo(string $question): bool {
     } while (true);
 }
 
+/*
 function stdOutIsTerminal(): bool {
     return posix_isatty(STDOUT);
 }
+*/

@@ -1,10 +1,16 @@
 include prelude.mk
 
-build:
+define make-for-modules
+	for module_dir_path in $(shell find module -mindepth 1 -maxdepth 1 -type d); do echo Running $1 in $$module_dir_path; make -C $$module_dir_path $(1); echo ---; done
+endef
 
-test:
-	for module_dir_path in $(shell find module -mindepth 1 -maxdepth 1 -type d); do make -C $$module_dir_path $@; done
+ci-cd-build:
+	$(call make-for-modules,$@)
 
-deploy:
+ci-cd-test:
+	$(call make-for-modules,$@)
 
-.PHONY: build test deploy
+ci-cd-deploy:
+	$(call make-for-modules,$@)
+
+.PHONY: ci-cd-build ci-cd-test ci-cd-deploy

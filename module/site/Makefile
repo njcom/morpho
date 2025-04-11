@@ -5,6 +5,19 @@ GNUMAKEFLAGS :=
 frontend-dir-path := $(CURDIR)/frontend
 
 ################################################################################
+# CI-CD
+
+ci-cd-build:
+	$(CURDIR)/bin/build
+
+ci-cd-test:
+	$(CURDIR)/bin/lint
+	$(CURDIR)/bin/test
+
+ci-cd-deploy:
+	$(CURDIR)/bin/deploy
+
+################################################################################
 # Tests
 
 test:

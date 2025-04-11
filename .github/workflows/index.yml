@@ -14,10 +14,10 @@ jobs:
         php-version: ['latest']
     name: ${{ matrix.operating-system }}, php-${{ matrix.php-version }}
     steps:
-      - name: Checkout
+      - name: build/pull-git-repo
         uses: actions/checkout@v4
 
-      - name: Install PHP
+      - name: build/install-php
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
@@ -29,17 +29,17 @@ jobs:
 #          php -v
 #          #php -r "if(strpos(phpversion(), '${{ matrix.php-version }}') === false) throw new Exception('Wrong PHP version Installed');"
 
-      - name: Build
+      - name: build/main
         run: |
-          make build
+          make ci-cd-build
 
-      - name: Test
+      - name: test
         run: |
           #touch 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-          make test
+          make ci-cd-test
           #rm -fv 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
           #test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
-      - name: Deploy
+      - name: deploy
         run: |
-          make deploy
+          make ci-cd-deploy
 

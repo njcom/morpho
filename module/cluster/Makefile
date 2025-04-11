@@ -31,6 +31,18 @@ init:
 .SILENT:
 .PHONY: test start start-detached stop check clean init
 
+################################################################################
+# CI-CD
+
+ci-cd-build:
+	echo todo: $(CURDIR)
+
+ci-cd-test:
+	echo todo: $(CURDIR)
+
+ci-cd-deploy:
+	echo todo: $(CURDIR)
+
 ## todo vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 ## login-py: login into `$(project_name)_django` container and run python.
