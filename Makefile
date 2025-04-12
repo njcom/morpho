@@ -36,7 +36,7 @@ image := localhost/morpho/ci-cd
 
 run:
 	test -b /tmp/block-dev-test || sudo mknod -m 0777 /tmp/block-dev-test b 125 1
-	docker run --device /tmp/block-dev-test:/tmp/block-dev-test --systemd=always -it $(image)
+	docker run --device /tmp/block-dev-test:/tmp/block-dev-test -it $(image)
 .PHONY: run
 
 build:

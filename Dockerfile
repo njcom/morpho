@@ -287,4 +287,4 @@ RUN chown -R www-data:www-data /morpho/site && chmod 1777 /morpho/site
 
 #ENTRYPOINT ["/bin/bash", "-c", "bin/build"]
 # https://developers.redhat.com/blog/2019/04/24/how-to-run-systemd-in-a-container#enter_podman
-CMD [ "/sbin/init" ]
+#CMD [ "/sbin/init" ]

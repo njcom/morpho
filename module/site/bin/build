@@ -9,7 +9,6 @@ declare -r SCRIPT_DIR_PATH
 #declare -r SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH"/"$SCRIPT_FILE_NAME"
 THIS_MODULE_DIR_PATH="$(realpath -e "$SCRIPT_DIR_PATH"/..)"
 declare -r THIS_MODULE_DIR_PATH
-declare -r MODULE_DIR_PATH="$THIS_MODULE_DIR_PATH"/module
 declare -r FRONTEND_DIR_PATH="$THIS_MODULE_DIR_PATH"/module/localhost/ui/frontend
 declare -r TEST_DB=test
 
@@ -39,7 +38,8 @@ configure_nginx() {
     sudo apt install -y nginx
     webRootDirPath="$FRONTEND_DIR_PATH" php "$THIS_MODULE_DIR_PATH"/rc/nginx.conf.php | sudo tee /etc/nginx/sites-enabled/default
     sudo nginx -t
-    sudo chown -R "$WWW_USER":"$WWW_GROUP" "$FRONTEND_DIR_PATH" "$MODULE_DIR_PATH"/localhost/{log,tmp/cache}
+    mkdir -p "$THIS_MODULE_DIR_PATH"/module/localhost/{log,tmp/cache}
+    sudo chown -R "$WWW_USER":"$WWW_GROUP" "$FRONTEND_DIR_PATH" "$THIS_MODULE_DIR_PATH"/module/localhost/{log,tmp/cache}
     sudo systemctl restart nginx
 }
 
