@@ -5,7 +5,7 @@ server {
     # Catch all
     server_name _;
 
-    root <?= $_ENV['webRootDirPath'] ?>;
+    root <?= getenv('webRootDirPath') ?>;
 
     index index.php;
     try_files $uri /index.php?$args;
