@@ -1,24 +1,29 @@
 include $(CURDIR)/../../prelude.mk
-GNUMAKEFLAGS :=
 
 #backend-dir-path := $(CURDIR)/backend
 frontend-dir-path := $(CURDIR)/frontend
 
+#################################################################################
+## Todo
+
+image := localhost/morpho/ci-cd
+
+run-image:
+	docker run -it $(image)
+.PHONY: run-image
+
+build-image:
+	docker build -t $(image) .
+.PHONY: build-image
+
 ################################################################################
-# CI-CD
+## Tests
 
-ci-cd-build:
-	$(CURDIR)/bin/build
-
-ci-cd-test:
-	$(CURDIR)/bin/lint
-	$(CURDIR)/bin/test
-
-ci-cd-deploy:
-	$(CURDIR)/bin/deploy
-
-################################################################################
-# Tests
+#setup:
+#	composer require --dev psalm/plugin-phpunit
+#	vendor/bin/psalm-plugin enable psalm/plugin-phpunit
+#	composer update
+#	bin/js setup
 
 test:
 	bin/test
@@ -43,7 +48,7 @@ lint:
 	php test/lint.php
 
 ###############################################################################
-# Assets
+## Assets
 
 assets: js css
 
@@ -70,7 +75,7 @@ clean-js:
 clean-assets: clean-css clean-js
 
 ###############################################################################
-# Pods and containers
+## Pods and containers
 
 run-nginx:
 	-podman pod create --name nginx-pod -p 127.0.0.1:8800:80

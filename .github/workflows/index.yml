@@ -9,12 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         #operating-system: [ubuntu-20.04, ubuntu-18.04, windows-latest, macos-10.15]
-        operating-system: [ubuntu-latest]
+        operating-system: [ubuntu-24.04]
         #php-versions: ['8.0', '8.1', 'latest']
         php-version: ['latest']
     name: ${{ matrix.operating-system }}, php-${{ matrix.php-version }}
     steps:
-      - name: build/pull-git-repo
+      - name: build/pull-source
         uses: actions/checkout@v4
 
       - name: build/install-php
@@ -39,7 +39,7 @@ jobs:
           make ci-cd-test
           #rm -fv 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
           #test ! -e 56914c9a23b80267cb66c41ab26c55e5-remove-me-after-tests-completed
+ 
       - name: deploy
         run: |
           make ci-cd-deploy
-

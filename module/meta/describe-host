@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -eu
+
+#######################################################################################
+# Distro
+
+# For Ubuntu, Debian
+cat /etc/debian_version
+cat /etc/os-release
+
+#######################################################################################
+# Kernel version
+uname -a
+
+#######################################################################################
+# Disk, boot record
+
+# todo
+# /sys/firmware/**/efi*
+# gpt vs mbr partition table
+
+#######################################################################################
+# Hardware, BIOS
+
+free -m
+cat /proc/cpuinfo
+cat /proc/meminfo
+lshw
+# todo: lspci, lsusb, dmidecode (BIOS)
+
+#######################################################################################
+# Network

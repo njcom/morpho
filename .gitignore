@@ -10,7 +10,11 @@ log/*
 *.jar
 *.tsbuildinfo
 .ipynb_checkpoints/
+.phpunit*.cache
+.sass-cache/
 .vscode/
+__pycache__/
 deno.lock
 node_modules/
+vendor/
 #/.devcontainer/devcontainer.json

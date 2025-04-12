@@ -1,5 +1,4 @@
 include $(CURDIR)/../../prelude.mk
-GNUMAKEFLAGS :=
 
 # Tools in alphabetical order
 tools := dotnet elasticsearch go haskell jvm kafka kibana logstash mariadb memcached mongodb nginx nodejs ocaml perl php playwright postgresql python rabbitmq redis ruby zeromq
@@ -30,18 +29,6 @@ init:
 
 .SILENT:
 .PHONY: test start start-detached stop check clean init
-
-################################################################################
-# CI-CD
-
-ci-cd-build:
-	echo todo: $(CURDIR)
-
-ci-cd-test:
-	echo todo: $(CURDIR)
-
-ci-cd-deploy:
-	echo todo: $(CURDIR)
 
 ## todo vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 

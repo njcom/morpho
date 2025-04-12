@@ -1,0 +1,381 @@
+fu! SetupPlugins()
+    " netrw
+    fu! OpenNetrw()
+        " Open if no stdin and no args
+        if !exists("s:std_in") && 0 == argc()
+            execute 'Explore'
+        end
+    endf
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * call OpenNetrw()
+    let g:netrw_banner=0
+    " See `:help netrw-c`
+    let g:netrw_keepdir = 0
+
+    " Allow to delete not empty directories
+    let g:netrw_localrmdir='rm -rf'
+    let g:netrw_sort_sequence=''
+endf
+
+fu! SetupBehavior()
+    set nocompatible
+"    set autochdir
+    set backspace=indent,eol,start
+    set confirm
+    set foldlevelstart=99
+    set foldmethod=indent
+
+"    set backup
+"    if !isdirectory($HOME."/.vim/bak")
+"        silent! execute "!mkdir ~/.vim/bak"
+"    endif
+"    set backupdir=~/.vim/bak
+    set nobackup
+
+    " Swap file related settings
+    "  set noswapfile
+    if !isdirectory($HOME."/.vim/swp")
+        silent! execute "!mkdir ~/.vim/swp"
+    endif
+    set directory=$HOME/.vim/swp// " The trailing double slash is required
+
+    " Sessions
+    set sessionoptions+=unix,slash
+    set ssop-=options    " do not store global and local values in a session
+    set ssop-=folds      " do not store folds
+
+    set showcmd
+    set showmatch
+    set ttyfast
+    set wrap
+    set textwidth=0
+
+    " set autowriteall
+
+    " Disable the history ~/.viminfo file.
+    set viminfo=
+
+    call SetupPlugins()
+
+    " Don't auto append <EOL> 0x0a at the end of file
+    set endofline
+
+    " Tell the `:find` search recursively
+    set path=**
+
+    "runtime macros/matchit.vim
+
+    fu! SetupAutoCommands()
+        " https://stackoverflow.com/a/27387138/13393715
+        "autocmd! TextChanged,TextChangedI <buffer> silent write
+
+        fu! ApplySettingsForJs()
+            set filetype=javascript
+            call SetupIndent()
+        endf
+
+        " Default filetype
+        autocmd BufNewFile,BufRead * if &filetype == "" | setlocal ft=sh | endif
+
+    "    autocmd! BufWritePost .vimrc source %
+
+        autocmd! BufNewFile,BufRead *.php,*.module,*.inc,*.test,*.install,*.profile,*.phar set filetype=php
+        autocmd! BufNewFile,BufRead *.phtml set filetype=phtml autoindent
+        autocmd! BufNewFile,BufRead *.ts set filetype=typescript
+        autocmd! BufNewFile,BufRead *.l set filetype=l sw=2 ts=2
+        autocmd! BufNewFile,BufRead *.markdown,*.md,*.mdown,*.mkd,*.mkdn,*.txt set filetype=markdown syntax=unknown shiftwidth=4
+        autocmd! BufNewFile,BufRead *.stg set filetype=stg
+        autocmd! BufNewFile,BufRead *.flex set filetype=lex
+        autocmd! BufNewFile,BufRead *.jsm call ApplySettingsForJs
+        autocmd! BufNewFile,BufRead *.sc set filetype=scala
+        autocmd! BufNewFile,BufRead tsconfig.json set filetype=javascript
+        autocmd! BufNewFile,BufRead tsconfig.json set filetype=javascript
+        autocmd! BufNewFile,BufRead CMakeLists.txt set filetype=cmake
+
+        autocmd! Filetype vim set shiftwidth=4 tabstop=4 textwidth=0
+        autocmd! Filetype sml set shiftwidth=4 tabstop=4
+        autocmd! Filetype cabal set shiftwidth=4 tabstop=4
+        autocmd! Filetype haskell set shiftwidth=4 tabstop=4
+
+        " Start in Insert mode.
+        "autocmd! BufNewFile * startinsert
+        "autocmd! VimEnter * if empty(expand("%")) | startinsert | endif
+
+        autocmd! BufEnter * silent! lcd %:p:h
+
+        " slimv
+        fu! InitLispBehaviour()
+            "au BufNewFile,BufRead *.scm call PareditInitBuffer()
+            "    imap <c-h> <Plug>snipMateNextOrTrigger
+            "    smap <c-h> <Plug>snipMateNextOrTrigger
+            "let g:snips_trigger_key = '<C-Space>'
+
+            "map <c-l> :call SlimvEvalExp()<cr>
+            "imap <c-l> <c-o>:call SlimvEvalExp()<cr>
+
+            set shiftwidth=4
+            set tabstop=4
+        endf
+        let g:scheme_builtin_swank=1
+        let g:paredit_mode=0
+        let g:paredit_electric_return=1
+        let g:lisp_rainbow=0
+        " Can we use filetype autocmd?
+        autocmd BufNewFile,BufRead *.lisp call InitLispBehaviour()
+        autocmd Filetype lisp call InitLispBehaviour()
+
+    endf
+    call SetupAutoCommands()
+
+    " Open windows to right and bottom
+    set splitbelow
+    set splitright
+
+    set timeout timeoutlen=500
+endf
+
+fu! SetupIndent()
+    " Get current settings: set ai? si? cin? sr? sta? sw? ts? et? ci?
+    set autoindent " ai
+    set nosmartindent " si
+    set nocindent " cin
+    set shiftround " sr
+    set smarttab " sta
+    set shiftwidth=4 " sw
+    set tabstop=4 " ts
+    set expandtab " et
+    set copyindent " ci
+endf
+
+fu! SetupFileFormat()
+    if &modifiable
+        set ffs=unix
+        set fileformat=unix
+    endif
+endf
+
+fu! SetupEncoding()
+    let termencoding=&encoding
+    set encoding=utf-8
+    setglobal fenc=utf-8
+    set fencs=ucs-bom,utf-8,cp1251,cp866,koi8-r
+endf
+
+fu! SetupStatusLine()
+    set wildmenu
+    "set wildmode=list:longest
+    set wildmode=longest:list,full
+    set laststatus=2
+endf
+
+fu! SetupCommandLine()
+    set cmdheight=1
+endf
+
+fu! SetupColors()
+    syntax on
+    set t_Co=256
+    colorscheme industry
+    "colorscheme desert
+    "colorscheme tango-dark
+    "colorscheme monochrome
+    "colorscheme xoria256
+endf
+
+fu! SetupCtags()
+    set tags=tags;/
+endf
+
+fu! SetupView()
+    set mousehide
+    set nocursorline
+    set number relativenumber
+    set ruler
+    set list listchars=tab:»»,trail:·
+    set scrolloff=5
+endf
+
+fu! SetupSearch()
+    set ignorecase
+    set smartcase
+    set incsearch
+    set hlsearch
+
+    " Show number of matches
+    set shortmess-=S
+
+    " Options for `grep` which will be called with for the :grep and :lgrep
+    set grepprg=grep\ -rnIiP\ --exclude-dir={.bzr,CVS,.git,.hg,.svn}
+endf
+
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+
+fu! SetupKeys()
+    " :help map.txt
+    " :help map-modes
+    " :help key-codes
+
+    command! ZoomToggle call s:ZoomToggle()
+    nnoremap <silent> <C-w>z :ZoomToggle<CR>
+
+    " Left: j
+    noremap j <Left>
+"    " Down: k
+    noremap k gj
+"    " Up: l
+    noremap l gk
+    " Right: ;
+    noremap ; <Right>
+
+    " Move line up
+    inoremap <C-l> <Esc>:m+<CR>==gi
+    inoremap <C-l> <Esc>:m-2<CR>==gi
+    nnoremap <C-l> mz:m-2<CR>`z==
+    vnoremap <C-l> :m'<-2<CR>gv=`>my`<mzgv`yo`z
+    " Move line down
+    nnoremap <C-k> mz:m+<CR>`z==
+    vnoremap <C-k> :m'>+<CR>gv=`<my`>mzgv`yo`z
+    "vnoremap J :m '>+1<CR>gv=gv
+    "vnoremap K :m '<-2<CR>gv=gv
+
+    " Move through windows: Alt+(j|k|l|;)
+"    noremap j <C-w>h
+"    inoremap j <C-o><C-w>h
+"    noremap k <C-w>j
+"    inoremap k <C-o><C-w>j
+"    noremap l <C-w>k
+"    inoremap l <C-o><C-w>k
+"    noremap ; <C-w>l
+"    inoremap ; <C-o><C-w>l
+
+    " To left window
+    noremap <C-w>j <C-w>h
+    noremap <C-w><C-j> <C-w>h
+
+    " To down window
+    noremap <C-w>k <C-w>j
+    noremap <C-w><C-k> <C-w>j
+
+    " To up window
+    noremap <C-w>l <C-w>k
+    noremap <C-w><C-l> <C-w>k
+
+    " To right window
+    noremap <C-w>; <C-w>l
+    noremap <C-w><C-semicolon> <C-w>l
+
+    " Leader key: Space
+    nnoremap <Space> <nop>
+    let mapleader = "\<Space>"
+    let maplocalleader="\<Space>"
+    map <Space> <leader>
+
+    " Put line up: p
+    noremap <leader>p :put<cr>
+    " Put line down: P
+    noremap <leader>P :put!<cr>
+
+    " :find: Space f
+    noremap <leader>F <Esc>:find<Space>
+   " Commands provided by fzf
+    noremap <leader>f <Esc>:Files<cr>
+    noremap <leader>m <Esc>:Marks<cr>
+    noremap <leader>h <Esc>:History<cr>
+    "noremap <leader>b :Buffers<cr>
+    noremap <Space><Space> :Buffers<cr>
+
+    noremap <Leader>e :e<Space>
+
+    " To begin of line: Ctrl+a
+    inoremap <C-a> <C-o>I
+    " To end of line: Ctrl+e
+    inoremap <C-e> <C-o>A
+    " Delete right char: Ctrl+d
+    inoremap <C-d> <C-o>x
+    " Delete end of word: Alt+d
+    "inoremap d <C-o>dw
+
+   " Left
+    inoremap <C-j> <C-o>h
+    " Down
+    inoremap <C-k> <C-o>gj
+    " Up
+    inoremap <C-l> <C-o>gk
+    " Right
+    inoremap <C-semicolon> <C-o>l
+
+    "set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
+
+    " Find next char for `f` or `t`: '
+    noremap ' ;
+
+    " Changed version from http://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
+    if has("unix") || has("gui_gtk") || has("gui_gtk2") || has("gui_gnome")
+        nnoremap <leader>c :let @+=expand("%:p")<CR>
+    endif
+    nnoremap <leader>C :echo expand("%:p")<CR>
+
+    " Save session: Space s s
+"    exec 'nnoremap <Leader>ss :mksession! ~/.vim/session/session.vim'
+    "nnoremap <leader>q :mksession! ~/.vim/session/
+
+    " Open file manager: Space .
+    noremap <silent> <leader>. :e .<cr>
+"    noremap <silent> <leader>. :Explore<CR>
+"   " Split vertically and open file manager: Space v
+    noremap <silent> <leader>v :vsplit .<cr>
+"   " Split horizontally and open file manager: Space v
+    noremap <silent> <leader>s :split .<cr>
+
+    " Unbind Ctrl-l for the file manager
+    augroup netrw_maps
+        autocmd!
+        autocmd filetype netrw call BindNetrwKeys()
+    augroup END
+    function BindNetrwKeys()
+        if hasmapto('<Plug>NetrwRefresh')
+            unmap <buffer> <C-l>
+        endif
+    endfunction
+
+    " Disable search highlight: Esc.
+    nnoremap <silent> <esc> :noh<cr><esc>
+
+    " Delete previous word: C-Backspace
+    "cnoremap  <C-w>
+    "inoremap  <C-w>
+    " Fix Backspace for `find ... | xargs vim`
+    noremap! <C-?> <C-h>
+
+    tnoremap <C-w>j <C-w>h
+    tnoremap <C-w>k <C-w>j
+    tnoremap <C-w>l <C-w>k
+    tnoremap <C-w>; <C-w>l
+endf
+
+fu! Main()
+    call SetupBehavior()
+    call SetupIndent()
+    call SetupFileFormat()
+    call SetupEncoding()
+    call SetupStatusLine()
+    call SetupCommandLine()
+    call SetupColors()
+    call SetupCtags()
+    call SetupView()
+    call SetupSearch()
+    call SetupKeys()
+endf
+
+call Main()

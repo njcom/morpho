@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eu
+
+readonly SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_FILE_NAME="$(basename "$0")"
+readonly SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH/$SCRIPT_FILE_NAME"
+
+# todo: use .json
+
+# ubuntu iso
+# https://releases.ubuntu.com/{{ env.UBUNTU_CODENAME }}/ubuntu-${{ env.UBUNTU_ISO_VER }}-live-server-amd64.iso
+
+# todo: archlinux

@@ -10,26 +10,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system:
-          - ubuntu-latest
-        php-version:
-          - latest
+        #operating-system: [ubuntu-20.04, ubuntu-18.04, windows-latest, macos-10.15]
+        operating-system: [ubuntu-24.04]
+        #php-versions: ['8.0', '8.1', 'latest']
+        php-version: ['latest']
     name: ${{ matrix.operating-system }}, php-${{ matrix.php-version }}
     steps:
-      - name: Checkout
+      - name: init/pull-source
         uses: actions/checkout@v4
 
-      - name: Install PHP
+      - name: init/install-php
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           #extensions: mbstring, xdebug, pcov, intl, gd
           #ini-values: "post_max_size=256M, short_open_tag=On, date.timezone=UTC"
 
-      - name: 'Pull changes for PEG'
+      - name: build/cron-daily
         run: |
-          composer --ignore-platform-reqs --no-ansi --no-interaction install
-          make update-peg
+          make ci-cd-cron-daily
 
-      - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v5
+      - name: 'deploy/push-cron-changes'
+        run: |
+          .github/workflows/push-changes.sh 'Updates from GitHub action ${{ github.action }} (#5)'
+
+#      - name: Create a Pull Request
+#uses: peter-evans/create-pull-request@v5

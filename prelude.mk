@@ -15,6 +15,7 @@ MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash -eu
 #.DEFAULT_GOAL = all
 .DEFAULT_GOAL = targets
+GNUMAKEFLAGS :=
 
 ###############################################################################
 # Help
