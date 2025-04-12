@@ -1,0 +1,10 @@
+#!/bin/sh
+# https://github.com/docker-library/php/blob/master/8.4/bookworm/fpm/docker-php-entrypoint
+set -e
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- php-fpm "$@"
+fi
+
+exec "$@"

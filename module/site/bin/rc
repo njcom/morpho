@@ -71,34 +71,6 @@ clean() {
     clean-css
 }
 
-install-global-packages() {
-    npm install -g rollup sass
-    # todo: postcss autoprefixer
-    # todo Install deno using package manager
-}
-
-install-local-packages() {
-    declare -r find_args=(
-        -name package.json
-        -type f
-        -not -path '*/node_modules/*'
-        -print0
-    )
-    declare path
-    while IFS= read -r -d '' path; do
-        pushd "$(dirname "$path")" > /dev/null
-        #test -e package.json || echo '{}' > package.json
-        echo "Installing packages in '$(dirname "$path")'..."
-        npm update # runs scripts in package.json
-        popd > /dev/null # $(dirname "$path")
-    done < <(echo -en "$BASE_DIR_PATH/package.json\x00"; echo -en "$FRONTEND_DIR_PATH/package.json\x00"; find "$FRONTEND_DIR_PATH"/module "${find_args[@]}")
-}
-
-install() {
-    install-global-packages
-    install-local-packages
-}
-
 setup() {
     clean
     build

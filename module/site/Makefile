@@ -3,19 +3,6 @@ include $(CURDIR)/../../prelude.mk
 #backend-dir-path := $(CURDIR)/backend
 frontend-dir-path := $(CURDIR)/frontend
 
-#################################################################################
-## Todo
-
-image := localhost/morpho/ci-cd
-
-run-image:
-	docker run -it $(image)
-.PHONY: run-image
-
-build-image:
-	docker build -t $(image) .
-.PHONY: build-image
-
 ################################################################################
 ## Tests
 

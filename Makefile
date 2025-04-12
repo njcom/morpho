@@ -28,3 +28,17 @@ ci-cd-cron-daily:
 #		ln -vsrfn $(CURDIR)/module/$$tool $(CURDIR)/index/toolchain/$$tool; \
 #	done
 #.PHONY: index
+
+#################################################################################
+## Todo
+
+image := localhost/morpho/ci-cd
+
+run:
+	test -b /tmp/block-dev-test || sudo mknod -m 0777 /tmp/block-dev-test b 125 1
+	docker run --device /tmp/block-dev-test:/tmp/block-dev-test --systemd=always -it $(image)
+.PHONY: run
+
+build:
+	docker build -t $(image) .
+.PHONY: build

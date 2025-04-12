@@ -5,7 +5,7 @@ server {
     # Catch all
     server_name _;
 
-    root $FRONTEND_DIR_PATH;
+    root <?= $_ENV['webRootDirPath'] ?>;
 
     index index.php;
     try_files $uri /index.php?$args;

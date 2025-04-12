@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 declare -r SCRIPT_DIR_PATH
@@ -10,9 +10,8 @@ declare -r SCRIPT_DIR_PATH
 THIS_MODULE_DIR_PATH="$(realpath -e "$SCRIPT_DIR_PATH"/..)"
 declare -r THIS_MODULE_DIR_PATH
 declare -r MODULE_DIR_PATH="$THIS_MODULE_DIR_PATH"/module
-declare -r FRONTEND_DIR_PATH="$THIS_MODULE_DIR_PATH"/frontend
+declare -r FRONTEND_DIR_PATH="$THIS_MODULE_DIR_PATH"/module/localhost/ui/frontend
 declare -r TEST_DB=test
-BASE_DIR_PATH="$(realpath -e "$THIS_MODULE_DIR_PATH"/../..)"
 
 #WWW_USER=$(id -u)
 #WWW_GROUP=$(id -g)
@@ -20,7 +19,10 @@ BASE_DIR_PATH="$(realpath -e "$THIS_MODULE_DIR_PATH"/../..)"
 declare -r WWW_USER=www-data
 declare -r WWW_GROUP="$WWW_USER"
 
-source "$BASE_DIR_PATH"/lib/index.sh
+err() {
+    echo "$@" 1>&2
+    exit 1
+}
 
 show_facts() {
 #    env
@@ -28,41 +30,57 @@ show_facts() {
     ls -alh "$THIS_MODULE_DIR_PATH"
     id
     cat /etc/os-release
-    which -a php
+    #which -a php
     php --version
     composer --version
 }
 
 configure_nginx() {
-    sudo apt update && sudo apt install -y nginx
-    php "$SCRIPT_DIR_PATH"/
- 
- | sudo tee > /dev/null /etc/nginx/sites-enabled/default
-
-
-
+    sudo apt install -y nginx
+    webRootDirPath="$FRONTEND_DIR_PATH" php "$THIS_MODULE_DIR_PATH"/rc/nginx.conf.php | sudo tee /etc/nginx/sites-enabled/default
     sudo nginx -t
     sudo chown -R "$WWW_USER":"$WWW_GROUP" "$FRONTEND_DIR_PATH" "$MODULE_DIR_PATH"/localhost/{log,tmp/cache}
     sudo systemctl restart nginx
 }
 
 configure_xserver() {
-    # To running firefox, see https://docs.travis-ci.com/user/gui-and-headless-browsers/
-    export DISPLAY=:99
-    # `start-stop-daemon` is provided by the `dpkg` package
-    /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+    echo Starting X server...
+    if ! pidof Xvfb &> /dev/null; then
+        # To running firefox, see https://docs.travis-ci.com/user/gui-and-headless-browsers/
+        export DISPLAY=:99
+        mkdir -p "$THIS_MODULE_DIR_PATH"/tmp
+        # `start-stop-daemon` is provided by the `dpkg` package
+        /sbin/start-stop-daemon --start --quiet --pidfile "$THIS_MODULE_DIR_PATH"/tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 || err "Unable to start xserver"
+    fi
 }
 
 install_npm_packages() {
     echo Installing global NPM packages...
-    sudo npm install -g typescript@next sass rollup yarn
+    sudo npm install -g npm
+    sudo npm install -g typescript@next sass rollup # yarn
+    # todo: postcss autoprefixer
+    # todo Install deno using package manager
 
     echo Installing local NPM packages...
+    declare -r find_args=(
+        -name package.json
+        -type f
+        -not -path '*/node_modules/*'
+        -print0
+    )
+    declare path
     while IFS= read -r -d '' path; do
         pushd "$(dirname "$path")" > /dev/null
-        npm install
-        popd > /dev/null
-    done < <(find . -name node_modules -type d -print0)
+        #test -e package.json || echo '{}' > package.json
+        echo "Installing packages in '$(dirname "$path")'..."
+        npm update # runs scripts in package.json
+        popd > /dev/null # $(dirname "$path")
+    done < <(echo -en "$THIS_MODULE_DIR_PATH/package.json\x00"; echo -en "$FRONTEND_DIR_PATH/package.json\x00"; find "$FRONTEND_DIR_PATH"/module "${find_args[@]}")
+    #while IFS= read -r -d '' path; do
+    #    pushd "$(dirname "$path")" > /dev/null
+    #    npm install
+    #    popd > /dev/null
+    #done < <(find . -name node_modules -type d -print0)
 }
 
 configure_db_server() {
@@ -72,21 +90,25 @@ configure_db_server() {
     mysql -u"$MORPHO_TEST_DB_USER" -p"$MORPHO_TEST_DB_PASSWORD" -e "SHOW DATABASES"
 }
 
+configure_block_dev() {
+    echo Configuring block device for tests...
+    declare block_dev_path=/tmp/block-dev-test
+    if ! test -b "$block_dev_path"; then
+        sudo mknod -m 0777 "$block_dev_path" b 125 1
+    fi
+    if ! test -r "$block_dev_path"; then
+        sudo chown "$(id -u)":"$(id -g)" "$block_dev_path"
+    fi
+}
+
 configure_env() {
+    sudo apt update
     export MORPHO_CI=GitHub MORPHO_CI_DEBUG=1 MORPHO_TEST_WEB_SERVER_DOMAIN=localhost MORPHO_TEST_WEB_SERVER_PORT=80 MORPHO_GECKO_BIN_FILE_PATH=/usr/bin/geckodriver
-
-    # Create block device for tests
-    sudo mknod -m 0777 /tmp/block-dev-test b 125 1
-    sudo chown "$(id -u)":"$(id -g)" /tmp/block-dev-test
-
+    configure_block_dev
     configure_xserver
-
     install_npm_packages
-
     configure_nginx
-
     composer --ignore-platform-reqs --no-ansi --no-interaction install
-
     configure_db_server
 }
 
@@ -94,8 +116,6 @@ build_package() {
     :
 }
 
-#show_facts
-#configure_env
-#build_package
-
-
+show_facts
+configure_env
+build_package

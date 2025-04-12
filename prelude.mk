@@ -12,7 +12,7 @@ MAKEFLAGS += --warn-undefined-variables
 # Suppress "Entering directory ..." unless we are changing the work directory.
 MAKEFLAGS += --no-print-directory
 # Use bash as SHELL in recipes
-SHELL := /bin/bash -eu
+SHELL := /bin/bash -euo pipefail
 #.DEFAULT_GOAL = all
 .DEFAULT_GOAL = targets
 GNUMAKEFLAGS :=
