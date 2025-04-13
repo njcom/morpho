@@ -25,7 +25,7 @@ class SutConf extends ArrayObject {
                 'host'     => getenv('MORPHO_TEST_DB_HOST') ?: '127.0.0.1',
                 'user'     => getenv('MORPHO_TEST_DB_USER') ?: 'root',
                 'password' => getenv('MORPHO_TEST_DB_PASSWORD') ?: '',
-                'db'       => getenv('MORPHO_TEST_DB_DB') ?: 'test',
+                'db'       => getenv('MORPHO_TEST_DB_NAME') ?: 'test',
             ];
         }
         parent::__construct($vals);
@@ -46,9 +46,9 @@ class SutConf extends ArrayObject {
     }
 
     public function webServerAddress(): array {
-        $domain = getenv('MORPHO_TEST_WEB_SERVER_DOMAIN') ?: 'framework';
+        $host = getenv('MORPHO_TEST_WEB_SERVER_HOST') ?: 'framework';
         $port = getenv('MORPHO_TEST_WEB_SERVER_PORT') ?: 80;
-        return ['host' => $domain, 'port' => (int) $port];
+        return ['host' => $host, 'port' => (int) $port];
     }
 
     public function webDriverConf(): array {
