@@ -5,7 +5,7 @@ ci-cd-build:
 
 ci-cd-test:
 	$(CURDIR)/bin/lint
-    MORPHO_CI=1 MORPHO_TEST_DB_HOST=127.0.0.1 MORPHO_TEST_DB_USER=root MORPHO_TEST_DB_PASSWORD=root MORPHO_TEST_DB_NAME=test $(CURDIR)/bin/test
+	MORPHO_CI=1 MORPHO_TEST_DB_HOST=127.0.0.1 MORPHO_TEST_DB_USER=root MORPHO_TEST_DB_PASSWORD=root MORPHO_TEST_DB_NAME=test $(CURDIR)/bin/test
 
 ci-cd-deploy:
 	$(CURDIR)/bin/deploy

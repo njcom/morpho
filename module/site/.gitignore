@@ -1,6 +1,7 @@
 vendor/
 .phpunit*.cache
 selenium.log.*
+test-result.xml
 
 /frontend/localhost/lib/base/*.js
 !/frontend/localhost/lib/base/index.js

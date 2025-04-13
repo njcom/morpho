@@ -1,7 +1,7 @@
 include prelude.mk
 
 define make-for-modules
-	for module_dir_path in $(shell find module -mindepth 1 -maxdepth 1 -type d); do echo Running \`make $1\` in $$module_dir_path; make -C $$module_dir_path -f ci-cd.mk $(1); echo ---; done
+	for module_dir_path in $(shell find module -mindepth 1 -maxdepth 1 -type d); do echo Running \`make $1\` in $$module_dir_path; cd $(CURDIR)/$$module_dir_path; make -f ci-cd.mk $(1); echo ---; done
 endef
 
 ci-cd-build:
