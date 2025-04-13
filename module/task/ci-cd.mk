@@ -12,8 +12,7 @@ ci-cd-deploy:
 ci-cd-cron-daily:
 .PHONY: ci-cd-cron-daily
 
-ci-cd-cron-daily:
-	$(MAKE) pull-meta
+ci-cd-cron-daily: pull-meta
 .PHONY: ci-cd-cron-daily
 
 pull-meta:
