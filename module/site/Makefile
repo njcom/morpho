@@ -77,16 +77,20 @@ run-mariadb:
 	podman run -d -it --pod mariadb-pod --name mariadb-container docker.io/library/mariadb:11.4.2
 
 run: run-nginx run-php run-mariadb
+.PHONY: run
 
 clean-images:
 	podman rmi --all --force
+.PHONY: clean-images
 
 clean-containers:
 	podman pod stop -a
 	podman pod rm -a
+.PHONY: clean-containers
 
 clean-container-env:
 	# podman system ...
+.PHONY: clean-container-env
 
 ################################################################################
 
@@ -95,22 +99,26 @@ clean-container-env:
 
 #clean-routes:
 #	sudo sh -c 'rm -rfv $(backend-dir-path)/localhost/cache/router'
+python-repo-uri = 'https://raw.githubusercontent.com/python/cpython/refs/tags/v3.12.10'
 
 update-peg:
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.token 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Grammar/Tokens'
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.token '$(python-repo-uri)/Grammar/Tokens'
 	echo "Written file $(CURDIR)/lib/Tool/Python/python.token"
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.gram 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Grammar/python.gram'
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.gram '$(python-repo-uri)/Grammar/python.gram'
 	echo "Written file $(CURDIR)/lib/Tool/Python/python.gram"
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/meta.gram 'https://raw.githubusercontent.com/python/cpython/refs/heads/3.12/Tools/peg_generator/pegen/metagrammar.gram'
+	curl -sSfLo $(CURDIR)/lib/Tool/Python/meta.gram '$(python-repo-uri)/Tools/peg_generator/pegen/metagrammar.gram'
 	echo "Written file $(CURDIR)/lib/Tool/Python/meta.gram"
 	target_file_path=$(CURDIR)/test/Unit/Compiler/Frontend/Peg/test-data/PythonTokenizerTest/meta-token \
 		&& cat $(CURDIR)/lib/Tool/Python/meta.gram | $(CURDIR)/bin/peg gen-py-tokens > "$$target_file_path" \
 		&& echo "Written file $$target_file_path"
+.PHONY: update-peg
 
 setup: update-peg
 	composer require --dev psalm/plugin-phpunit
 	vendor/bin/psalm-plugin enable psalm/plugin-phpunit
 	composer update
 	bin/js setup
+.PHONY: setup
 
-.PHONY: test unit-test integration-test frontend-test lint assets js watch-js css watch-css clean clean-css clean-js clean-assets run-nginx run-php run-mariadb run clean-images clean-containers clean-container-env update-peg setup
+# todo: set for each receipt separately
+.PHONY: test unit-test integration-test frontend-test lint assets js watch-js css watch-css clean clean-css clean-js clean-assets run-nginx run-php run-mariadb

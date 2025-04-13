@@ -12,6 +12,7 @@ use UnexpectedValueException;
 use function Morpho\Base\symDiff;
 
 use const Morpho\Base\INDENT;
+const PYTHON_IMAGE = 'python:3.12.10-bookworm';
 
 /*function tokenize($stream): void {
     foreach (PythonTokenizer::tokenize($stream) as $token) {
@@ -54,7 +55,7 @@ function genPyTokens(array $argv): void {
             //1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
             //2 => ["pipe", "w"], // stderr
         ];
-        $process = proc_open("python -c 'import tokenize, sys\nfor token in tokenize.generate_tokens(sys.stdin.readline): print(token)'", $descriptors, $pipes);
+        $process = proc_open('docker run --rm --interactive --entrypoint python ' . PYTHON_IMAGE . " -c 'import tokenize, sys\nfor token in tokenize.generate_tokens(sys.stdin.readline): print(token)'", $descriptors, $pipes);
         if (!$process) {
             throw new RuntimeException();
         }
@@ -74,15 +75,15 @@ function genPyTokens(array $argv): void {
 }
 
 function genTokenType(): void {
-    $tokens = [];
+    $pyTokens = [];
     $ignored = [];
-    foreach (explode(', ', trim(sh('python -c "import token; print(token.tok_name)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
+    foreach (explode(', ', trim(sh('docker run --rm --entrypoint python ' . PYTHON_IMAGE . ' -c "import token; print(token.tok_name)"', ['capture' => true])->stdOut(), " }{\n")) as $tokenOutput) {
         [$val, $name] = explode(': ', $tokenOutput);
         $name = trim($name, '"\'');
         if (in_array($name, $ignored)) {
             continue;
         }
-        $tokens[$name] = $val;
+        $pyTokens[$name] = $val;
     }
     $cases = [
         "AMPER" => "Ampersand",
@@ -106,8 +107,8 @@ function genTokenType(): void {
         "ELLIPSIS" => "Ellipsis",
         "ENCODING" => "Encoding",
         "ENDMARKER" => "EndMarker",
-        "EQUAL" => "Equal",
         "EQEQUAL" => "EqualEqual",
+        "EQUAL" => "Equal",
         "ERRORTOKEN" => "ErrorToken",
         "EXCLAMATION" => "Exclamation",
         "FSTRING_END" => "FstringEnd",
@@ -117,21 +118,21 @@ function genTokenType(): void {
         "GREATEREQUAL" => "GreaterEqual",
         "INDENT" => "Indent",
         "LBRACE" => "LeftBrace",
-        "LPAR" => "LeftParen",
         "LEFTSHIFT" => "LeftShift",
         "LEFTSHIFTEQUAL" => "LeftShiftEqual",
-        "LSQB" => "LeftSquareBrace",
         "LESS" => "Less",
         "LESSEQUAL" => "LessEqual",
-        "MINUS" => "Minus",
+        "LPAR" => "LeftParen",
+        "LSQB" => "LeftSquareBrace",
         "MINEQUAL" => "MinusEqual",
-        "NL" => "NL",
-        "N_TOKENS" => "NTokens",
+        "MINUS" => "Minus",
         "NAME" => "Name",
         "NEWLINE" => "NewLine",
+        "NL" => "NL",
         "NOTEQUAL" => "NotEqual",
         "NT_OFFSET" => "NtOffset",
         "NUMBER" => "Number",
+        "N_TOKENS" => "NTokens",
         "OP" => "Op",
         "PERCENT" => "Percent",
         "PERCENTEQUAL" => "PercentEqual",
@@ -139,9 +140,9 @@ function genTokenType(): void {
         "PLUSEQUAL" => "PlusEqual",
         "RARROW" => "RightArrow",
         "RBRACE" => "RightBrace",
-        "RPAR" => "RightParen",
         "RIGHTSHIFT" => "RightShift",
         "RIGHTSHIFTEQUAL" => "RightShiftEqual",
+        "RPAR" => "RightParen",
         "RSQB" => "RightSquareBrace",
         "SEMI" => "Semicolon",
         "SLASH" => "Slash",
@@ -157,9 +158,9 @@ function genTokenType(): void {
         "VBAREQUAL" => "VertBarEqual",
     ];
 
-    $tokens1 = $tokens;
-    ksort($tokens1);
-    $diff = symDiff(array_keys($cases), array_keys($tokens1));
+    $pyTokensSorted = $pyTokens;
+    ksort($pyTokensSorted);
+    $diff = symDiff(array_keys($cases), array_keys($pyTokensSorted), false);
     if ($diff) {
         throw new UnexpectedValueException(print_r($diff, true));
     }
@@ -181,7 +182,7 @@ function genTokenType(): void {
     OUT
         ) . "\n";
     $exactTypes = [];
-    foreach ($tokens as $name => $value) {
+    foreach ($pyTokens as $name => $value) {
         $out .= INDENT . 'case ' . $cases[$name] . ' = ' . $value . ";\n";
         $exactTypes[$value] = $cases[$name];
     }
