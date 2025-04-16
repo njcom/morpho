@@ -9,9 +9,6 @@ ci-cd-test:
 ci-cd-deploy:
 .PHONY: ci-cd-deploy
 
-ci-cd-cron-daily:
-.PHONY: ci-cd-cron-daily
-
 ci-cd-cron-daily: pull-meta
 .PHONY: ci-cd-cron-daily
 

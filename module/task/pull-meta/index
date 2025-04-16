@@ -1,0 +1,249 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+# Todo: rewrite in Python
+namespace Morpho\Module\Task;
+
+use Morpho\Base\Env;
+use function Morpho\App\Cli\{sh, bootstrap, showLine, showSep};
+use function Morpho\Base\{dasherize, fromJson, q};
+
+require __DIR__ . '/vendor/autoload.php';
+
+function lname(string $s): string {
+    $s = str_replace('/', '-', $s);
+    return dasherize($s, '.');
+}
+
+function pullMeta(string $tool, string $targetFilePath): void {
+    showLine("Pulling meta for the " . q($tool) . '...');
+    sh('curl -sSL ' . escapeshellarg('https://endoflife.date/api/' . $tool . '.json') . " | jq 'sort_by(.release) | reverse' | jq --indent 4 . > " . escapeshellarg($targetFilePath));
+}
+
+function pullBashMeta(string $targetFilePath): void {
+
+}
+
+
+function pullCmakeMeta(string $targetFilePath): void {
+
+}
+
+function pullMakeMeta(string $targetFilePath): void {
+
+}
+
+function pullQemuMeta(string $targetFilePath): void {
+
+}
+
+function pullLinqMeta(string $targetFilePath): void {
+    // @todo: Pull from https://www.nuget.org/packages/System.Linq/
+}
+
+function pullNeo4jMeta(string $targetFilePath): void {
+
+}
+
+function pullSqliteMeta(string $targetFilePath): void {
+
+}
+
+function pullGccMeta(string $targetFilePath): void {
+
+}
+
+function pullLlvmMeta(string $targetFilePath): void {
+
+}
+/*
+function pullLinuxVers(string $outDirPath): void {
+    // todo: use this: https://www.kernel.org/releases.json
+    //sh('curl -sSL https://www.kernel.org/feeds/kdist.xml ' . escapeshellarg($outDirPath . '/kernel.json'));
+
+
+}
+*/
+function pullUbuntuMeta(string $targetFilePath): void {
+    pullMeta('ubuntu', $targetFilePath);
+    // @todo: extend with data from https://lists.ubuntu.com/archives/ubuntu-release/2019-April/004757.html
+    // todo: use https://changelogs.ubuntu.com/meta-release-lts
+    # @todo: https://wiki.ubuntu.com/Releases
+    /*
+    sh("curl -sSL 'https://api.launchpad.net/devel/ubuntu/series' | jq --indent 4 '[.entries[] | select(.active == true and .supported == true)]' > " . escapeshellarg("$outDirPath/ubuntu.json"));
+    $rows = File::readJson($outDirPath . '/ubuntu.json');
+    foreach ($rows as $k => $row) {
+        $rows[$k] = [
+            'codeName' => $row['name'],
+            'humanCodeName' => $row['displayname'],
+            'fullName' => $row['title'],
+            'ver' => $row['version'],
+            'released' => $row['datereleased'],
+            'link' => $row['web_link'],
+        ];
+    }
+    File::writeJson($outDirPath . '/ubuntu.json', $rows);
+    showLine("Written '$outDirPath/ubuntu.json'");
+    */
+}
+/*
+function pullDebianVers(string $outDirPath): void {
+    try {
+        $tmpFilePath = tempnam($outDirPath, __FUNCTION__);
+        # See also https://www.debian.org/doc/manuals/debian-faq/ftparchives#sourceforcodenames
+        sh("curl -sSL -o " . escapeshellarg($tmpFilePath)  . " 'https://wiki.debian.org/DebianReleases'");
+        $doc = Doc::parseFile($tmpFilePath);
+    } finally {
+        if (isset($tmpFilePath)) {
+            unlink($tmpFilePath);
+        }
+    }
+    //$tableNode = $doc->select("//*[contains(text(),'Current LTS Release')]/ancestor::table")->item(0);
+    $tableNode = $doc->select('//*[@id="Production_Releases"]/following-sibling::div/table')->item(0);
+    $dom = simplexml_import_dom($tableNode);
+    $rows = [];
+    $j = 0;
+    $eolEltsFound = false;
+    $map = [
+        0 => 'ver',
+        1 => 'humanCodeName',
+        2 => 'released',
+        3 => 'eol',
+        4 => 'eolLts',
+        5 => 'eolElts', // End Of Life Extended Long Term Support
+    ];
+    foreach ($dom->tbody->tr as $tr) {
+        if ($j === 0) {
+            $j = 1;
+            continue;
+        }
+        $row = [];
+        $i = 0;
+        foreach ($tr as $td) {
+            $val = trim(strip_tags($td->p->asXml()));
+            if (!strlen($val)) {
+                continue;
+            }
+            $row[$map[$i]] = $val;
+            $i++;
+        }
+        if (!empty($row['eolElts'])) {
+            $eolEltsFound = true;
+        } elseif ($eolEltsFound && empty($row['eolElts'])) {
+            // Skip outdated releases.
+            break;
+        }
+        $rows[] = $row;
+    }
+    foreach ($rows as $k => $row) {
+        foreach ($map as $key) {
+            if (!isset($row[$key])) {
+                $rows[$k][$key] = null;
+            }
+        }
+    }
+    foreach ($rows as $k => $row) {
+        $rows[$k] = [
+            'codeName' => lname($row['humanCodeName']),
+            'humanCodeName' => $row['humanCodeName'],
+            'ver' => $row['ver'],
+            'released' => $row['released'],
+            'link' => null,
+            'eol' => $row['eol'],
+            'eolLts' => $row['eolLts'],
+            'eolElts' => $row['eolElts'],
+        ];
+    }
+
+    showLine("Written '" . File::writeJson($outDirPath . '/debian.json', $rows) . "'");
+}
+
+function pullFedoraVers(string $outDirPath): void {
+    // todo:
+    // https://getfedora.org/releases.json
+    // https://fedorapeople.org/groups/schedule/
+}
+
+function pullCentosVers(string $outDirPath): void {
+    // todo: https://wiki.centos.org/About/Product
+}
+
+function pullRhelVers(string $outDirPath): void {
+    // https://access.redhat.com/support/policy/updates/errata
+}
+*/
+
+function pullTypeScriptMeta(string $outDirPath): void {
+    // todo
+}
+
+function checkTargetFile(string $targetFilePath): void {
+    assert(file_exists($targetFilePath), 'Target file ' . q($targetFilePath) . ' does not exist');
+    assert(filesize($targetFilePath) > 0, "Target file '$targetFilePath' is empty");
+    $d = fromJson(file_get_contents($targetFilePath));
+    assert(is_array($d) && count($d), "File contains non empty JSON object");
+}
+
+function main(): void {
+    bootstrap();
+    Env::enableExpectations();
+    $tools = [
+        //todo'antlr',
+        'centos',
+        //todo'cmake',
+        'composer',
+        'debian',
+        'dotnet',
+        'drupal',
+        'elasticsearch',
+        'fedora',
+        //todo'gcc',
+        'gitlab',
+        'jquery',
+        'kde-plasma' => 'kde',
+        'kotlin',
+        'kubernetes',
+        //todo'linq',
+        'linux',
+        //todo'llvm',
+        //todo'make',
+        'mariadb',
+        'mysql',
+        'nginx',
+        'nodejs',
+        'perl',
+        'php',
+        'postgresql',
+        'python',
+        //todo'qemu',
+        'qt',
+        'rhel',
+        'sles',
+        //'typescript',
+        'ubuntu',
+        'wordpress',
+        //todo:'bash',
+        // todo:'neo4j',
+        // todo:'sqlite',
+    ];
+    //$outDirPath = $_SERVER['argv'][1] ?? __DIR__;
+    $targetDirPath =__DIR__ . '/dataset';
+    foreach ($tools as $key => $tool) {
+        if (!is_numeric($key)) {
+            $tool = $key;
+        }
+        $targetFilePath = $targetDirPath . '/' . $tool . '.json';
+        $fn = __NAMESPACE__ . '\\pull' . $tool . 'meta';
+        if (function_exists($fn)) {
+            showLine("Calling $fn()...");
+            $fn($targetFilePath);
+        } else {
+            showLine("Calling generic pullMeta()...");
+            pullMeta($tool, $targetFilePath);
+        }
+        checkTargetFile($targetFilePath);
+        showLine("Saved '$targetFilePath'");
+        showSep();
+    }
+}
+
+main();

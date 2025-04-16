@@ -1,0 +1,13 @@
+{
+    "name": "morpho/task_pull-meta",
+    "require": {
+        "njcom/framework": "dev-main"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../site"
+        }
+    ],
+    "minimum-stability": "dev"
+}

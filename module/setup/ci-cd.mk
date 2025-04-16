@@ -11,6 +11,3 @@ ci-cd-deploy:
 
 ci-cd-cron-daily:
 .PHONY: ci-cd-cron-daily
-
-ci-cd-cron-daily:
-.PHONY: ci-cd-cron-daily
