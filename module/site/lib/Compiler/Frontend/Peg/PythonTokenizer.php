@@ -179,12 +179,7 @@ class PythonTokenizer {
                     } elseif (in_array($initial, $singleQuoted) || in_array(mb_substr($token, 0, 2), $singleQuoted) || in_array(mb_substr($token, 0, 3), $singleQuoted)) {
                         if (str_ends_with($token, "\n")) { # continued string
                             $strStart = [$lineNum, $start];
-                            # Again, using the first 3 chars of the
-                            #  token. This is looking for the matching end
-                            #  regex for the correct type of quote
-                            #  character. So it's really looking for
-                            #  endpats["'"] or endpats['"'], by trying to
-                            #  skip string prefix characters, if any.
+                            // Again, using the first 3 chars of the token. This is looking for the matching end regex for the correct type of quote character. So it's really looking for endpats["'"] or endpats['"'], by trying to skip string prefix characters, if any.
                             if (isset($endPatterns[$initial])) {
                                 $endProgRe = $endPatterns[$initial];
                             } elseif (isset($endPatterns[$token[1]])) {
@@ -199,7 +194,7 @@ class PythonTokenizer {
                             $contLine = $line;
                             break;
                         } else {
-                            yield new Token(TokenType::String, $token, $spos, $epos, $line); # ordinary string
+                            yield new Token(TokenType::String, $token, $spos, $epos, $line); // Ordinary string
                         }
                     } elseif (PythonTokenizerRe::isIdentifier($initial)) { # ordinary name
                         yield new Token(TokenType::Name, $token, $spos, $epos, $line);

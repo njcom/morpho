@@ -111,7 +111,11 @@ class PhpParserGenerator implements IGrammarVisitor {
     }
 
     /**
-     * @param array|null $context @todo: specify shape
+     * @param array|null $context
+     *      namespace: string
+     *      class: string
+     *      header: string
+     *      subheader: string
      * @return string
      */
     public function generate(array|null $context = null): string {
@@ -139,8 +143,8 @@ class PhpParserGenerator implements IGrammarVisitor {
         }
         $this->write("}");
         //self.print(f"KEYWORDS = {tuple(self.keywords)}")
-        $this->write('const KEYWORDS = [' . implode(', ', array_keys($this->keywords)) . '];');
-        $this->write('const SOFT_KEYWORDS = [' . implode(', ', array_keys($this->softKeywords)) . '];');
+        //$this->write('const KEYWORDS = [' . implode(', ', array_keys($this->keywords)) . '];');
+        //$this->write('const SOFT_KEYWORDS = [' . implode(', ', array_keys($this->softKeywords)) . '];');
         //self.print(f"SOFT_KEYWORDS = {tuple(self.soft_keywords)}")
         $footer = $this->grammar->metas['trailer'] ?? $this->fileFooter($context);
         if (null !== $footer) {

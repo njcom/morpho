@@ -17,5 +17,4 @@ use Morpho\Tool\Sql\IUpdateQuery;
 use PDO;
 
 class Client extends BaseClient {
-
 }

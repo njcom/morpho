@@ -41,7 +41,7 @@ class Dialog {
         while (true) {
             /** @noinspection PhpStatementHasEmptyBodyInspection */
             if ($reader->readLen('~' . Re::WHITESPACES . '~s') > 0) {
-            } elseif ($reader->readLen('~' . Re::DOUBLE_QUOTED . '~s') > 0) {
+            } elseif ($reader->readLen('~' . Re::DOUBLE_QUOTED_STRING . '~s') > 0) {
                 $checkedItems[] = str_replace('\\"', '"', $reader->groups()[1]);
             } elseif ($reader->readLen('~' . Re::NOT_WHITESPACES . '~s') > 0) {
                 $checkedItems[] = $reader->match();

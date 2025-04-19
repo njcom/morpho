@@ -56,7 +56,7 @@ class PegTest extends TestCase {
         );
     }
 
-    public function testParseText() {
+    public function testParseProgram() {
         $grammar = Peg::parseGrammar(
             <<<OUT
         start: ('+' term)+ term NEWLINE
@@ -64,7 +64,7 @@ class PegTest extends TestCase {
         OUT
         );
 
-        $tree = Peg::parseText($grammar, Peg::mkTokenizer('+ 23 46'));
+        $tree = Peg::parseProgram($grammar, Peg::mkTokenizer('+ 23 46'));
         $this->assertEquals([
             [
                 [

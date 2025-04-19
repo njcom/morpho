@@ -14,7 +14,6 @@ use Traversable;
  * Based on https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/tokenizer.py
  */
 class Tokenizer implements ITokenizer {
-    // @todo: make public internal after switching to PHP 8.4 and remove index() method.
     private int $index = 0;
 
     /**
@@ -29,15 +28,15 @@ class Tokenizer implements ITokenizer {
     }
 
     public function getIterator(): Traversable {
-        while ($tok = $this->nextToken()) {
-            yield $tok;
+        while ($token = $this->nextToken()) {
+            yield $token;
         }
     }
 
     public function nextToken(): ?Token {
-        $tok = $this->peekToken();
+        $token = $this->peekToken();
         $this->index++;
-        return $tok;
+        return $token;
     }
 
     public function peekToken(): ?Token {

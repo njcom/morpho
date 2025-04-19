@@ -10,6 +10,7 @@ use Traversable;
 
 use UnexpectedValueException;
 
+use Morpho\Base\NotImplementedException;
 use function Morpho\Base\enumVals;
 use function Morpho\Tool\Php\parse;
 use function Morpho\Base\mkStream;
@@ -22,31 +23,35 @@ use function Morpho\Tool\Php\ppFile;
  * https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/testutil.py
  */
 class Peg {
+    public const int FORMAT_NONE = 1;
     public const int FORMAT_AS_FRAGMENT = 1;
     public const int FORMAT_AS_FILE = 2;
+
     /**
      * @param resource|string $source
      * @return Traversable
      * @throws \Exception
      */
-    public static function tokenize($source): Traversable {
-        return self::mkTokenizer($source)->getIterator();
+    public static function tokenize($text): Traversable {
+        return self::mkTokenizer($text)->getIterator();
     }
 
-    public static function parseGrammar($source): Grammar {
-        return self::runParser(new GrammarParser(self::mkTokenizer($source)));
+    /**
+     * @param resource|string $grammarText
+     */
+    public static function parseGrammar($grammarText): Grammar {
+        return self::runParser(new GrammarParser(self::mkTokenizer($grammarText)));
     }
 
-    public static function parseText(Grammar $grammar, $tokenizer, array|null $context = null) {
-        [$parserClass, $parserCode] = self::generateParser($grammar, $context, Peg::FORMAT_AS_FRAGMENT);
-        eval('?><?php ' . $parserCode);
-        $parser = new $parserClass($tokenizer);
-        return self::runParser($parser);
-    }
-
-    public static function generateParser(Grammar $grammar, array|null $context = null, int $format = self::FORMAT_AS_FILE): array {
+    /**
+     * @param array $context See $context in PhpParserGenerator::generate() +:
+     *     tokenNames: set[str]
+     */
+    public static function generateParserCode(Grammar $grammar, array|null $context = null, int $format = self::FORMAT_NONE): array {
         $programStream = mkStream('');
-        $gen = new PhpParserGenerator($grammar, $programStream, new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
+        $tokenNames = isset($context['tokenNames']) ? $context['tokenNames'] : array_keys(enumVals(TokenType::class));
+        $ruleCheckingVisitor = new RuleCheckingVisitor($tokenNames);
+        $gen = new PhpParserGenerator($grammar, $programStream, $ruleCheckingVisitor);
         $parserClass = $gen->generate($context);
         $parserCode = stream_get_contents($programStream, offset: 0);
         if ($parserCode === '') {
@@ -61,18 +66,25 @@ class Peg {
         return [$parserClass, $parserCode];
     }
 
-    /**
+    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $context = null): string {
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, $context, self::FORMAT_AS_FILE);
+        file_put_contents($targetFilePath, $parserCode);
+        return $parserClass;
+    }
+
+    public static function parseProgram(Grammar $grammar, $programTokenizer, array|null $context = null) {
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, $context);
+        eval($parserCode);
+        $programParser = new $parserClass($programTokenizer);
+        return self::runParser($programParser);
+    }
+
+   /**
      * @param string|resource $source
      * @return \Morpho\Compiler\Frontend\Peg\ITokenizer
      */
     public static function mkTokenizer($source): ITokenizer {
         return new Tokenizer(PythonTokenizer::tokenize($source));
-    }
-
-    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $context = null): string {
-        [$parserClass, $parserCode] = self::generateParser($grammar, $context);
-        file_put_contents($targetFilePath, $parserCode);
-        return $parserClass;
     }
 
     public static function runParser(Parser $parser): mixed {

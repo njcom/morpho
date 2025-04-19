@@ -16,11 +16,11 @@ use function Morpho\Base\qq;
  * @todo: Unify with Compiler\Token
  */
 readonly class Token implements Stringable {
-    public TokenType $type;
-    public string $value;
-    public array $start;
-    public array $end;
-    public string $line;
+    public protected(set) TokenType $type;
+    public protected(set) string $value;
+    public protected(set) array $start;
+    public protected(set) array $end;
+    public protected(set) string $line;
 
     public function __construct(TokenType $type, string $value, array $start, array $end, string $line) {
         $this->type = $type;

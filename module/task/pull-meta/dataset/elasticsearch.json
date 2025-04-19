@@ -1,0 +1,26 @@
+[
+    {
+        "cycle": "6",
+        "releaseDate": "2017-11-14",
+        "eol": "2022-02-10",
+        "latest": "6.8.23",
+        "latestReleaseDate": "2022-01-13",
+        "lts": false
+    },
+    {
+        "cycle": "7",
+        "releaseDate": "2019-04-10",
+        "eol": false,
+        "latest": "7.17.28",
+        "latestReleaseDate": "2025-02-18",
+        "lts": false
+    },
+    {
+        "cycle": "8",
+        "releaseDate": "2022-02-10",
+        "eol": false,
+        "latest": "8.17.4",
+        "latestReleaseDate": "2025-03-21",
+        "lts": false
+    }
+]

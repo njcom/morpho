@@ -227,6 +227,7 @@ function main(): void {
     ];
     //$outDirPath = $_SERVER['argv'][1] ?? __DIR__;
     $targetDirPath =__DIR__ . '/dataset';
+    Dir::create($targetDirPath);
     foreach ($tools as $key => $tool) {
         if (!is_numeric($key)) {
             $tool = $key;

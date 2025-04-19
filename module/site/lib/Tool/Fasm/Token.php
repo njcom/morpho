@@ -1,0 +1,19 @@
+<?php declare(strict_types=1);
+/**
+ * This file is part of njcom/framework
+ * It is distributed under the 'Apache License Version 2.0' license.
+ * See the https://github.com/njcom/framework/blob/main/LICENSE for the full license text.
+ */
+namespace Morpho\Tool\Fasm;
+
+class Token {
+    public protected(set) TokenType $type;
+    public protected(set) string $value;
+    public protected(set) array $location;
+
+    public function __construct(TokenType $type, string $value, array $location) {
+        $this->type = $type;
+        $this->value = $value;
+        $this->location = $location;
+    }
+}

@@ -11,9 +11,9 @@ class Re {
     //public const WHITESPACES_FULL = '~\\s+~s';
     public const NOT_WHITESPACES = '\\S+';
 
-    public const SINGLE_QUOTED = "'((?:[^'\\\\]|\\\\.)*)'";
+    public const SINGLE_QUOTED_STRING = "'((?:[^'\\\\]|\\\\.)*)'";
 
-    public const DOUBLE_QUOTED = '"((?:[^"\\\\]|\\\\.)*)"';
+    public const DOUBLE_QUOTED_STRING = '"((?:[^"\\\\]|\\\\.)*)"';
 
     // Matches single-line and multi-line C-style comments (https://stackoverflow.com/a/59094308):
     const C_COMMENT = '\/\*[\s\S]*?\*\/|\/\/.*';

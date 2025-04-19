@@ -7,8 +7,9 @@
 namespace Morpho\Compiler\Frontend;
 
 enum Lexeme: string {
+    case Ampersand = '&';
     case At = '@';
-    case BackSlash = '\\';
+    case Backslash = '\\';
     case Backtick = '`';
     case Caret = '^';
     case Colon = ':';
@@ -16,25 +17,25 @@ enum Lexeme: string {
     case Dollar = '$';
     case Dot = '.';
     case DoubleQuote = '"';
-    case Equal = '=';
+    case Equals = '=';
     case Exclamation = '!';
     case Hash = '#';
-    case LAngleBracket = '<';
-    case LBrace = '{';
-    case LBracket = '[';
-    case LParen = '(';
+    case LeftAngleBracket = '<';
+    case LeftBrace = '{';
+    case LeftBracket = '[';
+    case LeftParen = '(';
     case Minus = '-'; // aka dash, hyphen
     case Percent = '%';
+    case Pipe = '|';
     case Plus = '+';
     case Question = '?';
-    case RAngleBracket = '>';
-    case RBrace = '}';
-    case RBracket = ']';
-    case RParen = ')';
+    case RightAngleBracket = '>';
+    case RightBrace = '}';
+    case RightBracket = ']';
+    case RightParen = ')';
     case Semicolon = ';';
     case SingleQuote = "'"; // aka apostrophe
     case Slash = '/';
     case Star = '*'; // asterisk
     case Tilde = '~';
-    case VerticalBar = '|';
 }

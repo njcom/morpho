@@ -13,17 +13,17 @@ use function Morpho\Base\q;
  */
 class RuleCheckingVisitor extends GrammarVisitor {
     /**
-     * @var array Dict[str, Rule]
+     * @var array dict[str, Rule]
      */
     public array $rules;
 
     /**
-     * @var array Set[str]
+     * @var array set[str]
      */
-    private array $tokens;
+    private array $tokenNames;
 
-    public function __construct(array $tokens) {
-        $this->tokens = $tokens;
+    public function __construct(array $tokenNames) {
+        $this->tokenNames = $tokenNames;
     }
 
     protected function visitNameLeaf(NameLeaf $node): void {
@@ -32,7 +32,7 @@ class RuleCheckingVisitor extends GrammarVisitor {
             'NUMBER' => TokenType::Number->name,
             default => $node->value,
         };
-        if (!isset($this->rules[$value]) && !in_array($value, $this->tokens, true)) {
+        if (!isset($this->rules[$value]) && !in_array($value, $this->tokenNames, true)) {
             throw new GrammarException('Dangling reference to rule ' . q($value));
         }
     }
