@@ -21,6 +21,7 @@ const RC_DIR_NAME = 'rc';
 const TEST_DATA_DIR_NAME = 'test-data';
 const TEST_DIR_NAME = 'test';
 const TMP_DIR_NAME = 'tmp';
+const TPL_DIR_NAME = 'tpl';
 const UI_DIR_NAME = 'ui';
 const VENDOR_DIR_NAME = 'vendor';
 const VIEW_DIR_NAME = 'view';

@@ -62,11 +62,11 @@ enum StatusCode: int {
     case TooManyRequests = 429;
     case RequestHeaderFieldsTooLarge = 431;
     case UnavailableForLegalReasons = 451;
-    case InternalServerError = 500;
+    case InternalServerError = 500; // E.g. application exception
     case NotImplemented = 501;
-    case BadGateway = 502;
-    case ServiceUnavailable = 503;
-    case GatewayTimeout = 504;
+    case BadGateway = 502; // E.g. php-fpm not available
+    case ServiceUnavailable = 503; // E.g. database not available due connection refused (TCP port is not listening)
+    case GatewayTimeout = 504; // E.g. due network connectivity
     case HTTPVersionNotSupported = 505;
     case VariantAlsoNegotiates = 506;
     case InsufficientStorage = 507;

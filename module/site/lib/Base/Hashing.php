@@ -6,6 +6,8 @@
  */
 namespace Morpho\Base;
 
+// @deprecated
+// todo: move to Re class
 class Hashing {
     public static function isMd5Like(string $testString): bool {
         if (!isset($testString[0])) {

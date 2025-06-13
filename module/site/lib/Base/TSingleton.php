@@ -9,6 +9,9 @@ namespace Morpho\Base;
 trait TSingleton {
     private static $instance;
 
+    protected function __construct() {
+    }
+
     public static function instance(): static {
         if (!self::$instance) {
             self::$instance = new static();

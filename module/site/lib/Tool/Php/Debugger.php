@@ -13,6 +13,7 @@ use Morpho\Base\NotImplementedException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionObject;
+use Morpho\Base\TSingleton;
 
 use function array_pop;
 use function array_shift;
@@ -45,30 +46,13 @@ use function var_export;
  *     html_errors = 0
  */
 class Debugger {
+    use TSingleton;
+
     private static $instance;
     private static $class;
     protected array $ignoredFrames = [];
     protected ?bool $isHtmlMode = null;
     private int $exitCode = 1;
-
-    protected function __construct() {
-    }
-
-    final public static function instance() {
-        if (null === self::$instance) {
-            self::$instance = self::$class ? new self::$class : new self();
-        }
-
-        return self::$instance;
-    }
-
-    final public static function resetState() {
-        self::$instance = null;
-    }
-
-    public static function setClass($class) {
-        self::$class = $class;
-    }
 
     public function type($obj): void {
         $this->dump(get_debug_type($obj));

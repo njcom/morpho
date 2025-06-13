@@ -70,8 +70,9 @@ use const PREG_SPLIT_NO_EMPTY;
 const TRIM_CHARS = " \t\n\r\x00\x0B";
 
 // Matches EOL character:
-const EOL_RE = '(?>\r\n|\n|\r)';
-const EOL_FULL_RE = '~' . EOL_RE . '~s';
+const EOL_RE = '(?>\\r\\n|\\n|\\r)';
+
+const TPL_FILE_EXT = '.tpl.php';
 
 const INDENT_SIZE = 4; // size in spaces
 define(__NAMESPACE__ . '\\INDENT', str_repeat(' ', INDENT_SIZE));
@@ -81,10 +82,6 @@ const SHORTEN_LENGTH = 30;
 
 const CODE_WIDTH_1 = 80;
 const CODE_WIDTH_2 = 120;
-
-const TPL_FILE_EXT = '.php.tpl';
-
-const PHP_FILE_FULL_RE = '~\.php$~si';
 
 // https://stackoverflow.com/questions/23837286/why-does-php-not-provide-an-epsilon-constant-for-floating-point-comparisons
 // Can be used in comparison operations with real numbers.
@@ -140,7 +137,7 @@ function lines($source, bool $asArr = true, bool $filterEmpty = true, bool $trim
         if ($text === '') {
             $source = [];
         } else {
-            $source = preg_split(EOL_FULL_RE, $text, -1, $filterEmpty ? PREG_SPLIT_NO_EMPTY : 0);
+            $source = preg_split('~' . EOL_RE . '~s', $text, -1, $filterEmpty ? PREG_SPLIT_NO_EMPTY : 0);
         }
     }
     if ($asArr) {
@@ -555,7 +552,7 @@ function shorten(string $text, int $length = SHORTEN_LENGTH, $tail = null): stri
 
 function normalizeEols(string $list): string {
     return str_replace(["\r\n", "\n", "\r"], "\n", $list);
-    /*$res = \preg_replace(EOL_FULL_RE, "\n", $list);
+    /*$res = \preg_replace('~' . EOL_RE . '~s', "\n", $list);
     if (null === $res) {
         throw new Exception("Unable to replace EOLs");
     }
@@ -1166,15 +1163,15 @@ function map(callable $fn, $it, bool $passKey = false) {
         return '';
     }
     if (is_array($it)) {
-        $newArr = [];
+        $result = [];
         foreach ($it as $k => $v) {
             if ($passKey) {
-                $newArr[$k] = $fn($v, $k);
+                $result[$k] = $fn($v, $k);
             } else {
-                $newArr[$k] = $fn($v);
+                $result[$k] = $fn($v);
             }
         }
-        return $newArr;
+        return $result;
     }
     return (function () use ($fn, $it, $passKey) {
         foreach ($it as $k => $v) {
@@ -1520,10 +1517,18 @@ function index(array $matrix, $keyForIndex, bool $drop = false): array {
     return $result;
 }
 
-function camelizeKeys(array $arr): array {
+function reorderKeys(array $arr, array $keys): array {
+    $res = [];
+    foreach ($keys as $k) {
+        $res[$k] = $arr[$k];
+    }
+    return $res;
+}
+
+function camelizeKeys(array $arr, bool $toUpperFirstChar = false): array {
     $result = [];
     foreach ($arr as $key => $value) {
-        $result[camelize($key)] = $value;
+        $result[camelize($key, $toUpperFirstChar)] = $value;
     }
     return $result;
 }
@@ -1532,6 +1537,14 @@ function underscoreKeys(array $arr): array {
     $result = [];
     foreach ($arr as $key => $value) {
         $result[underscore($key)] = $value;
+    }
+    return $result;
+}
+
+function mapKeys(callable $fn, array $arr): array {
+    $result = [];
+    foreach ($arr as $key => $value) {
+        $result[$fn($key)] = $value;
     }
     return $result;
 }
@@ -1588,14 +1601,6 @@ function mkStream(string|null $bytes = null, string|null $fileName = null) {
     }
     rewind($stream);
     return $stream;
-}
-
-function reorderKeys(array $arr, array $keys): array {
-    $res = [];
-    foreach ($keys as $k) {
-        $res[$k] = $arr[$k];
-    }
-    return $res;
 }
 
 /**

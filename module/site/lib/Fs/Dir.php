@@ -30,13 +30,7 @@ class Dir {
             throw new Exception("Cannot copy the directory '$sourceDirPath' into itself");
         }
 
-        $conf = Conf::check(
-            [
-                'overwrite'    => false,
-                'skipIfExists' => false,
-            ],
-            (array)$conf
-        );
+        $conf = Conf::check(['overwrite' => false, 'skipIfExists' => false], (array)$conf);
 
         if (Stat::isDir($targetDirPath)) {
             $sourceDirName = basename($sourceDirPath);

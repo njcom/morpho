@@ -31,7 +31,7 @@ use const Morpho\Base\PHP_FILE_FULL_RE;
 
 class FunctionsTest extends TestCase {
     public function testPhpFilesFullRe() {
-        $phpFileRe = PHP_FILE_FULL_RE;
+        $phpFileRe = PHP_FILE_FULL_RE . 'si';
         $this->assertEquals(1, preg_match($phpFileRe, __FILE__));
         $this->assertEquals(1, preg_match($phpFileRe, basename(__FILE__)));
         $this->assertEquals(1, preg_match($phpFileRe, 'foo/.php'));
