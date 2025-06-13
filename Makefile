@@ -1,26 +1,30 @@
 include prelude.mk
 
-define make-for-modules
+define for-each-module
 	for module_dir_path in $(shell find module -mindepth 1 -maxdepth 1 -type d); do echo Running \`make $1\` in $$module_dir_path; cd $(CURDIR)/$$module_dir_path; make -f ci-cd.mk $(1); echo ---; done
 endef
 
 ci-cd-build:
-	$(call make-for-modules,$@)
+	$(call for-each-module,$@)
 .PHONY: ci-cd-build
 
 ci-cd-test:
-	$(call make-for-modules,$@)
+	$(call for-each-module,$@)
 .PHONY: ci-cd-test
 
 ci-cd-deploy:
-	$(call make-for-modules,$@)
+	$(call for-each-module,$@)
 .PHONY: ci-cd-deploy
 
 ci-cd-cron-daily:
-	$(call make-for-modules,$@)
+	$(call for-each-module,$@)
 .PHONY: ci-cd-cron-daily
 
 ###############################################################################
+
+test:
+	$(call for-each-module,$@)
+.PHONY: test
 
 #index:
 #	mkdir -p $(CURDIR)/index/toolchain

@@ -34,26 +34,18 @@ abstract class Parser {
      * make_syntax_error() in Python.
      */
     public function mkSyntaxError(string $msg, string|null $filePath = null): SyntaxError {
-        $tok = $this->tokenizer->lastReadToken();
-        return new SyntaxError($msg, $filePath, $tok->start, $tok->end, $tok->line);
+        $token = $this->tokenizer->lastReadToken();
+        return new SyntaxError($msg, $filePath, $token->start, $token->end, $token->line);
     }
 
     abstract public function start(): mixed;
-
-/*    protected function reset(int $index): void {
-        $this->tokenizer->reset($index);
-    }
-
-    protected function index(): int {
-        return $this->tokenizer->index();
-    }*/
 
     protected function name(): ?Token {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::Name && !in_array($tok->value, self::KEYWORDS)) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Name && !in_array($token->value, self::KEYWORDS)) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -65,8 +57,8 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::Number) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Number) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -78,8 +70,8 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::String) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::String) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -91,8 +83,8 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::Op) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Op) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -104,8 +96,8 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::Comment) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Comment) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -117,8 +109,8 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function () {
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->type == TokenType::Name && in_array($tok->value, self::SOFT_KEYWORDS)) {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Name && in_array($token->value, self::SOFT_KEYWORDS)) {
                     return $this->tokenizer->nextToken();
                 }
                 return null;
@@ -130,9 +122,17 @@ abstract class Parser {
         return $this->memoize(
             __METHOD__,
             function ($expected) {
-                // @todo: replace TokenType with SpecialWord enum
+                $token = $this->tokenizer->peekToken();
+
+                if (is_string($expected)) {
+                    if ($token->value === $expected) { // Compare by token value
+                        return $this->tokenizer->nextToken();
+                    }
+                }
+
+                // @todo: Allow to pass TokenType as $expected
                 $specialWords = [
-                    'NEWLINE' => TokenType::NewLine,
+                    'NEWLINE' => TokenType::EndOfStatementNewLine,
                     'ENDMARKER' => TokenType::EndMarker,
                     'INDENT' => TokenType::Indent,
                     'DEDENT' => TokenType::Dedent,
@@ -144,15 +144,12 @@ abstract class Parser {
                     $expected = $specialWords[$expected];
                 }
 
-                $tok = $this->tokenizer->peekToken();
-                if ($tok->value === $expected) { // Compare by token value
-                    return $this->tokenizer->nextToken();
-                }
                 if ($expected instanceof TokenType) {
-                    if ($tok->type == $expected) { // Compare by token type
+                    if ($token->type == $expected) { // Compare by token type
                         return $this->tokenizer->nextToken();
                     }
                 }
+
                 return null;
             },
             $expected,
@@ -167,32 +164,32 @@ abstract class Parser {
     }
 
     protected function positiveLookahead(callable $fn, ...$args): mixed {
-        $index = $this->tokenizer->index();
+        $index = $this->tokenizer->index;
         $ok = $fn(...$args);
-        $this->tokenizer->reset($index);
+        $this->tokenizer->index = $index;
         return $ok;
     }
 
     protected function negativeLookahead(callable $fn, ...$args): bool {
-        $index = $this->tokenizer->index();
+        $index = $this->tokenizer->index;
         $ok = $fn(...$args);
-        $this->tokenizer->reset($index);
+        $this->tokenizer->index = $index;
         return !$ok;
     }
 
     protected function memoize(string $fnId, Closure $fn, ...$args): mixed {
         // @todo: Replace with WeakMap
-        $index = $this->tokenizer->index();
+        $index = $this->tokenizer->index;
         $key = md5(serialize([$index, $fnId, $args]));
         if (isset($this->cache[$key])) {
             [$tree, $endIndex] = $this->cache[$key];
-            $this->tokenizer->reset($endIndex);
+            $this->tokenizer->index = $endIndex;
             return $tree;
         }
         $this->level++;
         $tree = $fn(...$args);
         $this->level--;
-        $endIndex = $this->tokenizer->index();
+        $endIndex = $this->tokenizer->index;
         $this->cache[$key] = [$tree, $endIndex];
         return $tree;
     }

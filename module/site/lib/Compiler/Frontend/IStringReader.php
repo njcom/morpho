@@ -217,4 +217,9 @@ interface IStringReader {
     public function restLen(): int;
 
     public function isAnchored(): bool;
+
+    /**
+     * Returns the substring of $length starting from the $offset. The name taken from Clojure https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/subs
+     */
+    public function subs(int $offset, int|null $length = null): ?string;
 }

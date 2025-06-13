@@ -101,19 +101,19 @@ clean-container-env:
 #	sudo sh -c 'rm -rfv $(backend-dir-path)/localhost/cache/router'
 python-repo-uri = 'https://raw.githubusercontent.com/python/cpython/refs/tags/v3.12.10'
 
-update-peg:
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.token '$(python-repo-uri)/Grammar/Tokens'
-	echo "Written file $(CURDIR)/lib/Tool/Python/python.token"
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.gram '$(python-repo-uri)/Grammar/python.gram'
-	echo "Written file $(CURDIR)/lib/Tool/Python/python.gram"
-	curl -sSfLo $(CURDIR)/lib/Tool/Python/meta.gram '$(python-repo-uri)/Tools/peg_generator/pegen/metagrammar.gram'
-	echo "Written file $(CURDIR)/lib/Tool/Python/meta.gram"
-	target_file_path=$(CURDIR)/test/Unit/Compiler/Frontend/Peg/test-data/PythonTokenizerTest/meta-token \
-		&& cat $(CURDIR)/lib/Tool/Python/meta.gram | $(CURDIR)/bin/peg gen-py-tokens > "$$target_file_path" \
-		&& echo "Written file $$target_file_path"
-.PHONY: update-peg
+#update-peg:
+#	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.token '$(python-repo-uri)/Grammar/Tokens'
+#	echo "Written file $(CURDIR)/lib/Tool/Python/python.token"
+#	curl -sSfLo $(CURDIR)/lib/Tool/Python/python.gram '$(python-repo-uri)/Grammar/python.gram'
+#	echo "Written file $(CURDIR)/lib/Tool/Python/python.gram"
+#	curl -sSfLo $(CURDIR)/lib/Tool/Python/meta.gram '$(python-repo-uri)/Tools/peg_generator/pegen/metagrammar.gram'
+#	echo "Written file $(CURDIR)/lib/Tool/Python/meta.gram"
+#	target_file_path=$(CURDIR)/test/Unit/Compiler/Frontend/Peg/test-data/PythonTokenizerTest/meta-token \
+#		&& cat $(CURDIR)/lib/Tool/Python/meta.gram | $(CURDIR)/bin/peg gen-py-tokens > "$$target_file_path" \
+#		&& echo "Written file $$target_file_path"
+#.PHONY: update-peg
 
-setup: update-peg
+setup:# update-peg
 	composer require --dev psalm/plugin-phpunit
 	vendor/bin/psalm-plugin enable psalm/plugin-phpunit
 	composer update

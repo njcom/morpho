@@ -9,6 +9,8 @@ namespace Morpho\Compiler\Frontend\Peg;
 use IteratorAggregate;
 
 interface ITokenizer extends IteratorAggregate {
+    // public int $index;
+
     /**
      * Returns the next token and updates the index.
      * getnext() in Python
@@ -20,10 +22,6 @@ interface ITokenizer extends IteratorAggregate {
      * peek() in Python
      */
     public function peekToken(): ?Token;
-
-    public function index(): int;
-
-    public function reset(int $index): void;
 
     //public function lines(array $lineNumbers): array;
 

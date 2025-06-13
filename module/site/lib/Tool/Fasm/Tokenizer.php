@@ -6,94 +6,122 @@
  */
 namespace Morpho\Tool\Fasm;
 
-//use Morpho\Base\Ok;
 use Morpho\Base\Result;
 use Morpho\Compiler\Frontend\MbStringReader;
 use Morpho\Compiler\Frontend\IStringReader;
 use Morpho\Compiler\Frontend\Re;
 use IteratorAggregate;
+use const Morpho\Base\EOL_RE;
+use function Morpho\Base\q;
 use Traversable;
 use Morpho\Compiler\Frontend\SyntaxError;
+use Morpho\Base\NotImplementedException;
+use Morpho\Compiler\Frontend\Peg\Tokenizer as BaseTokenizer;
+use Morpho\Compiler\Frontend\Peg\Token;
 
 class Tokenizer implements IteratorAggregate {
-    private IStringReader $reader;
-    //private int $index = -1;
-    private array $location = [1, 1]; // line number, column number
+    private $stream;
 
-    public function __invoke(string $programText): iterable {
-        $reader = new MbStringReader($programText);
-        $this->reader = $reader;
-        return $this->getIterator($reader);
+    public function __construct($stream) {
+        $this->stream = $stream;
     }
 
     public function getIterator(): Traversable {
-        while ($token = $this->nextToken()) {
-            yield $token;
+        $stream = $this->stream;
+        if (stream_get_meta_data($stream)['seekable']) {
+            rewind($stream);
         }
-    }
-
-    public function nextToken(): ?Token {
-        $this->reader->read('~\s+~');
-        $nextChar = $this->reader->peek(1);
+        $lineNum = 0;
+        $keywordsLike = [
+            'include' => TokenType::IncludeKeyword,
+            'org' => TokenType::OrgKeyword,
+            '$$' => TokenType::BaseAddress,
+            '$' => TokenType::CurrentAddress,
+            '%' => TokenType::SpecialParameter1,
+            '%%' => TokenType::SpecialParameter2,
+        ];
         $specialChars = [
-            '+' => TokenType::PlusSpecial,
-            '-' => TokenType::MinusSpecial,
-            '/' => TokenType::SlashSpecial,
-            '*' => TokenType::AsteriskSpecial,
-            '=' => TokenType::EqualsSpecial,
-            '<' => TokenType::LessThanSpecial,
-            '>' => TokenType::GreaterThanSpecial,
+            '!' => TokenType::ExclamationSpecial,
+            '#' => TokenType::HashSpecial,
+            '&' => TokenType::AmpersandSpecial,
             '(' => TokenType::LeftParenSpecial,
             ')' => TokenType::RightParenSpecial,
-            '[' => TokenType::LeftBracketSpecial,
-            ']' => TokenType::RightBracketSpecial,
-            '{' => TokenType::LeftBraceSpecial,
-            '}' => TokenType::RightBraceSpecial,
-            ':' => TokenType::ColonSpecial,
-            '?' => TokenType::QuestionSpecial,
-            '!' => TokenType::ExclamationSpecial,
-            '.' => TokenType::DotSpecial,
+            '*' => TokenType::StarSpecial,
+            '+' => TokenType::PlusSpecial,
             ',' => TokenType::CommaSpecial,
-            '|' => TokenType::PipeSpecial,
-            '&' => TokenType::AmpersandSpecial,
-            '~' => TokenType::TildeSpecial,
-            '#' => TokenType::HashSpecial,
-            '`' => TokenType::BacktickSpecial,
+            '-' => TokenType::MinusSpecial,
+            '.' => TokenType::DotSpecial,
+            '/' => TokenType::SlashSpecial,
+            ':' => TokenType::ColonSpecial,
+            '<' => TokenType::LessThanSpecial,
+            '=' => TokenType::EqualsSpecial,
+            '>' => TokenType::GreaterThanSpecial,
+            '?' => TokenType::QuestionSpecial,
+            '[' => TokenType::LeftBracketSpecial,
             '\\' => TokenType::BackslashSpecial,
+            ']' => TokenType::RightBracketSpecial,
+            '`' => TokenType::BacktickSpecial,
+            '{' => TokenType::LeftBraceSpecial,
+            '|' => TokenType::PipeSpecial,
+            '}' => TokenType::RightBraceSpecial,
+            '~' => TokenType::TildeSpecial,
         ];
-        if (isset($specialChars[$nextChar])) {
-            $char = $this->reader->char();
-            return new Token($specialChars[$nextChar], $char, $this->location);
-        }
-        $lexeme = $this->reader->read('~[^\s' . preg_quote(implode('', array_keys($specialChars)), '~') . ']+~');
-        // todo: handle location
-        $isFasmNumber = static function (string $text): bool {
-            return (bool) preg_match('~^(\d[\d_]*d?|0[0-7_]+[oq]|[01_]+b|\$[0-9a-f_]+|0x[0-9a-f_]+|\d[\da-f_]*h)$~si', $text);
-        };
-        $isFasmIdentifier = static function (string $text): bool {
-            return (bool) preg_match('~^[_.a-z0-9#?]+$~si', $text);
-        };
-        if (null !== $lexeme) {
-            $firstChar = mb_substr($lexeme, 0, 1);
-            $keywords = [
-                'include' => TokenType::IncludeKeyword,
-                'org' => TokenType::OrgKeyword,
-            ];
-            if ($firstChar === "'") {
-                $this->reader->unread();
-                return new Token(TokenType::SingleQuotedString, substr(substr($this->reader->read('~' . Re::SINGLE_QUOTED_STRING . '~'), 0, -1), 1), $this->location);
-            } elseif ($firstChar === '"')  {
-                $this->reader->unread();
-                return new Token(TokenType::DoubleQuotedStrng, substr(substr($this->reader->read('~' . Re::DOUBLE_QUOTED_STRING . '~'), 0, -1), 1), $this->location);
-            } elseif (isset($keywords[$lexeme])) {
-                return new Token($keywords[$lexeme], $lexeme, $this->location);
-            } elseif ($isFasmNumber($lexeme)) {
-                return new Token(TokenType::Number, $lexeme, $this->location);
-            } elseif ($isFasmIdentifier($lexeme)) {
-                return new Token(TokenType::Identifier, $lexeme, $this->location);
+        while (true) {
+            $line = fgets($stream);
+            if (false === $line) {
+                break;
             }
-            throw new \UnexpectedValueException('Unknown token');
+            if (trim($line) === '') {
+                continue;
+            }
+            $lineNum++;
+
+            $reader = new MbStringReader($line);
+            while (!$reader->isEnd()) {
+                $reader->read('~[ \f\t]+~'); // Skip whitespaces
+                $pos = $reader->offset();
+                $lexeme = $reader->read('~[^\s' . preg_quote(implode('', array_keys($specialChars)), '~') . ']+~');
+                if (null !== $lexeme) {
+                    $firstChar = mb_substr($lexeme, 0, 1);
+                    if ($firstChar === ';') {
+                        $reader->unread();
+                        $lexeme = $reader->readUntil('~' . EOL_RE . '~');
+                        yield new Token(TokenType::Comment, $lexeme, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    } elseif ($firstChar === "'") {
+                        $reader->unread();
+                        $value = $reader->read('~' . Re::SINGLE_QUOTED_STRING . '~');
+                        yield new Token(TokenType::SingleQuotedString, mb_substr(mb_substr($value, 0, -1), 1), [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    } elseif ($firstChar === '"')  {
+                        $reader->unread();
+                        throw new NotImplementedException();
+                        $value = $reader->read('~' . Re::DOUBLE_QUOTED_STRING . '~');
+                        yield new Token(TokenType::DoubleQuotedString, mb_substr(mb_substr($value, 0, -1), 1), [$lineNum, 1], [$lineNum, 1], $line);
+                        continue;
+                    } elseif (isset($keywordsLike[$lexeme])) {
+                        yield new Token($keywordsLike[$lexeme], $lexeme, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    } elseif (preg_match('~^(\d[\d_]*d?|0[0-7_]+[oq]|[01_]+b|\$[0-9a-f_]+|0x[0-9a-f_]+|\d[\da-f_]*h)$~si', $lexeme)) {
+                        yield new Token(TokenType::Number, $lexeme, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    } elseif (preg_match('~^[@%_.a-z0-9#?]+$~si', $lexeme)) {
+                        yield new Token(TokenType::Identifier, $lexeme, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    }
+                } elseif ($lexeme = $reader->read('~' . EOL_RE . '~')) {
+                    yield new Token(TokenType::NewLine, $lexeme, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                    continue;
+                } else {
+                    $nextChar = $reader->peek(1);
+                    if (isset($specialChars[$nextChar])) {
+                        $reader->char();
+                        yield new Token($specialChars[$nextChar], $nextChar, [$lineNum, $pos], [$lineNum, $reader->matchLen()], $line);
+                        continue;
+                    }
+                }
+                throw new \UnexpectedValueException('Unable to tokenize. Line: ' . $lineNum . ', lexeme: ' . q($lexeme));
+            }
         }
-        return null;
     }
 }

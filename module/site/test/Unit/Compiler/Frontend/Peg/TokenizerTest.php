@@ -51,15 +51,15 @@ class TokenizerTest extends TestCase {
             yield $expectedTokens[$i++];
         };
         $tokenizer = new Tokenizer($tokenGen());
-        $this->assertSame(0, $tokenizer->index());
+        $this->assertSame(0, $tokenizer->index);
         $this->assertSame($expectedTokens[0], $tokenizer->peekToken());
-        $this->assertSame(0, $tokenizer->index());
+        $this->assertSame(0, $tokenizer->index);
         $this->assertSame($expectedTokens[0], $tokenizer->peekToken());
-        $this->assertSame(0, $tokenizer->index());
+        $this->assertSame(0, $tokenizer->index);
     }
 
     public function testIndex() {
-        $this->assertSame(0, $this->tokenizer->index());
+        $this->assertSame(0, $this->tokenizer->index);
     }
 
     public function testNextToken() {

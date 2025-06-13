@@ -11,6 +11,6 @@ ci-cd-deploy:
 	$(CURDIR)/bin/deploy
 
 ci-cd-cron-daily:
-	composer --ignore-platform-reqs --no-ansi --no-interaction install
-	$(MAKE) update-peg
+	#composer --ignore-platform-reqs --no-ansi --no-interaction install
+	#$(MAKE) update-peg
 .PHONY: ci-cd-cron-daily

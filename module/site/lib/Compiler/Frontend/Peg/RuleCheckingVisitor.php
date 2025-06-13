@@ -26,9 +26,16 @@ class RuleCheckingVisitor extends GrammarVisitor {
         $this->tokenNames = $tokenNames;
     }
 
+    public function __invoke(array $rules): void {
+        $this->rules = $rules;
+        foreach ($rules as $rule) {
+            $this->visit($rule);
+        }
+    }
+
     protected function visitNameLeaf(NameLeaf $node): void {
         $value = match ($node->value) {
-            'NEWLINE' => TokenType::NewLine->name,
+            'NEWLINE' => TokenType::EndOfStatementNewLine->name,
             'NUMBER' => TokenType::Number->name,
             default => $node->value,
         };

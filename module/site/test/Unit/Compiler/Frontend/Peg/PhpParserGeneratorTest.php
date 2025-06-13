@@ -24,7 +24,7 @@ class PhpParserGeneratorTest extends TestCase {
         $parserGen = new PhpParserGenerator(
             new Grammar(['start' => new Rule('start', null, new Rhs([]))], []),
             STDOUT,
-            $this->createMock(RuleCheckingVisitor::class),
+            fn ($v) => null,
         );
         $this->assertInstanceOf(IGrammarVisitor::class, $parserGen);
     }

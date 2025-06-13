@@ -9,5 +9,4 @@ namespace Morpho\Compiler\Frontend\Peg;
 use RuntimeException;
 
 class PegException extends RuntimeException {
-
 }

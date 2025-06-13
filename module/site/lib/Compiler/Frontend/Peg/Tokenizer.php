@@ -14,7 +14,10 @@ use Traversable;
  * Based on https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/tokenizer.py
  */
 class Tokenizer implements ITokenizer {
-    private int $index = 0;
+    /**
+     * mark() in Python
+     */
+    public int $index = 0;
 
     /**
      * @var array Token[]
@@ -41,18 +44,18 @@ class Tokenizer implements ITokenizer {
 
     public function peekToken(): ?Token {
         while ($this->index === count($this->tokens)) {
-            $tok = $this->tokenIt->current();
+            $token = $this->tokenIt->current();
             $this->tokenIt->next();
-            if (!$tok) {
+            if (!$token) {
                 return null;
             }
-            if (in_array($tok->type, [TokenType::NL, TokenType::Comment])) {
+            if (in_array($token->type, [TokenType::SoftNewLine, TokenType::Comment])) {
                 continue;
             }
-            if ($tok->type === TokenType::ErrorToken && ctype_space($tok->value)) {
+            if ($token->type === TokenType::ErrorToken && ctype_space($token->value)) {
                 continue;
             }
-            $this->tokens[] = $tok;
+            $this->tokens[] = $token;
         }
         return $this->tokens[$this->index];
     }
@@ -74,26 +77,5 @@ class Tokenizer implements ITokenizer {
                 break
         return tok
         */
-    }
-
-    /**
-     * get_lines(self, line_numbers: List[int]) -> List[str]:
-    public function lines(array $lineNumbers): array {
-        throw new NotImplementedException();
-    }
-
-    def shorttok(tok: tokenize.TokenInfo) -> str:
-        return "%-25.25s" % f"{tok.start[0]}.{tok.start[1]}: {token.tok_name[tok.type]}:{tok.string!r}"
-     */
-
-    /**
-     * mark() in Python
-     */
-    public function index(): int {
-        return $this->index;
-    }
-
-    public function reset(int $index): void {
-        $this->index = $index;
     }
 }

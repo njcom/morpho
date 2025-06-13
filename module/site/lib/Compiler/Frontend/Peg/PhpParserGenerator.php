@@ -82,7 +82,7 @@ class PhpParserGenerator implements IGrammarVisitor {
     /**
      * __init__(self, grammar: grammar.Grammar, file: Optional[IO[Text]], tokens: Set[str] = set(token.tok_name.values()), location_formatting: Optional[str] = None,unreachable_formatting: Optional[str] = None)
      */
-    public function __construct(Grammar $grammar, $targetStream, RuleCheckingVisitor $ruleChecker, string|null $locationFormatting = null, string|null $unreachableFormatting = null) {
+    public function __construct(Grammar $grammar, $targetStream, callable $ruleChecker, string|null $locationFormatting = null, string|null $unreachableFormatting = null) {
         $this->grammar = $grammar;
 
         $this->validateRuleNames($grammar->rules);
@@ -92,12 +92,7 @@ class PhpParserGenerator implements IGrammarVisitor {
             throw new GrammarException("Grammar without a trailer must have a 'start' rule");
         }
 
-        // @todo: refactor this begin
-        $ruleChecker->rules = $this->rules;
-        foreach ($this->rules as $rule) {
-            $ruleChecker->visit($rule);
-        }
-        // @todo: refactor this end
+        $ruleChecker($this->rules);
 
         $this->stream = $targetStream; // self.file in Python
         [$this->firstGraph, $this->firstSccs] = $this->computeLeftRecursives($this->rules);
@@ -113,6 +108,7 @@ class PhpParserGenerator implements IGrammarVisitor {
     /**
      * @param array|null $context
      *      namespace: string
+     *      parentClass: Optional[string]
      *      class: string
      *      header: string
      *      subheader: string
@@ -123,9 +119,10 @@ class PhpParserGenerator implements IGrammarVisitor {
         if (!isset($context['namespace'])) {
             $context['namespace'] = __NAMESPACE__ . '\\Generated' . str_replace([' ', '.'], '', microtime());
         }
+        $parentClass = 'Parser';
         // @todo: Use PhpParser's generator?
         $this->collectRules();
-        $header = $this->grammar->metas['header'] ?? $this->fileHeader($context);
+        $header = $this->grammar->metas['header'] ?? "<?php\nnamespace {$context['namespace']};\nuse " . init(get_class($this), '\\') . "\\Parser;";
         if (null !== $header) {
             $this->write($header);
         }
@@ -133,10 +130,10 @@ class PhpParserGenerator implements IGrammarVisitor {
         if ($subheader) {
             $this->write($subheader);
         }
-        $className = $this->grammar->metas['class'] ?? 'GeneratedParser';
-        $context['class'] = $className;
+        $class = $this->grammar->metas['class'] ?? 'GeneratedParser';
+        $context['class'] = $class;
         $this->write("// Keywords and soft keywords are listed at the end of the parser definition.");
-        $this->write("class $className extends Parser {");
+        $this->write("class $class extends $parentClass {");
         foreach ($this->allRules as $rule) {
             $this->write();
             $this->visit($rule);
@@ -150,7 +147,7 @@ class PhpParserGenerator implements IGrammarVisitor {
         if (null !== $footer) {
             $this->write(rtrim($footer));
         }
-        return $context['namespace'] . '\\' . $className;
+        return $context['namespace'] . '\\' . $class;
     }
 
     /**
@@ -199,7 +196,7 @@ class PhpParserGenerator implements IGrammarVisitor {
 
             $this->write('function ' . $node->name . '(): ' . $returnType . ' {');
             $this->write('// ' . $node->name . ': ' . $rhs);
-            $this->write('$index = $this->tokenizer->index();');
+            $this->write('$index = $this->tokenizer->index;');
             if ($this->altsUseLocations($node->rhs->alts)) {
                 $this->write('$tok = $this->tokenizer->peek();');
                 $this->write('[$startLineNo, $startColOffset] = $tok->start;');
@@ -318,7 +315,7 @@ class PhpParserGenerator implements IGrammarVisitor {
         }
         if ($isLoop) {
             $this->write('$children[] = ' . $action . ';');
-            $this->write('$index = $this->tokenizer->index();');
+            $this->write('$index = $this->tokenizer->index;');
         } else {
             if (str_contains($action, 'UNREACHABLE')) {
                 $action = str_replace('UNREACHABLE', $this->unreachableFormatting, $action);
@@ -326,16 +323,12 @@ class PhpParserGenerator implements IGrammarVisitor {
             $this->write('return ' . $action . ';');
         }
         $this->write('}');
-        $this->write('$this->tokenizer->reset($index);');
+        $this->write('$this->tokenizer->index = $index;');
         // Skip remaining alternatives if a cut was reached.
         if ($hasCut) {
             $this->write('if ($cut) return null;');
         }
         array_pop($this->localVarStack);
-    }
-
-    private function fileHeader(array $context): ?string {
-        return "<?php\nnamespace {$context['namespace']};\nuse " . init(get_class($this), '\\') . "\\Parser;";
     }
 
     /**

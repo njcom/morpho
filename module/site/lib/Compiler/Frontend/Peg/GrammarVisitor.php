@@ -9,7 +9,7 @@ namespace Morpho\Compiler\Frontend\Peg;
 /**
  * https://github.com/python/cpython/blob/main/Tools/peg_generator/pegen/grammar.py
  */
-class GrammarVisitor implements IGrammarVisitor {
+abstract class GrammarVisitor implements IGrammarVisitor {
     /**
      * Visit a node
      * def visit(self, node: Any, *args: Any, **kwargs: Any) -> Any:

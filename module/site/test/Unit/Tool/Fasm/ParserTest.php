@@ -7,20 +7,25 @@
 namespace Morpho\Test\Unit\Tool\Fasm;
 
 use Morpho\Testing\TestCase;
+use function Morpho\Base\mkStream;
 use Morpho\Compiler\Frontend\Peg\Peg;
+use Morpho\Compiler\Frontend\Peg\Tokenizer;
+use Morpho\Compiler\Frontend\MbStringReader;
+use Morpho\Tool\Fasm\Tokenizer as FasmTokenizer;
+use Morpho\Tool\Fasm\TokenType as FasmTokenType;
 
 class ParserTest extends TestCase {
     public function testParse() {
-        $this->markTestIncomplete();
-        $grammarText = <<<'OUT'
-        start: instructions
-        # @todo: parse PHP inside {}
-        instructions: a=instruction+ { var_dump($a); }
-        instruction: INCLUDE
+        $grammarCode = <<<'OUT'
+        start: instructions NEWLINE? ENDMARKER
+        instructions: a=instruction+ { $a; }
+        instruction: include_instruction
+        include_instruction: INCLUDE str
+        str: SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
         INCLUDE: 'include'
         OUT;
 
-        $programText = <<<OUT
+        $programCode = <<<OUT
         include '8086.inc'
 
             org	100h
@@ -31,21 +36,24 @@ class ParserTest extends TestCase {
             mov	dx,hello
             int	21h
 
-            int	20h
+            int	20h ; Comment at the end of the line
+
+        ; Comment at the beginning of the line
 
         hello db 'Hello world!',24h
         OUT;
 
-        $grammar = Peg::parseGrammar($grammarText);
-        $context = [
-            'tokenNames' => [
-                'INCLUDE',
-            ],
-        ];
-        $tokenizer = new TokenizerWrapper(new FasmTokenizer($programText));
-        [$parser, $parserCode] = Peg::generateEvaluatedParser($grammar, Peg::mkTokenizer($programText), $context);
+        $programTokenizer = new Tokenizer(new FasmTokenizer(mkStream($programCode))->getIterator());
+        //d(Peg::prettyPrintTokens($programTokenizer));
+
+        $grammar = Peg::parseGrammar($grammarCode);
+        [$parserClass, $parserCode] = Peg::generateParserCode($grammar, ['ruleChecker' => function ($rules) {}]);
         d($parserCode);
-        $ast = Peg::runParser($parser);
+        $programParser = Peg::evalParserCode($parserClass, $parserCode, $programTokenizer);
+        $ast = Peg::runParser($programParser);
+
+
         d($ast);
+        //d($ast);
     }
 }

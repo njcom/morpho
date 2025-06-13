@@ -12,7 +12,7 @@ use RuntimeException;
  * Based on Python's SyntaxError (Include/cpython/pyerrors.h)
  */
 class SyntaxError extends RuntimeException {
-    public function __construct(string $msg, ?string $filePath, array $start, array $end, string $text, /*BorrPyObject *print_file_and_line;*/) {
+    public function __construct(string $msg, ?string $filePath, array $start, array $end, string|null $text = null, /*BorrPyObject *print_file_and_line;*/) {
         $formattedText = $text;
         if (!str_ends_with($text, "\n")) {
             $formattedText .= "\n";

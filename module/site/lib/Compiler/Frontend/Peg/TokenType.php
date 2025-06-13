@@ -14,7 +14,7 @@ enum TokenType: int {
     case Name = 1;
     case Number = 2;
     case String = 3;
-    case NewLine = 4;
+    case EndOfStatementNewLine = 4; // NewLine in Python
     case Indent = 5;
     case Dedent = 6;
     case LeftParen = 7;
@@ -75,9 +75,10 @@ enum TokenType: int {
     case FstringMiddle = 62;
     case FstringEnd = 63;
     case Comment = 64;
-    case NL = 65;
+    case SoftNewLine = 65; // NL in Python
     case ErrorToken = 66;
     case Encoding = 67;
     case NTokens = 68;
     case NtOffset = 256;
+    case PhpCode = 255;
 }

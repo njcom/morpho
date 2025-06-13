@@ -623,4 +623,3 @@ class RuleList extends ArrayObject implements IGrammarNode {
 /*
 LookaheadOrCut = Union[Lookahead, Forced, Cut]
 */
-

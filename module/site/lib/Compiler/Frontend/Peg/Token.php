@@ -10,19 +10,20 @@ use Stringable;
 
 use function Morpho\Base\q;
 use function Morpho\Base\qq;
+use function Morpho\Base\underscore;
 
 /**
  * https://github.com/python/cpython/blob/3.12/Lib/tokenize.py#L47
  * @todo: Unify with Compiler\Token
  */
 readonly class Token implements Stringable {
-    public protected(set) TokenType $type;
-    public protected(set) string $value;
-    public protected(set) array $start;
-    public protected(set) array $end;
-    public protected(set) string $line;
+    public mixed $type;
+    public string $value;
+    public array $start;
+    public array $end;
+    public string $line;
 
-    public function __construct(TokenType $type, string $value, array $start, array $end, string $line) {
+    public function __construct(mixed $type, string $value, array $start, array $end, string $line) {
         $this->type = $type;
         $this->value = $value;
         $this->start = $start;
@@ -56,6 +57,6 @@ readonly class Token implements Stringable {
             }
             return q($s);
         };
-        return 'Token(type=' . $this->type->value . ' (' . (strtoupper($this->type->name)) . '), string=' . $q($this->value) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
+        return 'Token(type=' . ($this->type->value ?? 'null') . ' (' . strtoupper(underscore($this->type->name, false)) . '), value=' . $q($this->value) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
     }
 }

@@ -7,22 +7,25 @@
 namespace Morpho\Test\Unit\Tool\Fasm;
 
 use Morpho\Testing\TestCase;
+use Morpho\Compiler\Frontend\MbStringReader;
 use Morpho\Tool\Fasm\Tokenizer;
 use Morpho\Tool\Fasm\Token;
 use Morpho\Tool\Fasm\TokenType;
+use function Morpho\Base\mkStream;
 use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 
 class TokenizerTest extends TestCase {
     //#[WithoutErrorHandler]
     public function testTokenize() {
-        $programText = <<<OUT
+        $programCode = <<<OUT
         include '8086.inc'
 
             org	100h
 
         display_text = 9
 
-            mov	ah,display_text
+        ; Some comments
+            mov	ah,display_text ; and comment here
             mov	dx,hello
             int	21h
 
@@ -31,35 +34,43 @@ class TokenizerTest extends TestCase {
         hello db 'Hello World!',24h
         OUT;
 
-        $tokens = new Tokenizer()($programText);
+        $tokenizer = new Tokenizer(mkStream($programCode));
         $empty = true;
         $expectedTokens = [
             new Token(TokenType::IncludeKeyword, 'include', [1, 1]),
             new Token(TokenType::SingleQuotedString, '8086.inc', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::OrgKeyword, 'org', [1, 1]),
             new Token(TokenType::Number, '100h', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'display_text', [1, 1]),
             new Token(TokenType::EqualsSpecial, '=', [1, 1]),
             new Token(TokenType::Number, '9', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'mov', [1, 1]),
             new Token(TokenType::Identifier, 'ah', [1, 1]),
             new Token(TokenType::CommaSpecial, ',', [1, 1]),
             new Token(TokenType::Identifier, 'display_text', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'mov', [1, 1]),
             new Token(TokenType::Identifier, 'dx', [1, 1]),
             new Token(TokenType::CommaSpecial, ',', [1, 1]),
             new Token(TokenType::Identifier, 'hello', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'int', [1, 1]),
             new Token(TokenType::Number, '21h', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'int', [1, 1]),
             new Token(TokenType::Number, '20h', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
             new Token(TokenType::Identifier, 'hello', [1, 1]),
             new Token(TokenType::Identifier, 'db', [1, 1]),
             new Token(TokenType::SingleQuotedString, 'Hello World!', [1, 1]),
             new Token(TokenType::CommaSpecial, ',', [1, 1]),
             new Token(TokenType::Number, '24h', [1, 1]),
+            new Token(TokenType::NewLine, "\n", [1, 1]),
         ];
-        foreach ($tokens as $key => $token) {
+        foreach ($tokenizer as $key => $token) {
             $empty = false;
             $this->assertEquals($expectedTokens[$key], $token);
             /*

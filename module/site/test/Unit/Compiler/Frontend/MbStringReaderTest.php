@@ -33,8 +33,13 @@ class MbStringReaderTest extends AsciiStringReaderTest {
     public function testReadUntil() {
         parent::testReadUntil();
         $reader = $this->mkReader('Привет Мир!');
-        $this->assertSame("Привет", $reader->readUntil('/Привет/'));
-        $this->checkState($reader, 6, 'Привет', ['Привет']);
+
+        $this->assertSame('', $reader->readUntil('/Привет/'));
+        $this->checkState($reader, 0, '', ['']);
+        $reader->reset();
+
+        $this->assertSame('Привет ', $reader->readUntil('/Мир/'));
+        $this->checkState($reader, 7, 'Привет ', ['Привет ']);
     }
 
     public function testChar() {
@@ -88,25 +93,22 @@ class MbStringReaderTest extends AsciiStringReaderTest {
         $this->assertSame(4, $reader->matchLen());
     }
 
-    public function testPreMatch() {
-        parent::testPreMatch();
+    public function testPreMatchAndPostMatch() {
+        parent::testPreMatchAndPostMatch();
+
         $reader = $this->mkReader("Привет Мир!");
+
         $reader->read('/Привет/');
         $reader->read('/ /');
         $this->assertSame('Привет', $reader->preMatch());
-    }
-
-    public function testPostMatch() {
-        parent::testPostMatch();
-        $reader = $this->mkReader("Привет Мир!");
-        $reader->read('/Привет/');
-        $reader->read('/ /');
         $this->assertSame('Мир!', $reader->postMatch());
     }
 
     public function testRest() {
         parent::testRest();
+
         $reader = $this->mkReader("Привет Мир!");
+
         $this->assertSame("Привет Мир!", $reader->rest());
         $reader->read('/Привет/');
         $this->assertSame(' Мир!', $reader->rest());

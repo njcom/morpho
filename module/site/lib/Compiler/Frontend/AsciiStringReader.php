@@ -241,11 +241,7 @@ class AsciiStringReader implements IStringReader {
      * @see IStringReader::rest()
      */
     public function rest(): string {
-        $res = $this->substr($this->input, $this->offset, null);
-        if (false === $res) {
-            return '';
-        }
-        return $res;
+        return $this->substr($this->input, $this->offset, null);
     }
 
     /**
@@ -262,7 +258,11 @@ class AsciiStringReader implements IStringReader {
         return $this->anchored;
     }
 
-    protected function substr(string $s, int $offset, ?int $length): string|false {
+    public function subs(int $offset, int|null $length = null): string {
+        return $this->substr($this->input, $offset, $length);
+    }
+
+    protected function substr(string $s, int $offset, ?int $length): string {
         return substr($s, $offset, $length);
     }
 
@@ -317,18 +317,17 @@ class AsciiStringReader implements IStringReader {
      * @return string|int|null Depending from the $advanceOffset and $returnStr arguments the different result will be returned.
      */
     protected function scanUntil(string $re, bool $advanceOffset, bool $returnStr): string|int|null {
-        if (preg_match($this->re($re, false), $this->input, $m, PREG_OFFSET_CAPTURE, $this->offsetInBytes())) {
-            $res = $this->substr(
-                $this->input,
-                $this->offset,
-                $m[0][1] - $this->offset + $this->strlen($m[0][0])
-            );
+        if (preg_match($this->re($re, false), $this->input, $match, PREG_OFFSET_CAPTURE, $this->offsetInBytes())) {
+            $res = substr($this->input, $this->offset, $match[0][1] - $this->offset); // NB: We use substr() instead of mb_substr() as preg_match() captures offset in bytes
+            $this->groups = array_column($match, 0);
+            $this->groups[0] = $res;
+            $this->match = substr($this->input, $this->offset, $match[0][1] - $this->offset); // We use substr() instead of mb_stubstr() as preg_match() captures offset in bytes.
+
             if ($advanceOffset) {
-                $this->prevOffset = $m[0][1];
+                //$this->prevOffset = $match[0][1];
+                $this->prevOffset = $this->offset;
                 $this->offset += $this->strlen($res);
             }
-            $this->groups = array_column($m, 0);
-            $this->match = $m[0][0];
             if ($returnStr) {
                 return $res;
             }
