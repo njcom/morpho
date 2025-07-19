@@ -26,7 +26,7 @@ use const Morpho\Base\INDENT;
  * 1. Split checking (analysis) phase into separate classes.
  * 2. Allow to use PythonParserGenerator generate(self, filename: str) -> None:
  */
-class PhpParserGenerator implements IGrammarVisitor {
+class ParserGenerator implements IGrammarVisitor {
     private InvalidNodeVisitor $invalidVisitor;
     private ?string $unreachableFormatting;
     private ?string $locationFormatting;
@@ -81,6 +81,7 @@ class PhpParserGenerator implements IGrammarVisitor {
 
     /**
      * __init__(self, grammar: grammar.Grammar, file: Optional[IO[Text]], tokens: Set[str] = set(token.tok_name.values()), location_formatting: Optional[str] = None,unreachable_formatting: Optional[str] = None)
+     * @todo: refactor arguments
      */
     public function __construct(Grammar $grammar, $targetStream, callable $ruleChecker, string|null $locationFormatting = null, string|null $unreachableFormatting = null) {
         $this->grammar = $grammar;

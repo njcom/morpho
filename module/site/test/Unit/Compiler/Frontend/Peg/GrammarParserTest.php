@@ -11,7 +11,7 @@ use Morpho\Compiler\Frontend\Peg\GrammarParser;
 use Morpho\Compiler\Frontend\Peg\Tokenizer;
 use Morpho\Compiler\Frontend\Peg\IRenderingActions;
 use Morpho\Compiler\Frontend\Peg\Parser;
-use Morpho\Compiler\Frontend\Peg\PythonTokenizer;
+use Morpho\Compiler\Frontend\Peg\GrammarTokenizer;
 use Morpho\Testing\TestCase;
 
 /**
@@ -24,7 +24,7 @@ class GrammarParserTest extends TestCase {
         parent::setUp();
         $this->parser = new GrammarParser(
             new Tokenizer(
-                PythonTokenizer::tokenize($this->mkStream('foo: bar'))
+                GrammarTokenizer::tokenize($this->mkStream('foo: bar'))
             )
         );
     }

@@ -27,13 +27,6 @@ class Peg {
     public const int FORMAT_AS_FRAGMENT = 1;
     public const int FORMAT_AS_FILE = 2;
 
-    public static function run(string $grammarCode, ITokenizer|null $programTokenizer = null, array|null $generateParserConf = null) {
-        $grammar = self::parseGrammar($grammarCode);
-        [$parserClass, $parserCode] = self::generateParserCode($grammar, $generateParserConf);
-        $programParser = self::evalParserCode($parserClass, $parserCode, $programTokenizer);
-        return self::runParser($programParser);
-    }
-
     public static function prettyPrintTokens(iterable $tokenizer): string {
         $output = '';
         foreach ($tokenizer as $token) {
@@ -42,36 +35,49 @@ class Peg {
         return $output;
     }
 
+    /**
+     * @param string|resource $grammarCode
+     */
+    public static function prettyPrintGrammarTokens($grammarCode): string {
+        return self::prettyPrintTokens(self::mkGrammarTokenizer($grammarCode));
+    }
+
    /**
-     * @param string|resource $source
+     * @param string|resource $grammarCode
      * @return \Morpho\Compiler\Frontend\Peg\ITokenizer
      */
-    public static function mkTokenizer($source): ITokenizer {
-        return new Tokenizer(PythonTokenizer::tokenize($source));
+    public static function mkGrammarTokenizer($grammarCode): ITokenizer {
+        return new Tokenizer(GrammarTokenizer::tokenize($grammarCode));
     }
 
     /**
+     * Creates Grammar AST from grammar code.
      * @param resource|string $grammarCode
      */
     public static function parseGrammar($grammarCode): Grammar {
-        $tokenizer = self::mkTokenizer($grammarCode);
-        return self::runParser(new GrammarParser($tokenizer));
+        $grammarTokenizer = self::mkGrammarTokenizer($grammarCode);
+        return self::runParser(new GrammarParser($grammarTokenizer));
     }
 
-    /**
-     * @param array $conf
-     *     ruleChecker: callable: custom rule checker. If not specified the default RuleCheckingVisitor will be used
-     *     tokenNames: set[str]: required only when ruleChecker is not specified and need to use the default RuleCheckingVisitor with custom token names.
-     */
-    public static function generateParserCode(Grammar $grammar, array|null $conf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
-        $targetProgramStream = mkStream('');
-        $diff = array_diff_key($conf, ['tokenNames' => true, 'ruleChecker' => true]);
-        if ($diff) {
-            throw new \InvalidArgumentException('Invalid $conf argument');
+    public static function parseProgram(string|Grammar $grammar, ITokenizer $programTokenizer, array|null $parserGeneratorConf = null) {
+        if (!is_object($grammar)) {
+            $grammar = self::parseGrammar($grammar);
         }
-        $ruleChecker = $conf['ruleChecker'] ?? new RuleCheckingVisitor($conf['tokenNames'] ?? array_keys(enumVals(TokenType::class)));
-        $gen = new PhpParserGenerator($grammar, $targetProgramStream, $ruleChecker);
-        $parserClass = $gen->generate($conf);
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, $parserGeneratorConf);
+        $programParser = self::evalParserCode($parserClass, $parserCode, $programTokenizer);
+        return self::runParser($programParser);
+    }
+
+    public static function mkParserGenerator(Grammar $grammar, $stream, $ruleChecker = null) {
+        return new ParserGenerator($grammar, $stream, $ruleChecker ?? new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
+    }
+
+    public static function generateParserCode(Grammar $grammar, $parserGenerator = null, array|null $parserGeneratorConf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
+        $targetProgramStream = mkStream('');
+        if (!$parserGenerator) {
+            $parserGenerator = self::mkParserGenerator($grammar, $targetProgramStream);
+        }
+        $parserClass = $parserGenerator->generate($parserGeneratorConf);
         $parserCode = stream_get_contents($targetProgramStream, offset: 0);
         if ($parserCode === '') {
             throw new UnexpectedValueException();
@@ -85,8 +91,8 @@ class Peg {
         return [$parserClass, $parserCode];
     }
 
-    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $conf = null): string {
-        [$parserClass, $parserCode] = self::generateParserCode($grammar, $conf, self::FORMAT_AS_FILE);
+    public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $parserGeneratorConf = null): string {
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, parserGeneratorConf: $parserGeneratorConf, format: self::FORMAT_AS_FILE);
         file_put_contents($targetFilePath, $parserCode);
         return $parserClass;
     }
@@ -102,5 +108,24 @@ class Peg {
             throw $parser->mkSyntaxError('Invalid syntax');
         }
         return $tree;
+    }
+
+    /**
+     * ast.literal_eval() in Python
+     */
+    public static function literalEval(string $literal): string {
+        // Handle ''' and """ Python strings
+        if (preg_match('~^(\'\'\'|""")(?P<value>.*)(\\1)$~s', $literal, $match)) {
+            $literal = '"' . $match['value'] . '"';
+        }
+        if ($literal === "''" || $literal === '""') {
+            return '';
+        }
+        /*        try {
+                    return eval('return ' . $literal . ';');
+                } catch (\ParseError $e) {
+                    d($literal);
+                }*/
+        return eval('return ' . $literal . ';');
     }
 }

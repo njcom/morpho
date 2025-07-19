@@ -11,7 +11,7 @@ namespace Morpho\Compiler\Frontend\Peg;
  * Visitor that collects all the keywods and soft keywords in the Grammar
  */
 class KeywordCollectorVisitor extends GrammarVisitor {
-    private PhpParserGenerator $generator;
+    private ParserGenerator $parserGenerator;
 
     /**
      * @var array Dict[str, int]
@@ -23,18 +23,17 @@ class KeywordCollectorVisitor extends GrammarVisitor {
      */
     private array $softKeywords;
 
-
-    public function __construct(PhpParserGenerator $gen, array $keywords, array $softKeywords) {
-        $this->generator = $gen;
+    public function __construct(ParserGenerator $parserGenerator, array $keywords, array $softKeywords) {
+        $this->parserGenerator = $parserGenerator;
         $this->keywords = $keywords;
         $this->softKeywords = $softKeywords;
     }
 
     protected function visitStringLeaf(StringLeaf $node): void {
-        $value = GrammarParser::_literalEval($node->value);
+        $value = Peg::literalEval($node->value);
         if (preg_match('~[a-zA-Z_]\\w*\\Z~s', $value)) { # This is a keyword
             if (str_ends_with($node->value, "'") && !in_array($node->value, $this->keywords)) {
-                $this->keywords[$value] = $this->generator->keywordType();
+                $this->keywords[$value] = $this->parserGenerator->keywordType();
             } else {
                 $this->softKeywords = array_unique(array_merge($this->softKeywords, [str_replace('"', '', $node->value)]));
             }

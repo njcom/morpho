@@ -15,7 +15,7 @@ use Morpho\Testing\TestCase;
  * https://github.com/python/cpython/blob/3.12/Lib/test/test_peg_generator/test_pegen.py
  */
 class PegTest extends TestCase {
-    public function testTokenize() {
+    public function testMkGrammarTokenize() {
         $this->assertEquals(
             [
                 new Token(TokenType::Op, '+', [1, 0], [1, 1], '+ 21 35'),
@@ -24,32 +24,32 @@ class PegTest extends TestCase {
                 new Token(TokenType::NewLine, '', [1, 7], [1, 8], '+ 21 35'),
                 new Token(TokenType::EndMarker, '', [2, 0], [2, 0], ''),
             ],
-            iterator_to_array(Peg::tokenize("+ 21 35"))
+            iterator_to_array(Peg::mkGrammarTokenizer("+ 21 35"))
         );
 
         $this->assertEquals(
             [
-                new Token(TokenType::Name, 'start', [1, 0], [1, 5], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Op, ':', [1, 5], [1, 6], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Op, '(', [1, 7], [1, 8], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::String, "'+'", [1, 8], [1, 11], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Name, 'term', [1, 12], [1, 16], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Op, ')', [1, 16], [1, 17], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Op, '+', [1, 17], [1, 18], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Name, 'term', [1, 19], [1, 23], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Name, 'NEWLINE', [1, 24], [1, 31], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::NewLine, "\n", [1, 31], [1, 32], "start: ('+' term)+ term NEWLINE\n"),
-                new Token(TokenType::Name, 'term', [2, 0], [2, 4], 'term: NUMBER'),
-                new Token(TokenType::Op, ':', [2, 4], [2, 5], 'term: NUMBER'),
-                new Token(TokenType::Name, 'NUMBER', [2, 6], [2, 12], 'term: NUMBER'),
-                new Token(TokenType::NewLine, '', [2, 12], [2, 13], 'term: NUMBER'),
+                new Token(TokenType::Name, 'start', [1, 0], [1, 5], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Op, ':', [1, 5], [1, 6], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Op, '(', [1, 7], [1, 8], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::String, "'+'", [1, 8], [1, 11], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Name, 'term', [1, 12], [1, 16], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Op, ')', [1, 16], [1, 17], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Op, '+', [1, 17], [1, 18], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Name, 'term', [1, 19], [1, 23], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Name, 'NewLine', [1, 24], [1, 31], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::NewLine, "\n", [1, 31], [1, 32], "start: ('+' term)+ term NewLine\n"),
+                new Token(TokenType::Name, 'term', [2, 0], [2, 4], 'term: Number'),
+                new Token(TokenType::Op, ':', [2, 4], [2, 5], 'term: Number'),
+                new Token(TokenType::Name, 'Number', [2, 6], [2, 12], 'term: Number'),
+                new Token(TokenType::NewLine, '', [2, 12], [2, 13], 'term: Number'),
                 new Token(TokenType::EndMarker, '', [3, 0], [3, 0], ''),
             ],
             iterator_to_array(
-                Peg::tokenize(
+                Peg::mkGrammarTokenizer(
                     <<<OUT
-                    start: ('+' term)+ term NEWLINE
-                    term: NUMBER
+                    start: ('+' term)+ term NewLine
+                    term: Number
                     OUT
                 )
             )
@@ -59,12 +59,12 @@ class PegTest extends TestCase {
     public function testParseProgram() {
         $grammar = Peg::parseGrammar(
             <<<OUT
-        start: ('+' term)+ term NEWLINE
-        term: NUMBER
+        start: ('+' term)+ term NewLine
+        term: Number
         OUT
         );
 
-        $tree = Peg::parseProgram($grammar, Peg::mkTokenizer('+ 23 46'));
+        $tree = Peg::parseProgram($grammar, Peg::mkGrammarTokenizer('+ 23 46'));
         $this->assertEquals([
             [
                 [
@@ -79,14 +79,14 @@ class PegTest extends TestCase {
 
     public function testGenerateParserFile() {
         $grammarText = <<<OUT
-        start: ('+' term)+ term NEWLINE
-        term: NUMBER
+        start: ('+' term)+ term NewLine
+        term: Number
         OUT;
         $grammar = Peg::parseGrammar($grammarText);
         $tmpFilePath = $this->tmpFilePath();
         $parserClass = Peg::generateParserFile($grammar, $tmpFilePath);
         require $tmpFilePath;
-        $parser = new $parserClass(Peg::mkTokenizer("+32 53\n"));
+        $parser = new $parserClass(Peg::mkGrammarTokenizer("+32 53\n"));
         $tree = Peg::runParser($parser);
         $this->assertEquals([
             [
@@ -101,26 +101,26 @@ class PegTest extends TestCase {
     }
 
     public function testParseGrammar(): void {
-        $grammarSource = <<<OUT
-        start: sum NEWLINE
-        sum: t1=term '+' t2=term { action } | term
-        term: NUMBER
+        $grammarCode = <<<OUT
+        start: sum NewLine
+        sum: t1=term '+' t2=term { \$action } | term
+        term: Number
         OUT;
         $expected = <<<OUT
-        start: sum NEWLINE
+        start: sum NewLine
         sum: term '+' term | term
-        term: NUMBER
+        term: Number
         OUT;
-        $grammar = Peg::parseGrammar($grammarSource);
+        $grammar = Peg::parseGrammar($grammarCode);
         $rules = $grammar->rules;
         $this->assertSame($expected, rtrim($grammar->__toString()));
-        $this->assertSame('start: sum NEWLINE', $rules['start']->__toString());
+        $this->assertSame('start: sum NewLine', $rules['start']->__toString());
         $this->assertSame("sum: term '+' term | term", $rules['sum']->__toString());
-        $this->assertSame("Rule('term', None, Rhs([Alt([NamedItem(None, NameLeaf('NUMBER'))])]))", $rules["term"]->repr());
+        $this->assertSame("Rule('term', None, Rhs([Alt([NamedItem(None, NameLeaf('Number'))])]))", $rules["term"]->repr());
     }
 
     public function testParseGrammar_LongRuleStr(): void {
-        $grammarSource = <<<OUT
+        $grammarCode = <<<OUT
         start: zero | one | one zero | one one | one zero zero | one zero one | one one zero | one one one
         OUT;
         $expected = <<<OUT
@@ -134,42 +134,44 @@ class PegTest extends TestCase {
             | one one zero
             | one one one
         OUT;
-        $grammar = Peg::parseGrammar($grammarSource);
+        $grammar = Peg::parseGrammar($grammarCode);
         $this->assertSame($expected, $grammar->rules['start']->__toString());
     }
 
     public function testParseGrammar_TypedRules(): void {
-        $grammarSource = <<<OUT
-        start[int]: sum NEWLINE
-        sum[int]: t1=term '+' t2=term { action } | term
-        term[int]: NUMBER
+        $grammarCode = <<<OUT
+        start[int]: sum NewLine
+        sum[int]: t1=term '+' t2=term { \$action } | term
+        term[int]: Number
         OUT;
-        $rules = Peg::parseGrammar($grammarSource)->rules;
+
+        $rules = Peg::parseGrammar($grammarCode)->rules;
+
         # Check the str() and repr() of a few rules; AST nodes don't support ==.
-        $this->assertSame("start: sum NEWLINE", $rules["start"]->__toString());
+        $this->assertSame("start: sum NewLine", $rules["start"]->__toString());
         $this->assertSame("sum: term '+' term | term", $rules["sum"]->__toString());
-        $this->assertSame("Rule('term', 'int', Rhs([Alt([NamedItem(None, NameLeaf('NUMBER'))])]))", $rules['term']->repr());
+        $this->assertSame("Rule('term', 'int', Rhs([Alt([NamedItem(None, NameLeaf('Number'))])]))", $rules['term']->repr());
     }
 
     /*
         public function testGather(): void {
-            $grammarSource = <<<OUT
-            start: ','.thing+ NEWLINE
-            thing: NUMBER
+            $grammarCode = <<<OUT
+            start: ','.thing+ NewLine
+            thing: Number
             OUT;
-            $grammar = Peg::parseGrammar($grammarSource);
+            $grammar = Peg::parseGrammar($grammarCode);
             $rules = $grammar->rules;
-            $this->assertSame("start: ','.thing+ NEWLINE", $rules['start']->__toString());
+            $this->assertSame("start: ','.thing+ NewLine", $rules['start']->__toString());
             $this->assertStringStartsWith(
                 "Rule('start', None, Rhs([Alt([NamedItem(None, Gather(StringLeaf(\"','\"), NameLeaf('thing'",
                 $rules['start']->repr()
             );
-            $this->assertSame("thing: NUMBER", $rules["thing"]->__toString());
+            $this->assertSame("thing: Number", $rules["thing"]->__toString());
 
             $result = Peg::generateAndEvalParser($grammar);
             //$node = $this->testHelper->parseString("42\n", $parserClass);
             $line = "1, 2\n";
-            $parser = $result['parserFactory'](Peg::mkTokenizer($line));
+            $parser = $result['parserFactory'](Peg::mkGrammarTokenizer($line));
             $node = Peg::runParser($parser);
             // @todo: Check $node representation
             $this->assertEquals(
@@ -192,37 +194,37 @@ class PegTest extends TestCase {
     */
     public function testParseGrammar_ShouldParseTrailer() {
         $trailer = '// Something at bottom';
-        $grammarSource = <<<EOF
+        $grammarCode = <<<EOF
         @trailer '''
         $trailer
         '''
         start: '123'
         EOF;
-        $grammar = Peg::parseGrammar($grammarSource);
+        $grammar = Peg::parseGrammar($grammarCode);
         $this->assertSame($trailer, trim($grammar->metas['trailer']));
     }
     /*
         def test_expr_grammar(self) -> None:
             grammar = """
-            start: sum NEWLINE
+            start: sum NewLine
             sum: term '+' term | term
-            term: NUMBER
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("42\n", parser_class)
             self.assertEqual(
                 node,
                 [
-                    TokenInfo(NUMBER, string="42", start=(1, 0), end=(1, 2), line="42\n"),
-                    TokenInfo(NEWLINE, string="\n", start=(1, 2), end=(1, 3), line="42\n"),
+                    TokenInfo(Number, string="42", start=(1, 0), end=(1, 2), line="42\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 2), end=(1, 3), line="42\n"),
                 ],
             )
 
         def test_optional_operator(self) -> None:
             grammar = """
-            start: sum NEWLINE
+            start: sum NewLine
             sum: term ('+' term)?
-            term: NUMBER
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 + 2\n", parser_class)
@@ -231,19 +233,19 @@ class PegTest extends TestCase {
                 [
                     [
                         TokenInfo(
-                            NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 + 2\n"
+                            Number, string="1", start=(1, 0), end=(1, 1), line="1 + 2\n"
                         ),
                         [
                             TokenInfo(
                                 OP, string="+", start=(1, 2), end=(1, 3), line="1 + 2\n"
                             ),
                             TokenInfo(
-                                NUMBER, string="2", start=(1, 4), end=(1, 5), line="1 + 2\n"
+                                Number, string="2", start=(1, 4), end=(1, 5), line="1 + 2\n"
                             ),
                         ],
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 5), end=(1, 6), line="1 + 2\n"
+                        NewLine, string="\n", start=(1, 5), end=(1, 6), line="1 + 2\n"
                     ),
                 ],
             )
@@ -252,18 +254,18 @@ class PegTest extends TestCase {
                 node,
                 [
                     [
-                        TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1\n"),
+                        TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1\n"),
                         None,
                     ],
-                    TokenInfo(NEWLINE, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
                 ],
             )
 
         def test_optional_literal(self) -> None:
             grammar = """
-            start: sum NEWLINE
+            start: sum NewLine
             sum: term '+' ?
-            term: NUMBER
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1+\n", parser_class)
@@ -272,11 +274,11 @@ class PegTest extends TestCase {
                 [
                     [
                         TokenInfo(
-                            NUMBER, string="1", start=(1, 0), end=(1, 1), line="1+\n"
+                            Number, string="1", start=(1, 0), end=(1, 1), line="1+\n"
                         ),
                         TokenInfo(OP, string="+", start=(1, 1), end=(1, 2), line="1+\n"),
                     ],
-                    TokenInfo(NEWLINE, string="\n", start=(1, 2), end=(1, 3), line="1+\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 2), end=(1, 3), line="1+\n"),
                 ],
             )
             node = parse_string("1\n", parser_class)
@@ -284,18 +286,18 @@ class PegTest extends TestCase {
                 node,
                 [
                     [
-                        TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1\n"),
+                        TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1\n"),
                         None,
                     ],
-                    TokenInfo(NEWLINE, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
                 ],
             )
 
         def test_alt_optional_operator(self) -> None:
             grammar = """
-            start: sum NEWLINE
+            start: sum NewLine
             sum: term ['+' term]
-            term: NUMBER
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 + 2\n", parser_class)
@@ -304,19 +306,19 @@ class PegTest extends TestCase {
                 [
                     [
                         TokenInfo(
-                            NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 + 2\n"
+                            Number, string="1", start=(1, 0), end=(1, 1), line="1 + 2\n"
                         ),
                         [
                             TokenInfo(
                                 OP, string="+", start=(1, 2), end=(1, 3), line="1 + 2\n"
                             ),
                             TokenInfo(
-                                NUMBER, string="2", start=(1, 4), end=(1, 5), line="1 + 2\n"
+                                Number, string="2", start=(1, 4), end=(1, 5), line="1 + 2\n"
                             ),
                         ],
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 5), end=(1, 6), line="1 + 2\n"
+                        NewLine, string="\n", start=(1, 5), end=(1, 6), line="1 + 2\n"
                     ),
                 ],
             )
@@ -325,34 +327,34 @@ class PegTest extends TestCase {
                 node,
                 [
                     [
-                        TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1\n"),
+                        TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1\n"),
                         None,
                     ],
-                    TokenInfo(NEWLINE, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
                 ],
             )
 
         def test_repeat_0_simple(self) -> None:
             grammar = """
-            start: thing thing* NEWLINE
-            thing: NUMBER
+            start: thing thing* NewLine
+            thing: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 2 3\n", parser_class)
             self.assertEqual(
                 node,
                 [
-                    TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 2 3\n"),
+                    TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1 2 3\n"),
                     [
                         TokenInfo(
-                            NUMBER, string="2", start=(1, 2), end=(1, 3), line="1 2 3\n"
+                            Number, string="2", start=(1, 2), end=(1, 3), line="1 2 3\n"
                         ),
                         TokenInfo(
-                            NUMBER, string="3", start=(1, 4), end=(1, 5), line="1 2 3\n"
+                            Number, string="3", start=(1, 4), end=(1, 5), line="1 2 3\n"
                         ),
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 5), end=(1, 6), line="1 2 3\n"
+                        NewLine, string="\n", start=(1, 5), end=(1, 6), line="1 2 3\n"
                     ),
                 ],
             )
@@ -360,16 +362,16 @@ class PegTest extends TestCase {
             self.assertEqual(
                 node,
                 [
-                    TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1\n"),
+                    TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1\n"),
                     [],
-                    TokenInfo(NEWLINE, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
+                    TokenInfo(NewLine, string="\n", start=(1, 1), end=(1, 2), line="1\n"),
                 ],
             )
 
         def test_repeat_0_complex(self) -> None:
             grammar = """
-            start: term ('+' term)* NEWLINE
-            term: NUMBER
+            start: term ('+' term)* NewLine
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 + 2 + 3\n", parser_class)
@@ -377,7 +379,7 @@ class PegTest extends TestCase {
                 node,
                 [
                     TokenInfo(
-                        NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 + 2 + 3\n"
+                        Number, string="1", start=(1, 0), end=(1, 1), line="1 + 2 + 3\n"
                     ),
                     [
                         [
@@ -385,7 +387,7 @@ class PegTest extends TestCase {
                                 OP, string="+", start=(1, 2), end=(1, 3), line="1 + 2 + 3\n"
                             ),
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="2",
                                 start=(1, 4),
                                 end=(1, 5),
@@ -397,7 +399,7 @@ class PegTest extends TestCase {
                                 OP, string="+", start=(1, 6), end=(1, 7), line="1 + 2 + 3\n"
                             ),
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="3",
                                 start=(1, 8),
                                 end=(1, 9),
@@ -406,32 +408,32 @@ class PegTest extends TestCase {
                         ],
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
+                        NewLine, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
                     ),
                 ],
             )
 
         def test_repeat_1_simple(self) -> None:
             grammar = """
-            start: thing thing+ NEWLINE
-            thing: NUMBER
+            start: thing thing+ NewLine
+            thing: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 2 3\n", parser_class)
             self.assertEqual(
                 node,
                 [
-                    TokenInfo(NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 2 3\n"),
+                    TokenInfo(Number, string="1", start=(1, 0), end=(1, 1), line="1 2 3\n"),
                     [
                         TokenInfo(
-                            NUMBER, string="2", start=(1, 2), end=(1, 3), line="1 2 3\n"
+                            Number, string="2", start=(1, 2), end=(1, 3), line="1 2 3\n"
                         ),
                         TokenInfo(
-                            NUMBER, string="3", start=(1, 4), end=(1, 5), line="1 2 3\n"
+                            Number, string="3", start=(1, 4), end=(1, 5), line="1 2 3\n"
                         ),
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 5), end=(1, 6), line="1 2 3\n"
+                        NewLine, string="\n", start=(1, 5), end=(1, 6), line="1 2 3\n"
                     ),
                 ],
             )
@@ -440,8 +442,8 @@ class PegTest extends TestCase {
 
         def test_repeat_1_complex(self) -> None:
             grammar = """
-            start: term ('+' term)+ NEWLINE
-            term: NUMBER
+            start: term ('+' term)+ NewLine
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1 + 2 + 3\n", parser_class)
@@ -449,7 +451,7 @@ class PegTest extends TestCase {
                 node,
                 [
                     TokenInfo(
-                        NUMBER, string="1", start=(1, 0), end=(1, 1), line="1 + 2 + 3\n"
+                        Number, string="1", start=(1, 0), end=(1, 1), line="1 + 2 + 3\n"
                     ),
                     [
                         [
@@ -457,7 +459,7 @@ class PegTest extends TestCase {
                                 OP, string="+", start=(1, 2), end=(1, 3), line="1 + 2 + 3\n"
                             ),
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="2",
                                 start=(1, 4),
                                 end=(1, 5),
@@ -469,7 +471,7 @@ class PegTest extends TestCase {
                                 OP, string="+", start=(1, 6), end=(1, 7), line="1 + 2 + 3\n"
                             ),
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="3",
                                 start=(1, 8),
                                 end=(1, 9),
@@ -478,7 +480,7 @@ class PegTest extends TestCase {
                         ],
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
+                        NewLine, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
                     ),
                 ],
             )
@@ -487,8 +489,8 @@ class PegTest extends TestCase {
 
         def test_repeat_with_sep_simple(self) -> None:
             grammar = """
-            start: ','.thing+ NEWLINE
-            thing: NUMBER
+            start: ','.thing+ NewLine
+            thing: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("1, 2, 3\n", parser_class)
@@ -497,26 +499,26 @@ class PegTest extends TestCase {
                 [
                     [
                         TokenInfo(
-                            NUMBER, string="1", start=(1, 0), end=(1, 1), line="1, 2, 3\n"
+                            Number, string="1", start=(1, 0), end=(1, 1), line="1, 2, 3\n"
                         ),
                         TokenInfo(
-                            NUMBER, string="2", start=(1, 3), end=(1, 4), line="1, 2, 3\n"
+                            Number, string="2", start=(1, 3), end=(1, 4), line="1, 2, 3\n"
                         ),
                         TokenInfo(
-                            NUMBER, string="3", start=(1, 6), end=(1, 7), line="1, 2, 3\n"
+                            Number, string="3", start=(1, 6), end=(1, 7), line="1, 2, 3\n"
                         ),
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 7), end=(1, 8), line="1, 2, 3\n"
+                        NewLine, string="\n", start=(1, 7), end=(1, 8), line="1, 2, 3\n"
                     ),
                 ],
             )
 
         def test_left_recursive(self) -> None:
             grammar_source = """
-            start: expr NEWLINE
+            start: expr NewLine
             expr: ('-' term | expr '+' term | term)
-            term: NUMBER
+            term: Number
             foo: NAME+
             bar: NAME*
             baz: NAME?
@@ -537,7 +539,7 @@ class PegTest extends TestCase {
                     [
                         [
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="1",
                                 start=(1, 0),
                                 end=(1, 1),
@@ -547,7 +549,7 @@ class PegTest extends TestCase {
                                 OP, string="+", start=(1, 2), end=(1, 3), line="1 + 2 + 3\n"
                             ),
                             TokenInfo(
-                                NUMBER,
+                                Number,
                                 string="2",
                                 start=(1, 4),
                                 end=(1, 5),
@@ -558,11 +560,11 @@ class PegTest extends TestCase {
                             OP, string="+", start=(1, 6), end=(1, 7), line="1 + 2 + 3\n"
                         ),
                         TokenInfo(
-                            NUMBER, string="3", start=(1, 8), end=(1, 9), line="1 + 2 + 3\n"
+                            Number, string="3", start=(1, 8), end=(1, 9), line="1 + 2 + 3\n"
                         ),
                     ],
                     TokenInfo(
-                        NEWLINE, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
+                        NewLine, string="\n", start=(1, 9), end=(1, 10), line="1 + 2 + 3\n"
                     ),
                 ],
             )
@@ -570,7 +572,7 @@ class PegTest extends TestCase {
 
         def test_python_expr(self) -> None:
             grammar = """
-            start: expr NEWLINE? $ { ast.Expression(expr, lineno=1, col_offset=0) }
+            start: expr NewLine? $ { ast.Expression(expr, lineno=1, col_offset=0) }
             expr: ( expr '+' term { ast.BinOp(expr, ast.Add(), term, lineno=expr.lineno, col_offset=expr.col_offset, end_lineno=term.end_lineno, end_col_offset=term.end_col_offset) }
                 | expr '-' term { ast.BinOp(expr, ast.Sub(), term, lineno=expr.lineno, col_offset=expr.col_offset, end_lineno=term.end_lineno, end_col_offset=term.end_col_offset) }
                 | term { term }
@@ -583,7 +585,7 @@ class PegTest extends TestCase {
                     | atom { atom }
                     )
             atom: ( n=NAME { ast.Name(id=n.string, ctx=ast.Load(), lineno=n.start[0], col_offset=n.start[1], end_lineno=n.end[0], end_col_offset=n.end[1]) }
-                | n=NUMBER { ast.Constant(value=ast.literal_eval(n.string), lineno=n.start[0], col_offset=n.start[1], end_lineno=n.end[0], end_col_offset=n.end[1]) }
+                | n=Number { ast.Constant(value=ast.literal_eval(n.string), lineno=n.start[0], col_offset=n.start[1], end_lineno=n.end[0], end_col_offset=n.end[1]) }
                 )
             """
             parser_class = make_parser(grammar)
@@ -594,7 +596,7 @@ class PegTest extends TestCase {
 
         def test_nullable(self) -> None:
             grammar_source = """
-            start: sign NUMBER
+            start: sign Number
             sign: ['-' | '+']
             """
             grammar: Grammar = parse_string(grammar_source, GrammarParser)
@@ -605,7 +607,7 @@ class PegTest extends TestCase {
 
         def test_advanced_left_recursive(self) -> None:
             grammar_source = """
-            start: NUMBER | sign start
+            start: Number | sign start
             sign: ['-']
             """
             grammar: Grammar = parse_string(grammar_source, GrammarParser)
@@ -741,7 +743,7 @@ class PegTest extends TestCase {
             assign_stmt: target '=' expr
             expr: term ('+' term)*
             target: NAME
-            term: NUMBER
+            term: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("foo = 12 + 12 .", parser_class)
@@ -756,7 +758,7 @@ class PegTest extends TestCase {
                     ),
                     [
                         TokenInfo(
-                            NUMBER,
+                            Number,
                             string="12",
                             start=(1, 6),
                             end=(1, 8),
@@ -772,7 +774,7 @@ class PegTest extends TestCase {
                                     line="foo = 12 + 12 .",
                                 ),
                                 TokenInfo(
-                                    NUMBER,
+                                    Number,
                                     string="12",
                                     start=(1, 11),
                                     end=(1, 13),
@@ -821,7 +823,7 @@ class PegTest extends TestCase {
         def test_cut(self) -> None:
             grammar = """
             start: '(' ~ expr ')'
-            expr: NUMBER
+            expr: Number
             """
             parser_class = make_parser(grammar)
             node = parse_string("(1)", parser_class)
@@ -829,7 +831,7 @@ class PegTest extends TestCase {
                 node,
                 [
                     TokenInfo(OP, string="(", start=(1, 0), end=(1, 1), line="(1)"),
-                    TokenInfo(NUMBER, string="1", start=(1, 1), end=(1, 2), line="(1)"),
+                    TokenInfo(Number, string="1", start=(1, 1), end=(1, 2), line="(1)"),
                     TokenInfo(OP, string=")", start=(1, 2), end=(1, 3), line="(1)"),
                 ],
             )
@@ -887,9 +889,9 @@ class PegTest extends TestCase {
         def test_soft_keyword(self) -> None:
             grammar = """
             start:
-                | "number" n=NUMBER { eval(n.string) }
+                | "number" n=Number { eval(n.string) }
                 | "string" n=STRING { n.string }
-                | SOFT_KEYWORD l=NAME n=(NUMBER | NAME | STRING) { f"{l.string} = {n.string}"}
+                | SOFT_KEYWORD l=NAME n=(Number | NAME | STRING) { f"{l.string} = {n.string}"}
             """
             parser_class = make_parser(grammar)
             self.assertEqual(parse_string("number 1", parser_class), 1)
@@ -940,7 +942,7 @@ class PegTest extends TestCase {
         def test_unreachable_implicit1(self) -> None:
             source = """
             start: NAME | invalid_input
-            invalid_input: NUMBER { None }
+            invalid_input: Number { None }
             """
             grammar = parse_string(source, GrammarParser)
             out = io.StringIO()
@@ -953,7 +955,7 @@ class PegTest extends TestCase {
         def test_unreachable_implicit2(self) -> None:
             source = """
             start: NAME | '(' invalid_input ')'
-            invalid_input: NUMBER { None }
+            invalid_input: Number { None }
             """
             grammar = parse_string(source, GrammarParser)
             out = io.StringIO()
@@ -966,7 +968,7 @@ class PegTest extends TestCase {
         def test_unreachable_implicit3(self) -> None:
             source = """
             start: NAME | invalid_input { None }
-            invalid_input: NUMBER
+            invalid_input: Number
             """
             grammar = parse_string(source, GrammarParser)
             out = io.StringIO()
@@ -978,7 +980,7 @@ class PegTest extends TestCase {
 
         def test_locations_in_alt_action_and_group(self) -> None:
             grammar = """
-            start: t=term NEWLINE? $ { ast.Expression(t, LOCATIONS) }
+            start: t=term NewLine? $ { ast.Expression(t, LOCATIONS) }
             term:
                 | l=term '*' r=factor { ast.BinOp(l, ast.Mult(), r, LOCATIONS) }
                 | l=term '/' r=factor { ast.BinOp(l, ast.Div(), r, LOCATIONS) }
@@ -986,7 +988,7 @@ class PegTest extends TestCase {
             factor:
                 | (
                     n=NAME { ast.Name(id=n.string, ctx=ast.Load(), LOCATIONS) } |
-                    n=NUMBER { ast.Constant(value=ast.literal_eval(n.string), LOCATIONS) }
+                    n=Number { ast.Constant(value=ast.literal_eval(n.string), LOCATIONS) }
                 )
             """
             parser_class = make_parser(grammar)

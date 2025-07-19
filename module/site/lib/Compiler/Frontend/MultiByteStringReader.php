@@ -9,7 +9,7 @@ namespace Morpho\Compiler\Frontend;
 /**
  * Based on [StringScanner in Ruby](https://docs.ruby-lang.org/en/3.0.0/StringScanner.html), see [license](https://github.com/ruby/ruby/blob/master/COPYING)
  */
-class MbStringReader extends AsciiStringReader {
+class MultiByteStringReader extends AsciiStringReader {
     protected string $encoding;
 
     /**

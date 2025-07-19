@@ -35,7 +35,7 @@ class RuleCheckingVisitor extends GrammarVisitor {
 
     protected function visitNameLeaf(NameLeaf $node): void {
         $value = match ($node->value) {
-            'NEWLINE' => TokenType::EndOfStatementNewLine->name,
+            'NEWLINE' => TokenType::NewLine->name,
             'NUMBER' => TokenType::Number->name,
             default => $node->value,
         };

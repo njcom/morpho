@@ -57,6 +57,6 @@ readonly class Token implements Stringable {
             }
             return q($s);
         };
-        return 'Token(type=' . ($this->type->value ?? 'null') . ' (' . strtoupper(underscore($this->type->name, false)) . '), value=' . $q($this->value) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
+        return 'Token(type=' . ($this->type->value ?? 'null') . ' (' . $this->type->name . '), value=' . $q($this->value) . ', start=(' . $this->start[0] . ', ' . $this->start[1] . '), end=(' . $this->end[0] . ', ' . $this->end[1] . '), line=' . $q($this->line) . ")";
     }
 }

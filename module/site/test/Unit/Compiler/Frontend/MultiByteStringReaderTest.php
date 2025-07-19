@@ -7,16 +7,16 @@
 namespace Morpho\Test\Unit\Compiler\Frontend;
 
 use Morpho\Compiler\Frontend\IStringReader;
-use Morpho\Compiler\Frontend\MbStringReader;
+use Morpho\Compiler\Frontend\MultiByteStringReader;
 
-class MbStringReaderTest extends AsciiStringReaderTest {
+class MultiByteStringReaderTest extends AsciiStringReaderTest {
     public function testInterface() {
         parent::testInterface();
-        $this->assertInstanceOf(MbStringReader::class, $this->mkReader(''));
+        $this->assertInstanceOf(MultiByteStringReader::class, $this->mkReader(''));
     }
 
     protected function mkReader(string $input, bool $anchored = true, string|null $encoding = null): IStringReader {
-        return new MbStringReader($input, $encoding, $anchored);
+        return new MultiByteStringReader($input, $encoding, $anchored);
     }
 
     public function testRead() {

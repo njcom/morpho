@@ -12,16 +12,16 @@ use Morpho\Compiler\Frontend\Peg\Grammar;
 use Morpho\Compiler\Frontend\Peg\IGrammarVisitor;
 use Morpho\Compiler\Frontend\Peg\NamedItem;
 use Morpho\Compiler\Frontend\Peg\NameLeaf;
-use Morpho\Compiler\Frontend\Peg\PhpParserGenerator;
+use Morpho\Compiler\Frontend\Peg\ParserGenerator;
 use Morpho\Compiler\Frontend\Peg\Rhs;
 use Morpho\Compiler\Frontend\Peg\Rule;
 use Morpho\Compiler\Frontend\Peg\RuleCheckingVisitor;
 use Morpho\Compiler\Frontend\Peg\StringLeaf;
 use Morpho\Testing\TestCase;
 
-class PhpParserGeneratorTest extends TestCase {
+class ParserGeneratorTest extends TestCase {
     public function testInterface() {
-        $parserGen = new PhpParserGenerator(
+        $parserGen = new ParserGenerator(
             new Grammar(['start' => new Rule('start', null, new Rhs([]))], []),
             STDOUT,
             fn ($v) => null,
@@ -51,7 +51,7 @@ class PhpParserGeneratorTest extends TestCase {
                 ]),
             ),
         ], []);
-        $parserGen = new PhpParserGenerator($grammar, $stream, $this->createMock(RuleCheckingVisitor::class));
+        $parserGen = new ParserGenerator($grammar, $stream, $this->createMock(RuleCheckingVisitor::class));
 
         $parserGen->generate();
 

@@ -18,10 +18,10 @@ class PhpCallMakerVisitor extends GrammarVisitor {
      */
     private WeakMap $cache;
 
-    private PhpParserGenerator $gen;
+    private ParserGenerator $parserGenerator;
 
-    public function __construct(PhpParserGenerator $parserGenerator) {
-        $this->gen = $parserGenerator;
+    public function __construct(ParserGenerator $parserGenerator) {
+        $this->parserGenerator = $parserGenerator;
         $this->cache = new WeakMap();
     }
 
@@ -65,7 +65,7 @@ class PhpCallMakerVisitor extends GrammarVisitor {
         if (count($node->alts) == 1 && count($node->alts[0]->items) == 1) {
             $this->cache[$node] = $this->visit($node->alts[0]->items[0]);
         } else {
-            $name = $this->gen->artificialRuleFromRhs($node);
+            $name = $this->parserGenerator->artificialRuleFromRhs($node);
             $this->cache[$node] = [$name, '$this->' . $name . '()'];
         }
         return $this->cache[$node];
@@ -147,7 +147,7 @@ class PhpCallMakerVisitor extends GrammarVisitor {
         if (isset($this->cache[$node])) {
             return $this->cache[$node];
         }
-        $name = $this->gen->artificialRuleFromRepeat($node->node, true);
+        $name = $this->parserGenerator->artificialRuleFromRepeat($node->node, true);
         $this->cache[$node] = [$name, '$this->' . $name . '()']; // But no trailing comma here!
         return $this->cache[$node];
     }
@@ -160,7 +160,7 @@ class PhpCallMakerVisitor extends GrammarVisitor {
         if (isset($this->cache[$node])) {
             return $this->cache[$node];
         }
-        $name = $this->gen->artificialRuleFromGather($node);
+        $name = $this->parserGenerator->artificialRuleFromGather($node);
         $this->cache[$node] = [$name, '$this->' . $name . '()']; // No trailing comma here either!
         return $this->cache[$node];
     }

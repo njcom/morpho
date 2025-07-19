@@ -12,6 +12,9 @@ require_once __DIR__ . '/Grammar.php';
  * https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/grammar_parser.py
  */
 class GrammarParser extends Parser {
+    private const array KEYWORDS = [];
+    private const array SOFT_KEYWORDS = ['memo'];
+
     /**
      * start: grammar $
      */
@@ -20,33 +23,13 @@ class GrammarParser extends Parser {
             __METHOD__,
             function (): ?Grammar {
                 $index = $this->tokenizer->index;
-                if (($grammar = $this->grammar()) && $this->expect('ENDMARKER')) {
+                if (($grammar = $this->grammar()) && $this->expect(TokenType::EndMarker)) {
                     return $grammar;
                 }
                 $this->tokenizer->index = $index;
                 return null;
             }
         );
-    }
-
-    /**
-     * ast.literal_eval() in Python
-     * @todo: move somewhere, find better place that this class.
-     */
-    public static function _literalEval(string $literal): string {
-        // Handle ''' and """ Python strings
-        if (preg_match('~^(\'\'\'|""")(?P<value>.*)(\\1)$~s', $literal, $match)) {
-            $literal = '"' . $match['value'] . '"';
-        }
-        if ($literal === "''" || $literal === '""') {
-            return '';
-        }
-        /*        try {
-                    return eval('return ' . $literal . ';');
-                } catch (\ParseError $e) {
-                    d($literal);
-                }*/
-        return eval('return ' . $literal . ';');
     }
 
     /**
@@ -92,23 +75,23 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * meta: "@" NAME NEWLINE | "@" NAME NAME NEWLINE | "@" NAME STRING NEWLINE
+     * meta: "@" Name NewLine | "@" Name Name NewLine | "@" Name String NewLine
      */
     private function meta(): ?array {
         return $this->memoize(
             __METHOD__,
             function (): ?array {
                 $index = $this->tokenizer->index;
-                if ($this->expect('@') && ($name = $this->name()) && $this->expect('NEWLINE')) {
+                if ($this->expect('@') && ($name = $this->name()) && $this->expect(TokenType::NewLine)) {
                     return [$name->value, null];
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect('@') && ($a = $this->name()) && ($b = $this->name()) && $this->expect('NEWLINE')) {
+                if ($this->expect('@') && ($a = $this->name()) && ($b = $this->name()) && $this->expect(TokenType::NewLine)) {
                     return [$a->value, $b->value];
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect('@') && ($name = $this->name()) && ($string = $this->string()) && $this->expect('NEWLINE')) {
-                    return [$name->value, self::_literalEval($string->value)];
+                if ($this->expect('@') && ($name = $this->name()) && ($string = $this->string()) && $this->expect(TokenType::NewLine)) {
+                    return [$name->value, Peg::literalEval($string->value)];
                 }
                 $this->tokenizer->index = $index;
                 return null;
@@ -138,7 +121,7 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * rule: rulename memoflag? ":" alts NEWLINE INDENT more_alts DEDENT | rulename memoflag? ":" NEWLINE INDENT more_alts DEDENT | rulename memoflag? ":" alts NEWLINE
+     * rule: rulename memoflag? ":" alts NewLine INDENT more_alts DEDENT | rulename memoflag? ":" NewLine INDENT more_alts DEDENT | rulename memoflag? ":" alts NewLine
      */
     private function rule(): ?Rule {
         return $this->memoize(
@@ -151,10 +134,10 @@ class GrammarParser extends Parser {
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
                     && ($alts = $this->alts())
-                    && ($this->expect('NEWLINE'))
-                    && ($this->expect('INDENT'))
+                    && ($this->expect(TokenType::NewLine))
+                    && ($this->expect(TokenType::Indent))
                     && ($moreAlts = $this->moreAlts())
-                    && ($this->expect('DEDENT'))
+                    && ($this->expect(TokenType::Dedent))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], new Rhs(array_merge($alts->alts, $moreAlts->alts)), memo: $opt === true ? null : $opt);
                 }
@@ -164,10 +147,10 @@ class GrammarParser extends Parser {
                     ($ruleName = $this->ruleName())
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
-                    && ($this->expect('NEWLINE'))
-                    && ($this->expect('INDENT'))
+                    && ($this->expect(TokenType::NewLine))
+                    && ($this->expect(TokenType::Indent))
                     && ($moreAlts = $this->moreAlts())
-                    && ($this->expect('DEDENT'))
+                    && ($this->expect(TokenType::Dedent))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], $moreAlts, memo: $opt === true ? null : $opt);
                 }
@@ -178,7 +161,7 @@ class GrammarParser extends Parser {
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
                     && ($alts = $this->alts())
-                    && ($this->expect('NEWLINE'))
+                    && ($this->expect(TokenType::NewLine))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], $alts, memo: $opt === true ? null : $opt);
                 }
@@ -189,7 +172,7 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * rulename: NAME annotation | NAME
+     * rulename: Name annotation | Name
      */
     private function ruleName(): ?RuleName {
         return $this->memoize(
@@ -248,7 +231,7 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * more_alts: "|" alts NEWLINE more_alts | "|" alts NEWLINE
+     * more_alts: "|" alts NewLine more_alts | "|" alts NewLine
      */
     private function moreAlts(): ?Rhs {
         return $this->memoize(
@@ -258,13 +241,13 @@ class GrammarParser extends Parser {
                 if (
                     ($this->expect("|"))
                     && ($alts = $this->alts())
-                    && $this->expect('NEWLINE')
+                    && $this->expect(TokenType::NewLine)
                     && ($moreAlts = $this->moreAlts())
                 ) {
                     return new Rhs(array_merge($alts->alts, $moreAlts->alts));
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect("|") && ($alts = $this->alts()) && ($this->expect('NEWLINE'))) {
+                if ($this->expect("|") && ($alts = $this->alts()) && ($this->expect(TokenType::NewLine))) {
                     return new Rhs($alts->alts);
                 }
                 $this->tokenizer->index = $index;
@@ -281,18 +264,18 @@ class GrammarParser extends Parser {
             __METHOD__,
             function (): ?Alt {
                 $index = $this->tokenizer->index;
-                if (($items = $this->items()) && ($this->expect('$')) && ($action = $this->action())) {
+                if (($items = $this->items()) && ($this->expect('$')) && ($action = $this->action())) { 
                     return new Alt(
                         array_merge(
                             $items,
-                            [new NamedItem(null, new NameLeaf('ENDMARKER'))]
+                            [new NamedItem(null, new NameLeaf(TokenType::EndMarker))]
                         ), action: $action
                     );
                 }
                 $this->tokenizer->index = $index;
                 if (($items = $this->items()) && ($this->expect('$'))) {
                     return new Alt(
-                        array_merge($items, [new NamedItem(null, new NameLeaf('ENDMARKER'))])
+                        array_merge($items, [new NamedItem(null, new NameLeaf(TokenType::EndMarker))])
                         , action: null
                     );
                 }
@@ -332,7 +315,7 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * named_item: NAME annotation '=' ~ item | NAME '=' ~ item | item | forced_atom | lookahead
+     * named_item: Name annotation '=' ~ item | Name '=' ~ item | item | forced_atom | lookahead
      */
     private function namedItem(): ?NamedItem {
         return $this->memoize(
@@ -486,7 +469,7 @@ class GrammarParser extends Parser {
     }
 
     /**
-     * atom: '(' ~ alts ')' | NAME | STRING
+     * atom: '(' ~ alts ')' | Name | String
      * def atom(self) -> Optional[Plain]:
      *   Plain = Union[Leaf, Group]
      */
@@ -575,34 +558,24 @@ class GrammarParser extends Parser {
         );
     }
 
+    /**
+     * target_atom: "{" ~ grammar_action "}" | "[" ~ target_atoms? "]" | Name "*" | Name | Number | String | "?" | ":" | !"}" !"]" Op
+     */
     private function targetAtom(): ?string {
         return $this->memoize(
             __METHOD__,
             function (): ?string {
-                $token = $this->tokenizer->nextToken();
-                if ($token->type !== TokenType::PhpCode) {
-                    return null;
-                }
-                return trim($token->value);
-                /*
- 
-// target_atom: "{" ~ target_atoms? "}" | "[" ~ target_atoms? "]" | NAME "*" | NAME | NUMBER | STRING | "?" | ":" | !"}" !"]" OP
-
-                //$index = $this->tokenizer->index;
-2                $cut = false;
-                /** @noinspection PhpBooleanCanBeSimplifiedInspection * /
-                if ($this->expect("{") && ($cut = true) && ($atoms = ($this->targetAtoms() || true)) && $this->expect("}")) {
-                    /** @noinspection PhpConditionAlreadyCheckedInspection * /
-                    return "{" . ($atoms === true ? '' : $atoms) . "}";
-                }
-                $this->tokenizer->index = $index;
-                if ($cut) {
-                    return null;
+                /** @noinspection PhpBooleanCanBeSimplifiedInspection */
+                $nextToken = $this->tokenizer->peekToken();
+                if ($nextToken && $nextToken->type === TokenType::GrammarAction) {
+                    $this->tokenizer->nextToken();
+                    return trim($nextToken->value);
                 }
                 $cut = false;
-                /** @noinspection PhpBooleanCanBeSimplifiedInspection * /
+                $index = $this->tokenizer->index;
+                /** @noinspection PhpBooleanCanBeSimplifiedInspection */
                 if ($this->expect('[') && ($cut = true) && ($atoms = ($this->targetAtoms() || true)) && $this->expect(']')) {
-                    /** @noinspection PhpConditionAlreadyCheckedInspection * /
+                    /** @noinspection PhpConditionAlreadyCheckedInspection */
                     return '[' . ($atoms === true ? '' : $atoms) . ']';
                 }
                 $this->tokenizer->index = $index;
@@ -625,7 +598,7 @@ class GrammarParser extends Parser {
                     return $string->value;
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect('?"')) {
+                if ($this->expect('?')) {
                     return '?';
                 }
                 $this->tokenizer->index = $index;
@@ -638,8 +611,95 @@ class GrammarParser extends Parser {
                 }
                 $this->tokenizer->index = $index;
                 return null;
-                */
             }
         );
+    }
+
+    //abstract public function start(): mixed;
+
+    private function name(): ?Token {
+        return $this->memoize(
+            __METHOD__,
+            function () {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Name && !in_array($token->value, self::KEYWORDS)) {
+                    return $this->tokenizer->nextToken();
+                }
+                return null;
+            },
+        );
+    }
+
+    private function string(): ?Token {
+        return $this->memoize(
+            __METHOD__,
+            function () {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::String) {
+                    return $this->tokenizer->nextToken();
+                }
+                return null;
+            },
+        );
+    }
+
+    private function op(): ?Token {
+        return $this->memoize(
+            __METHOD__,
+            function () {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Op) {
+                    return $this->tokenizer->nextToken();
+                }
+                return null;
+            },
+        );
+    }
+    
+    private function typeComment(): ?Token {
+        return $this->memoize(
+            __METHOD__,
+            function () {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Comment) {
+                    return $this->tokenizer->nextToken();
+                }
+                return null;
+            },
+        );
+    }
+
+    private function softKeyword(): ?Token {
+        return $this->memoize(
+            __METHOD__,
+            function () {
+                $token = $this->tokenizer->peekToken();
+                if ($token->type == TokenType::Name && in_array($token->value, self::SOFT_KEYWORDS)) {
+                    return $this->tokenizer->nextToken();
+                }
+                return null;
+            },
+        );
+    }
+
+    private function expectForced(mixed $res, string $expectation): ?Token {
+        if (null === $res) {
+            throw new $this->mkSyntaxError("expected $expectation");
+        }
+        return $res;
+    }
+
+    private function positiveLookahead(callable $fn, ...$args): mixed {
+        $index = $this->tokenizer->index;
+        $ok = $fn(...$args);
+        $this->tokenizer->index = $index;
+        return $ok;
+    }
+
+    private function negativeLookahead(callable $fn, ...$args): bool {
+        $index = $this->tokenizer->index;
+        $ok = $fn(...$args);
+        $this->tokenizer->index = $index;
+        return !$ok;
     }
 }

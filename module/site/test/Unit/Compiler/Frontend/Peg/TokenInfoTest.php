@@ -12,11 +12,11 @@ use Morpho\Testing\TestCase;
 
 class TokenInfoTest extends TestCase {
     public function testApi() {
-        $tokenInfo = new Token(TokenType::NL, "\n", [1, 1], [1, 2], "foo\n");
-        $this->assertSame(TokenType::NL, $tokenInfo->type);
+        $tokenInfo = new Token(TokenType::ContinuedNewLine, "\n", [1, 1], [1, 2], "foo\n");
+        $this->assertSame(TokenType::ContinuedNewLine, $tokenInfo->type);
         $this->assertEquals([1, 1], $tokenInfo->start);
         $this->assertEquals([1, 2], $tokenInfo->end);
         $this->assertSame("foo\n", $tokenInfo->line);
-        $this->assertSame('Token(type=65 (NL), string=\'\\n\', start=(1, 1), end=(1, 2), line=\'foo\\n\')', (string) $tokenInfo);
+        $this->assertSame('Token(type=65 (ContinuedNewLine), value=\'\\n\', start=(1, 1), end=(1, 2), line=\'foo\\n\')', (string) $tokenInfo);
     }
 }

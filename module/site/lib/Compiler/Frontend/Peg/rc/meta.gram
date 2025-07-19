@@ -1,0 +1,131 @@
+@subheader """\
+from ast import literal_eval
+
+from pegen.grammar import (
+    Alt,
+    Cut,
+    Forced,
+    Gather,
+    Group,
+    Item,
+    Lookahead,
+    LookaheadOrCut,
+    MetaTuple,
+    MetaList,
+    NameLeaf,
+    NamedItem,
+    NamedItemList,
+    NegativeLookahead,
+    Opt,
+    Plain,
+    PositiveLookahead,
+    Repeat0,
+    Repeat1,
+    Rhs,
+    Rule,
+    RuleList,
+    RuleName,
+    Grammar,
+    StringLeaf,
+)
+"""
+
+start[Grammar]: grammar EndMarker { grammar }
+
+grammar[Grammar]:
+    | metas rules { Grammar(rules, metas) }
+    | rules { Grammar(rules, []) }
+
+metas[MetaList]:
+    | meta metas { [meta] + metas }
+    | meta { [meta] }
+
+meta[MetaTuple]:
+    | "@" Name NewLine { (name.string, None) }
+    | "@" a=Name b=Name NewLine { (a.string, b.string) }
+    | "@" Name String NewLine { (name.string, literal_eval(string.string)) }
+
+rules[RuleList]:
+    | rule rules { [rule] + rules }
+    | rule { [rule] }
+
+rule[Rule]:
+    | rulename memoflag? ":" alts NewLine Indent more_alts Dedent {
+          Rule(rulename[0], rulename[1], Rhs(alts.alts + more_alts.alts), memo=opt) }
+    | rulename memoflag? ":" NewLine Indent more_alts Dedent {
+          Rule(rulename[0], rulename[1], more_alts, memo=opt) }
+    | rulename memoflag? ":" alts NewLine { Rule(rulename[0], rulename[1], alts, memo=opt) }
+
+rulename[RuleName]:
+    | Name annotation { (name.string, annotation) }
+    | Name { (name.string, None) }
+
+# In the future this may return something more complicated
+memoflag[str]:
+    | '(' "memo" ')' { "memo" }
+
+alts[Rhs]:
+    | alt "|" alts { Rhs([alt] + alts.alts)}
+    | alt { Rhs([alt]) }
+
+more_alts[Rhs]:
+    | "|" alts NewLine more_alts { Rhs(alts.alts + more_alts.alts) }
+    | "|" alts NewLine { Rhs(alts.alts) }
+
+alt[Alt]:
+    | items '$' action { Alt(items + [NamedItem(None, NameLeaf('EndMarker'))], action=action) }
+    | items '$' { Alt(items + [NamedItem(None, NameLeaf('EndMarker'))], action=None) }
+    | items action { Alt(items, action=action) }
+    | items { Alt(items, action=None) }
+
+items[NamedItemList]:
+    | named_item items { [named_item] + items }
+    | named_item { [named_item] }
+
+named_item[NamedItem]:
+    | Name annotation '=' ~ item {NamedItem(name.string, item, annotation)}
+    | Name '=' ~ item {NamedItem(name.string, item)}
+    | item {NamedItem(None, item)}
+    | forced=forced_atom {NamedItem(None, forced)}
+    | it=lookahead {NamedItem(None, it)}
+
+forced_atom[Forced]:
+    | '&''&' ~ atom {Forced(atom)}
+
+lookahead[LookaheadOrCut]:
+    | '&' ~ atom {PositiveLookahead(atom)}
+    | '!' ~ atom {NegativeLookahead(atom)}
+    | '~' {Cut()}
+
+item[Item]:
+    | '[' ~ alts ']' {Opt(alts)}
+    |  atom '?' {Opt(atom)}
+    |  atom '*' {Repeat0(atom)}
+    |  atom '+' {Repeat1(atom)}
+    |  sep=atom '.' node=atom '+' {Gather(sep, node)}
+    |  atom {atom}
+
+atom[Plain]:
+    | '(' ~ alts ')' {Group(alts)}
+    | Name {NameLeaf(name.string) }
+    | String {StringLeaf(string.string)}
+
+# Mini-grammar for the actions and annotations
+
+action[str]: "{" ~ target_atoms "}" { target_atoms }
+annotation[str]: "[" ~ target_atoms "]" { target_atoms }
+
+target_atoms[str]:
+    | target_atom target_atoms { target_atom + " " + target_atoms }
+    | target_atom { target_atom }
+
+target_atom[str]:
+    | "{" ~ atoms=target_atoms? "}" { "{" + (atoms or "") + "}" }
+    | "[" ~ atoms=target_atoms? "]" { "[" + (atoms or "") + "]" }
+    | Name "*" { name.string + "*" }
+    | Name { name.string }
+    | Number { number.string }
+    | String { string.string }
+    | "?" { "?" }
+    | ":" { ":" }
+    | !"}" !"]" Op { op.string }

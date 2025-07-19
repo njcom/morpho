@@ -6,29 +6,20 @@
  */
 namespace Morpho\Test\Unit\Compiler\Frontend\Peg;
 
-use Generator;
-use Morpho\Compiler\Frontend\Peg\PythonTokenizerRe;
+use Morpho\Compiler\Frontend\Peg\GrammarTokenizerRe;
 use Morpho\Testing\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class PythonTokenizerReTest extends TestCase {
-    public function testIsIdentifier() {
-        $this->assertTrue(PythonTokenizerRe::isIdentifier('Grammar'));
-        $this->assertFalse(PythonTokenizerRe::isIdentifier('0'));
-        $this->assertFalse(PythonTokenizerRe::isIdentifier('123test'));
-        $this->assertTrue(PythonTokenizerRe::isIdentifier('test123'));
-        $this->assertTrue(PythonTokenizerRe::isIdentifier('_test123'));
-        $this->assertTrue(PythonTokenizerRe::isIdentifier('_123'));
-    }
-
+class GrammarTokenizerReTest extends TestCase {
     public function testEndPatterns_EndProgRe() {
-        $re = PythonTokenizerRe::endPatterns()['"""'];
+        $re = GrammarTokenizerRe::endPatterns()['"""'];
         $this->assertMatchesRegularExpression('~' . $re . '~', '"""' . "\n");
     }
 
     public function testTailEndOfSingleQuote() {
-        $re = '~' . PythonTokenizerRe::TAIL_END_OF_SINGLE_QUOTE . '~s';
+        $re = '~' . GrammarTokenizerRe::TAIL_END_OF_SINGLE_QUOTE . '~s';
         preg_match($re, "pre1\\.\\.pre2'post", $match);
         $this->assertSame(["pre1\\.\\.pre2'"], $match);
 
@@ -37,25 +28,25 @@ class PythonTokenizerReTest extends TestCase {
     }
 
     public function testTripleQuotedPrefixesAndSingleQuotedPrefixes() {
-        $prefixes = PythonTokenizerRe::allStringPrefixes();
+        $prefixes = GrammarTokenizerRe::allStringPrefixes();
         $this->assertIsArray($prefixes);
         $n = count($prefixes);
         $this->assertTrue($n > 0);
-        $this->assertCount($n * 2, PythonTokenizerRe::tripleQuotedPrefixes());
-        $this->assertCount($n * 2, PythonTokenizerRe::singleQuotedPrefixes());
+        $this->assertCount($n * 2, GrammarTokenizerRe::tripleQuotedPrefixes());
+        $this->assertCount($n * 2, GrammarTokenizerRe::singleQuotedPrefixes());
     }
 
     public function testGroupRe(): void {
-        $this->assertSame('()', PythonTokenizerRe::groupRe());
-        $this->assertSame('(a)', PythonTokenizerRe::groupRe('a'));
-        $this->assertSame('(a|b)', PythonTokenizerRe::groupRe('a', 'b'));
+        $this->assertSame('()', GrammarTokenizerRe::groupRe());
+        $this->assertSame('(a)', GrammarTokenizerRe::groupRe('a'));
+        $this->assertSame('(a|b)', GrammarTokenizerRe::groupRe('a', 'b'));
     }
 
     public function testAnyRe(): void {
-        $this->assertSame('(a)*', PythonTokenizerRe::anyRe('a'));
-        $this->assertSame('(a|b)*', PythonTokenizerRe::anyRe('a', 'b'));
+        $this->assertSame('(a)*', GrammarTokenizerRe::anyRe('a'));
+        $this->assertSame('(a|b)*', GrammarTokenizerRe::anyRe('a', 'b'));
         try {
-            PythonTokenizerRe::anyRe();
+            GrammarTokenizerRe::anyRe();
             $this->fail();
         } catch (UnexpectedValueException $e) {
             $this->assertSame("RE can't be empty", $e->getMessage());
@@ -63,10 +54,10 @@ class PythonTokenizerReTest extends TestCase {
     }
 
     public function testMaybeRe(): void {
-        $this->assertSame('(a)?', PythonTokenizerRe::maybeRe('a'));
-        $this->assertSame('(a|b)?', PythonTokenizerRe::maybeRe('a', 'b'));
+        $this->assertSame('(a)?', GrammarTokenizerRe::maybeRe('a'));
+        $this->assertSame('(a|b)?', GrammarTokenizerRe::maybeRe('a', 'b'));
         try {
-            PythonTokenizerRe::maybeRe();
+            GrammarTokenizerRe::maybeRe();
             $this->fail();
         } catch (UnexpectedValueException $e) {
             $this->assertSame("RE can't be empty", $e->getMessage());
@@ -75,7 +66,7 @@ class PythonTokenizerReTest extends TestCase {
 
     public static function dataSimpleRes(): iterable {
         yield from self::genSamples([
-            PythonTokenizerRe::HEX_NUMBER_RE => [
+            GrammarTokenizerRe::HEX_NUMBER_RE => [
                 [
                     '0x_0f',
                     true,
@@ -117,7 +108,7 @@ class PythonTokenizerReTest extends TestCase {
                     true,
                 ],
             ],
-            PythonTokenizerRe::BIN_NUMBER_RE => [
+            GrammarTokenizerRe::BIN_NUMBER_RE => [
                 [
                     '0b01_10',
                     true,
@@ -151,7 +142,7 @@ class PythonTokenizerReTest extends TestCase {
                     false,
                 ],
             ],
-            PythonTokenizerRe::OCT_NUMBER_RE => [
+            GrammarTokenizerRe::OCT_NUMBER_RE => [
                 [
                     '0o0703331',
                     true,
@@ -177,7 +168,7 @@ class PythonTokenizerReTest extends TestCase {
                     false,
                 ],
             ],
-            PythonTokenizerRe::DEC_NUMBER_RE => [
+            GrammarTokenizerRe::DEC_NUMBER_RE => [
                 [
                     '0',
                     true,
@@ -207,7 +198,7 @@ class PythonTokenizerReTest extends TestCase {
                     false,
                 ],
             ],
-            PythonTokenizerRe::WHITESPACE_RE => [
+            GrammarTokenizerRe::WHITESPACE_RE => [
                 [
                     '',
                     true,
@@ -221,7 +212,7 @@ class PythonTokenizerReTest extends TestCase {
                     false,
                 ],
             ],
-            PythonTokenizerRe::COMMENT_RE    => [
+            GrammarTokenizerRe::COMMENT_RE => [
                 [
                     '#',
                     true,
@@ -239,7 +230,7 @@ class PythonTokenizerReTest extends TestCase {
                     false,
                 ],
             ],
-            PythonTokenizerRe::NAME_RE       => [
+            GrammarTokenizerRe::NAME_RE => [
                 [
                     'abc',
                     true,
@@ -392,7 +383,7 @@ class PythonTokenizerReTest extends TestCase {
 
     #[DataProvider('dataIntNumberRe')]
     public function testIntNumberRe(string $input, bool $mustMatch) {
-        $this->checkRe(PythonTokenizerRe::intNumberRe(), $input, $mustMatch);
+        $this->checkRe(GrammarTokenizerRe::intNumberRe(), $input, $mustMatch);
     }
 
     public static function dataStringPrefixRe(): iterable {
@@ -406,11 +397,11 @@ class PythonTokenizerReTest extends TestCase {
 
     #[DataProvider('dataStringPrefixRe')]
     public function testStringPrefixRe(string $prefix, bool $mustMatch) {
-        $this->checkRe(PythonTokenizerRe::stringPrefixRe(), $prefix, $mustMatch);
+        $this->checkRe(GrammarTokenizerRe::stringPrefixRe(), $prefix, $mustMatch);
     }
 
     public function testContStrRe() {
-        $re = PythonTokenizerRe::contStr();
+        $re = GrammarTokenizerRe::contStr();
         $this->checkRe($re, '""', true);
         $this->checkRe($re, '"123"', true);
         $this->checkRe($re, '"', false);
@@ -418,19 +409,19 @@ class PythonTokenizerReTest extends TestCase {
 
     public function testFunnyRe() {
         $line = '"""' . "\n";
-        $re = PythonTokenizerRe::funnyRe();
+        $re = GrammarTokenizerRe::funnyRe();
         preg_match($this->toFullRe($re), $line, $match, PREG_OFFSET_CAPTURE, 3);
         $this->assertSame(["\n", 3], $match[0]);
     }
 
     public function testPseudoExtrasRe() {
-        $re = PythonTokenizerRe::pseudoExtrasRe();
+        $re = GrammarTokenizerRe::pseudoExtrasRe();
         preg_match($this->toFullRe($re), '"""' . "\n", $match, PREG_OFFSET_CAPTURE, 3);
         $this->assertSame(["\n", 3], $match[0]);
     }
 
     public function testPseudoTokenRe(): void {
-        $re = PythonTokenizerRe::pseudoTokenRe();
+        $re = GrammarTokenizerRe::pseudoTokenRe();
 
         $this->assertMatchesRegularExpression($this->toLineRe($re), 'abc');
 

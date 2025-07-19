@@ -30,6 +30,9 @@ class Tokenizer implements ITokenizer {
         $this->tokenIt = $tokenIt;
     }
 
+    /**
+     * @return \Generator
+     */
     public function getIterator(): Traversable {
         while ($token = $this->nextToken()) {
             yield $token;
@@ -49,10 +52,10 @@ class Tokenizer implements ITokenizer {
             if (!$token) {
                 return null;
             }
-            if (in_array($token->type, [TokenType::SoftNewLine, TokenType::Comment])) {
+            if (in_array($token->type, [TokenType::ContinuedNewLine, TokenType::Comment])) {
                 continue;
             }
-            if ($token->type === TokenType::ErrorToken && ctype_space($token->value)) {
+            if ($token->type === TokenType::ErrorMarker && ctype_space($token->value)) {
                 continue;
             }
             $this->tokens[] = $token;
