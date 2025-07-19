@@ -6,6 +6,7 @@
  */
 namespace Morpho\App;
 
+// @todo: Remove all these constants - they must be configured via configs.
 const VENDOR = 'morpho-os';
 
 const APP_DIR_NAME = 'app'; // Can be used in frontend or backend modules.

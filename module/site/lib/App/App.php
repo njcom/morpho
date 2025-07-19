@@ -16,22 +16,33 @@ use function error_log;
 
 class App implements IFn {
     public readonly array $conf;
-    private ?ServiceManager $serviceManager = null;
+    private ?ServiceManager $_serviceManager = null;
 
     public function __construct(array|null $conf = null) {
         $this->conf = $conf ?? [];
     }
 
+    public ?ServiceManager $serviceManager {
+        get {
+            if (!$this->_serviceManager) {
+                $this->_serviceManager = $this->mkServiceManager();
+            }
+            return $this->_serviceManager;
+        }
+    }
+
+/*
     public function init(): ServiceManager {
         if (!$this->serviceManager) {
             $this->serviceManager = $this->mkServiceManager();
         }
         return $this->serviceManager;
     }
+*/
 
     public function __invoke(mixed $context): mixed {
         try {
-            $serviceManager = $this->init();
+            $serviceManager = $this->serviceManager;
             try {
                 $request = $serviceManager['request'];
                 $request = $serviceManager['router']->__invoke($request);

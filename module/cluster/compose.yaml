@@ -8,7 +8,7 @@ services:
     #network_mode: service:postgres
     image: localhost/${PROJECT_NAME}-postgresql
     ports:
-      - 10432:5432
+      - 127.0.0.1:10432:5432
     networks:
       - morpho
     volumes:
@@ -25,7 +25,7 @@ services:
 #    volumes:
 #      - ${MOUNT_DIR_PATH}/mariadb:/var/lib/mysql
 #    ports:
-#      - "${MARIADB_PORT}:3306"
+#      - "127.0.0.1:${MARIADB_PORT}:3306"
 #    networks:
 #      - morpho
 #    #env_file: mariadb/.env
@@ -41,7 +41,7 @@ services:
       #      - ${MOUNT_DIR_PATH}/nginx:/etc/nginx
       #      - ${MOUNT_DIR_PATH}/frontend:/frontend
       #    ports:
-      #      - ${NGINX_PORT}:80
+      #      - 127.0.0.1:${NGINX_PORT}:80
       #    networks:
       #      - morpho
       #
@@ -54,7 +54,7 @@ services:
       #    volumes:
       #      - ${MOUNT_DIR_PATH}/php/
       #    ports:
-      #      - ${PHP_PORT}:9000
+      #      - 127.0.0.1:${PHP_PORT}:9000
       #    networks:
       #      - morpho
       #
@@ -200,7 +200,8 @@ services:
     image: localhost/${PROJECT_NAME}-rabbitmq
     volumes: []
     ports:
-      - 15672:5672
+      - 127.0.0.1:5672:5672
+      - 127.0.0.1:15672:15672
     networks:
       - morpho
 #
@@ -291,4 +292,3 @@ networks:
 #    driver: ${NETWORKS_DRIVER}
 #  backend:
 #    driver: ${NETWORKS_DRIVER}
-
