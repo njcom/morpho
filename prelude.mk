@@ -3,7 +3,8 @@
 
 unexport _JAVA_OPTIONS
 
-.SILENT:
+V=
+$(V).SILENT:
 # Do not use make's built-in rules and variables (this increases performance and avoids hard-to-debug behaviour).
 MAKEFLAGS += -rR
 # Warning on undefined variables.
