@@ -9,10 +9,10 @@ namespace Morpho\Compiler\Frontend\Peg;
 use Morpho\Base\NotImplementedException;
 use UnexpectedValueException;
 use function Morpho\Base\enumVals;
-use function Morpho\Tool\Php\parse;
 use function Morpho\Base\mkStream;
-use function Morpho\Tool\Php\pp;
+use function Morpho\Tool\Php\parse;
 use function Morpho\Tool\Php\ppFile;
+use function Morpho\Tool\Php\pp;
 
 /**
  * PEG (Parsing Expression Grammar): parser generator, generate recursive descent parser by a grammar.
@@ -38,12 +38,23 @@ class Peg {
         return new Tokenizer(new GrammarTokenizer()->__invoke($grammarCode));
     }
 
-    public static function parseProgram(string|Grammar $grammar, ITokenizer $tokenizer, array|null $parserGeneratorConf = null, $format = self::FORMAT_AS_FRAGMENT): array {
-        if (!is_object($grammar)) {
-            $grammar = self::parseGrammar($grammar);
+    /**
+     * @param string|\Morpho\Compiler\Frontend\Peg\Grammar $programGrammar
+     * @param \Morpho\Compiler\Frontend\Peg\ITokenizer $programTokenizer
+     * @param array|null $programParserGeneratorConf
+     *     generatedCodeFormat:
+     *         0: none
+     *         1: format as fragment
+     *         2: format as file
+     * @param mixed $generatedCodeFormat
+     * @return array<mixed|Parser>
+     */
+    public static function parseProgram(string|Grammar $programGrammar, ITokenizer $programTokenizer, array|null $programParserGeneratorConf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
+        if (!is_object($programGrammar)) {
+            $programGrammar = self::parseGrammar($programGrammar);
         }
-        [$parserClass, $parserCode] = self::generateParserCode($grammar, $parserGeneratorConf, format: $format);
-        $parser = self::evalParserCode($parserClass, $parserCode, $tokenizer, $format);
+        [$parserClass, $parserCode] = self::generateParserCode($programGrammar, $programParserGeneratorConf, $format);
+        $parser = self::evalParserCode($parserClass, $parserCode, $programTokenizer, $format);
         return [$parser, $parserCode];
     }
 
@@ -55,36 +66,25 @@ class Peg {
         return $tree;
     }
 
-    public static function generateParserCode(Grammar $grammar, $parserGenerator, array|null $parserGeneratorConf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
+    public static function generateParserCode(Grammar $grammar, array|null $parserGeneratorConf, int $format): array {
         $targetProgramStream = mkStream('');
-        if (!$parserGenerator) {
-            $parserGenerator = self::mkParserGenerator($grammar, $targetProgramStream);
-        }
+        $parserGenerator = self::mkParserGenerator($grammar, $targetProgramStream);
         $parserClass = $parserGenerator->generate($parserGeneratorConf);
         $parserCode = stream_get_contents($targetProgramStream, offset: 0);
-        if ($parserCode === '') {
-            throw new UnexpectedValueException();
-        }
-        if ($format & self::FORMAT_AS_FILE) {
-            return [$parserClass, ppFile(parse($parserCode), false)];
-        }
-        if ($format & self::FORMAT_AS_FRAGMENT) {
-            return [$parserClass, pp(parse($parserCode))];
+        if ($format) {
+            $parserCode = self::prettyPrintCode($parserCode, $format);
         }
         return [$parserClass, $parserCode];
     }
 
-    public static function mkParserGenerator(Grammar $grammar, $stream, $ruleChecker = null) {
-        return new ParserGenerator($grammar, $stream, $ruleChecker ?? new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
-    }
-
     public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $parserGeneratorConf = null): string {
-        throw new NotImplementedException();
-        /*
-        [$parserClass, $parserCode] = self::generateParserCode($grammar, parserGeneratorConf: $parserGeneratorConf, format: self::FORMAT_AS_FILE);
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, $parserGeneratorConf, self::FORMAT_AS_FILE);
         file_put_contents($targetFilePath, $parserCode);
         return $parserClass;
-        */
+    }
+
+    public static function mkParserGenerator(Grammar $grammar, $stream, $ruleChecker = null) {
+        return new ParserGenerator($grammar, $stream, $ruleChecker ?? new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
     }
 
     /**
@@ -119,11 +119,21 @@ class Peg {
                 }*/
         return eval('return ' . $literal . ';');
     }
-
-    private static function evalParserCode(string $parserClass, string $parserCode, ITokenizer $programTokenizer, $format): Parser {
+    
+    private static function prettyPrintCode(string $code, int $format): string {
+        if ($format & self::FORMAT_AS_FRAGMENT) {
+            return pp(parse($code));
+        }
+        if ($format && self::FORMAT_AS_FILE) {
+            return ppFile(parse($code), false);
+        }
+        throw new UnexpectedValueException();
+    }
+    
+    private static function evalParserCode(string $parserClass, string $parserCode, ITokenizer $programTokenizer, int $format): Parser {
         if ($format & self::FORMAT_AS_FILE) {
             eval('?>' . $parserCode);
-        } elseif ($format & self::FORMAT_AS_FRAGMENT) {
+        } elseif (!$format || ($format & self::FORMAT_AS_FRAGMENT)) {
             eval($parserCode);
         } else {
             throw new UnexpectedValueException();

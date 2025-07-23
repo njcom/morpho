@@ -16,7 +16,6 @@ use function Morpho\Base\mkStream;
 use function Morpho\Base\last;
 use function Morpho\Base\init;
 use function Morpho\Base\prepend;
-
 use const Morpho\Base\INDENT;
 
 /**
@@ -114,7 +113,7 @@ class ParserGenerator implements IGrammarVisitor {
      *      class: string
      *      header: string
      *      subheader: string
-     * @return string
+     * @return string Class name
      */
     public function generate(array|null $conf = null): string {
         $conf = (array)$conf;
@@ -152,7 +151,7 @@ class ParserGenerator implements IGrammarVisitor {
         if (null !== $footer) {
             $this->write(rtrim($footer));
         }
-        return $conf['namespace'] . '\\' . $class;
+        return $conf['namespace'] . '\\' . $class; // class name
     }
 
     /**
