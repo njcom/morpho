@@ -8,7 +8,7 @@ namespace Morpho\Compiler\Frontend\Peg;
 
 require_once __DIR__ . '/../index.php';
 
-use Iterator;
+use Generator;
 use Morpho\Base\Must;
 use Morpho\Base\NotImplementedException;
 use RuntimeException;
@@ -23,7 +23,16 @@ use function Morpho\Base\mkStream;
  * Based on https://github.com/python/cpython/blob/fc94d55ff453a3101e4c00a394d4e38ae2fece13/Lib/tokenize.py
  */
 class GrammarTokenizer {
-    public static function tokenize($stream): Iterator {
+    /**
+     * @param string|resource $stream
+     * @throws \Morpho\Compiler\Frontend\Peg\TokenException
+     * @throws \Morpho\Compiler\Frontend\Peg\IndentationException
+     * @throws \UnexpectedValueException
+     * @throws \Morpho\Base\NotImplementedException
+     * @throws \RuntimeException
+     * @return \Generator<mixed, Token, mixed, void>
+     */
+    public function __invoke($stream): Generator {
         if (is_string($stream)) {
             $stream = mkStream($stream);
         }

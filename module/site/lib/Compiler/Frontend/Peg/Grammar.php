@@ -143,9 +143,9 @@ class Rule implements IGrammarNode, IRenderingActions {
 }
 
 abstract readonly class Leaf implements IGrammarNode {
-    public mixed $value;
+    public string $value;
 
-    public function __construct(mixed $value) {
+    public function __construct(string $value) {
         $this->value = $value;
     }
 
@@ -165,7 +165,7 @@ abstract readonly class Leaf implements IGrammarNode {
 readonly class NameLeaf extends Leaf {
 
     public function __toString(): string {
-        if ($this->value == TokenType::EndMarker) {
+        if ($this->value == TokenType::EndMarker->name) {
             return '$';
         }
         return parent::__toString();

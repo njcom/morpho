@@ -11,18 +11,28 @@ use Morpho\Compiler\Frontend\SyntaxError;
 
 /**
  * Base class for the PEG parsers
- * Based on https://github.com/python/cpython/blob/main/Tools/peg_generator/pegen/parser.py
+ * Based on https://github.com/python/cpython/blob/3.11/Tools/peg_generator/pegen/parser.py
  */
 abstract class Parser {
     protected ITokenizer $tokenizer;
     private int $level;
     private array $cache;
+    private array $specialWords;
     
-    public function __construct(ITokenizer $tokenizer) {
+    public function __construct(ITokenizer $tokenizer, array|null $specialWords = null) {
         $this->tokenizer = $tokenizer;
         $this->level = 0;
         $this->cache = [];
+        $this->specialWords = $specialWords ?? [
+            TokenType::NewLine->name => true,
+            TokenType::EndMarker->name => true,
+            TokenType::Indent->name => true,
+            TokenType::Dedent->name => true,
+            // @todo: Async, Await, Name, Number, String, Op, TypeComment, SoftKeyword
+        ];
     }
+
+    abstract public function start(): mixed;
 
     /**
      * make_syntax_error() in Python.
@@ -37,31 +47,16 @@ abstract class Parser {
             __METHOD__,
             function ($expected) {
                 $token = $this->tokenizer->peekToken();
-
-                if (is_string($expected)) {
+                if ($token && is_string($expected)) {
                     if ($token->value === $expected) { // Compare by token value
                         return $this->tokenizer->nextToken();
                     }
+                    if ($expected != '' && ord($expected[0]) >= 65 && ord($expected[0]) <= 90) { // Compare by special words (often TokenType) as string; First letter [A-Z]?
+                        if (isset($this->specialWords[$expected]) && $expected === $token->type->name) {
+                            return $this->tokenizer->nextToken();
+                        }
+                    }
                 }
-
-                // @todo: Allow to pass TokenType as $expected
-/*                 $specialWords = [
-                    'NewLine' => TokenType::NewLine,
-                    'EndMarker' => TokenType::EndMarker,
-                    'Indent' => TokenType::Indent,
-                    'Dedent' => TokenType::Dedent,
-                    // @todo: ASYNC, AWAIT
-                    // @todo: Name, NUMBER, STRING, OP, TYPE_COMMENT
-                    // @todo: SOFT_KEYWORD
-                ];
-                if (isset($specialWords[$expected])) {
-                    $expected = $specialWords[$expected];
-                } */
-
-                if ($token->type == $expected) { // Compare by token type
-                    return $this->tokenizer->nextToken();
-                }
-
                 return null;
             },
             $expected,

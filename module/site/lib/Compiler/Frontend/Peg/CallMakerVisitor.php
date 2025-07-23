@@ -12,7 +12,7 @@ use WeakMap;
 /**
  * [PythonCallMakerVisitor](https://github.com/python/cpython/blob/3.12/Tools/peg_generator/pegen/python_generator.py#L93)
  */
-class PhpCallMakerVisitor extends GrammarVisitor {
+class CallMakerVisitor extends GrammarVisitor {
     /**
      * @var WeakMap Dict[Any, Any] = {}
      */
@@ -32,12 +32,12 @@ class PhpCallMakerVisitor extends GrammarVisitor {
     protected function visitNameLeaf(NameLeaf $node): array {
         $name = $node->value;
         switch (true) {
-            case $name === 'SOFT_KEYWORD':
+            case $name === TokenType::SoftKeyword->name:
                 return ["soft_keyword", $this->softKeyword()];
-            case in_array($name, ["NAME", "NUMBER", "STRING", "OP", "TYPE_COMMENT"]):
+            case in_array($name, [TokenType::Name->name, TokenType::Number->name, TokenType::String->name, TokenType::Op->name, TokenTYpe::TypeComment->name]):
                 $name = strtolower($name);
                 return [$name, '$this->' . $name . '()'];
-            case in_array($name, ["NEWLINE", "DEDENT", "INDENT", "ENDMARKER", "ASYNC", "AWAIT"]):
+            case in_array($name, [TokenType::NewLine->name, TokenType::Dedent->name, TokenType::Indent->name, TokenType::EndMarker->name, TokenType::Async->name, TokenType::Await->name]):
                 // @todo: difference in Python's keywords and PHP keywords
                 // Avoid using names that can be PHP keywords
                 return [strtolower($name), '$this->expect(\'' . $name . '\')'];

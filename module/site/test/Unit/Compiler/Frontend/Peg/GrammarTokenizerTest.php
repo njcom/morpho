@@ -21,13 +21,13 @@ class GrammarTokenizerTest extends TestCase {
     }
 
     public function testTokenize_EmptyString() {
-        $this->assertTokensStr("Token(type=0 (EndMarker), value='', start=(1, 0), end=(1, 0), line='')", $this->tokenizer->tokenize(''));
+        $this->assertTokensStr("Token(type=0 (EndMarker), value='', start=(1, 0), end=(1, 0), line='')", $this->tokenizer->__invoke(''));
     }
 
     public function testTokenize_Sample1() {
         $doubleQuote3 = '"""';
         $stream = $this->mkStream("@subheader $doubleQuote3\n");
-        $tokens = $this->tokenizer->tokenize($stream);
+        $tokens = $this->tokenizer->__invoke($stream);
         $this->assertTokensStr(
             <<<'EOF'
         Token(type=55 (Op), value='@', start=(1, 0), end=(1, 1), line='@subheader """\n')
@@ -43,7 +43,7 @@ class GrammarTokenizerTest extends TestCase {
 '(' "memo" ')' { "memo" }
 EOF;
         $stream = $this->mkStream(rtrim($s) . "\n\n");
-        $tokens = $this->tokenizer->tokenize($stream);
+        $tokens = $this->tokenizer->__invoke($stream);
         $this->assertTokensStr(
             <<<'EOF'
 Token(type=3 (String), value="'('", start=(1, 0), end=(1, 3), line='\'(\' "memo" \')\' { "memo" }\n')
@@ -63,7 +63,7 @@ EOF,
     public function testTokenize_Sample3() {
         $s = "+\n";
         $stream = $this->mkStream($s);
-        $tokens = $this->tokenizer->tokenize($stream);
+        $tokens = $this->tokenizer->__invoke($stream);
         $this->assertTokensStr(
             <<<'EOF'
             Token(type=55 (Op), value='+', start=(1, 0), end=(1, 1), line='+\n')
@@ -76,7 +76,7 @@ EOF,
 
     public function testTokenize_NewLine() {
         $stream = $this->mkStream("\n\n");
-        $tokens = $this->tokenizer->tokenize($stream);
+        $tokens = $this->tokenizer->__invoke($stream);
         #d(Peg::prettyPrintTokens($tokens));
         $this->assertTokensStr(
             <<<'EOF'
@@ -99,7 +99,7 @@ EOF,
             Token(type=65 (ContinuedNewLine), value='\n', start=(2, 0), end=(2, 1), line='\n')
             Token(type=0 (EndMarker), value='', start=(3, 0), end=(3, 0), line='')
             EOF,
-            $this->tokenizer->tokenize($grammarCode)
+            $this->tokenizer->__invoke($grammarCode)
         );
     }
 
@@ -109,7 +109,7 @@ EOF,
             | "{" ~ atoms=target_atoms? "}" { "{" + (atoms or "") + "}" }
         EOF;
         $stream = $this->mkStream(rtrim($s) . "\n\n");
-        $tokens = $this->tokenizer->tokenize($stream);
+        $tokens = $this->tokenizer->__invoke($stream);
         $this->assertTokensStr(
             <<<'EOF'
             Token(type=1 (Name), value='target_atom', start=(1, 0), end=(1, 11), line='target_atom[str]:\n')
@@ -142,7 +142,7 @@ EOF,
     public function testTokenize_MetaGrammar() {
         $metaGrammarFilePath = dirname(new \ReflectionClass(GrammarTokenizer::class)->getFileName()) . '/rc/meta.gram';
         $stream = $this->mkStream(rtrim(file_get_contents($metaGrammarFilePath)) . "\n");
-        $actualTokens = $this->tokenizer->tokenize($stream);
+        $actualTokens = $this->tokenizer->__invoke($stream);
         $expectedTokens = file_get_contents($this->getTestDirPath() . '/meta-grammar-tokens');
         $this->checkTokens($expectedTokens, $actualTokens);
     }
@@ -158,7 +158,7 @@ EOF,
             Token(type=4 (NewLine), value='', start=(1, 11), end=(1, 12), line='start: foo?')
             Token(type=0 (EndMarker), value='', start=(2, 0), end=(2, 0), line='')
             EOF,
-            $this->tokenizer->tokenize($grammar)
+            $this->tokenizer->__invoke($grammar)
         );
     }
 

@@ -24,7 +24,7 @@ class PegTest extends TestCase {
                 new Token(TokenType::NewLine, '', [1, 7], [1, 8], '+ 21 35'),
                 new Token(TokenType::EndMarker, '', [2, 0], [2, 0], ''),
             ],
-            iterator_to_array(Peg::mkGrammarTokenizer("+ 21 35"))
+            iterator_to_array(Peg::tokenizeGrammar("+ 21 35"))
         );
 
         $this->assertEquals(
@@ -64,7 +64,7 @@ class PegTest extends TestCase {
         OUT
         );
 
-        $tree = Peg::parseProgram($grammar, Peg::mkGrammarTokenizer('+ 23 46'));
+        $tree = Peg::parseProgram($grammar, Peg::tokenizeGrammar('+ 23 46'));
         $this->assertEquals([
             [
                 [
@@ -86,7 +86,7 @@ class PegTest extends TestCase {
         $tmpFilePath = $this->tmpFilePath();
         $parserClass = Peg::generateParserFile($grammar, $tmpFilePath);
         require $tmpFilePath;
-        $parser = new $parserClass(Peg::mkGrammarTokenizer("+32 53\n"));
+        $parser = new $parserClass(Peg::tokenizeGrammar("+32 53\n"));
         $tree = Peg::runParser($parser);
         $this->assertEquals([
             [

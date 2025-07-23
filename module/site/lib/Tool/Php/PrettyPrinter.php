@@ -70,12 +70,13 @@ class PrettyPrinter extends BasePrettyPrinter {
      *
      * @return string Pretty printed statements
      */
-    public function prettyPrintFile(array $stmts): string {
+    public function prettyPrintFile(array $stmts, bool $strictTypes = true): string {
+        $strictSmtp = $strictTypes ? ' declare(strict_types=1);' : '';
         if (!$stmts) {
-            return "<?php declare(strict_types=1);" . $this->newline ;
+            return "<?php$strictSmtp" . $this->newline;
         }
 
-        $p = "<?php declare(strict_types=1);" . $this->newline . $this->prettyPrint($stmts);
+        $p = "<?php$strictSmtp" . $this->newline . $this->prettyPrint($stmts);
 
         if ($stmts[0] instanceof Stmt\InlineHTML) {
             $p = preg_replace('/^<\?php\s+\?>\r?\n?/', '', $p);

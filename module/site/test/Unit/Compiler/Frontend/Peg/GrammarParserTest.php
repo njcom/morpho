@@ -24,7 +24,7 @@ class GrammarParserTest extends TestCase {
         parent::setUp();
         $this->parser = new GrammarParser(
             new Tokenizer(
-                GrammarTokenizer::tokenize($this->mkStream('foo: bar'))
+                new GrammarTokenizer()->__invoke($this->mkStream('foo: bar'))
             )
         );
     }

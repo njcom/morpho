@@ -27,45 +27,36 @@ use const Morpho\Base\INDENT;
  * 2. Allow to use PythonParserGenerator generate(self, filename: str) -> None:
  */
 class ParserGenerator implements IGrammarVisitor {
-    private InvalidNodeVisitor $invalidVisitor;
-    private ?string $unreachableFormatting;
-    private ?string $locationFormatting;
-
-    protected Grammar $grammar;
+    private Grammar $grammar;
 
     /**
      * For name_rule()/name_loop()
      */
-    protected int $counter = 0;
+    private int $counter = 0;
 
-    protected GrammarVisitor $callMakerVisitor;
+    private GrammarVisitor $callMakerVisitor;
 
     /**
      * @var resource IO[Text]
      */
-    protected $stream;
+    private $stream;
 
-    protected int $level = 0;
-
-    /**
-     * @var mixed Dict[str, Rule]
-     */
-    protected array $allRules;
+    private int $level = 0;
 
     /**
      * @var array List[List[str]]
      */
-    protected array $localVarStack = [];
+    private array $localVarStack = [];
 
     /**
      * @var array Dict[str, int]
      */
-    protected array $keywords = [];
+    private array $keywords = [];
 
     /**
      * @var array Set[str]
      */
-    protected array $softKeywords = [];
+    private array $softKeywords = [];
 
 
     private int $keywordCounter = 499;
@@ -75,9 +66,19 @@ class ParserGenerator implements IGrammarVisitor {
      */
     private array $rules;
 
+    /**
+     * @var mixed Dict[str, Rule]
+     */
+    private array $allRules;
+
     private readonly array $firstGraph;
 
     private readonly iterable $firstSccs;
+
+    private InvalidNodeVisitor $invalidVisitor;
+    private ?string $unreachableFormatting;
+    private ?string $locationFormatting;
+
 
     /**
      * __init__(self, grammar: grammar.Grammar, file: Optional[IO[Text]], tokens: Set[str] = set(token.tok_name.values()), location_formatting: Optional[str] = None,unreachable_formatting: Optional[str] = None)
@@ -100,14 +101,14 @@ class ParserGenerator implements IGrammarVisitor {
         // self.all_rules:  = self.rules.copy()
         $this->allRules = $this->rules; # Rules + temporal rules
 
-        $this->callMakerVisitor = new PhpCallMakerVisitor($this);
+        $this->callMakerVisitor = new CallMakerVisitor($this);
         $this->invalidVisitor = new InvalidNodeVisitor();
         $this->unreachableFormatting = $unreachableFormatting ?? "null  // pragma: no cover";
         $this->locationFormatting = ($locationFormatting ?? "lineno=start_lineno, col_offset=start_col_offset, ") . "end_lineno=end_lineno, end_col_offset=end_col_offset";
     }
 
     /**
-     * @param array|null $context
+     * @param array|null $conf
      *      namespace: string
      *      parentClass: Optional[string]
      *      class: string
@@ -115,15 +116,18 @@ class ParserGenerator implements IGrammarVisitor {
      *      subheader: string
      * @return string
      */
-    public function generate(array|null $context = null): string {
-        $context = (array)$context;
-        if (!isset($context['namespace'])) {
-            $context['namespace'] = __NAMESPACE__ . '\\Generated' . str_replace([' ', '.'], '', microtime());
+    public function generate(array|null $conf = null): string {
+        $conf = (array)$conf;
+        // @todo: $conf vs $this->grammar->metas
+        if (!isset($conf['namespace'])) {
+            $conf['namespace'] = __NAMESPACE__ . '\\Generated' . str_replace([' ', '.'], '', microtime());
         }
-        $parentClass = 'Parser';
+        if (!isset($conf['parentClass'])) {
+            $conf['parentClass'] = init(get_class($this), '\\') . "\\Parser";
+        }
         // @todo: Use PhpParser's generator?
         $this->collectRules();
-        $header = $this->grammar->metas['header'] ?? "<?php\nnamespace {$context['namespace']};\nuse " . init(get_class($this), '\\') . "\\Parser;";
+        $header = $this->grammar->metas['header'] ?? "<?php\nnamespace {$conf['namespace']};\nuse " . $conf['parentClass'] . ';';
         if (null !== $header) {
             $this->write($header);
         }
@@ -132,9 +136,9 @@ class ParserGenerator implements IGrammarVisitor {
             $this->write($subheader);
         }
         $class = $this->grammar->metas['class'] ?? 'GeneratedParser';
-        $context['class'] = $class;
+        $conf['class'] = $class;
         $this->write("// Keywords and soft keywords are listed at the end of the parser definition.");
-        $this->write("class $class extends $parentClass {");
+        $this->write("class $class extends " . last($conf['parentClass'], '\\') . ' {');
         foreach ($this->allRules as $rule) {
             $this->write();
             $this->visit($rule);
@@ -144,11 +148,11 @@ class ParserGenerator implements IGrammarVisitor {
         //$this->write('const KEYWORDS = [' . implode(', ', array_keys($this->keywords)) . '];');
         //$this->write('const SOFT_KEYWORDS = [' . implode(', ', array_keys($this->softKeywords)) . '];');
         //self.print(f"SOFT_KEYWORDS = {tuple(self.soft_keywords)}")
-        $footer = $this->grammar->metas['trailer'] ?? $this->fileFooter($context);
+        $footer = $this->grammar->metas['trailer'] ?? $this->fileFooter($conf);
         if (null !== $footer) {
             $this->write(rtrim($footer));
         }
-        return $context['namespace'] . '\\' . $class;
+        return $conf['namespace'] . '\\' . $class;
     }
 
     /**

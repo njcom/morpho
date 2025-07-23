@@ -12,7 +12,7 @@ use Morpho\Compiler\Frontend\Peg\Peg;
 use Morpho\Testing\TestCase;
 
 /**
- * Based on https://github.com/python/cpython/blob/main/Lib/test/test_peg_generator/test_first_sets.py
+ * Based on https://github.com/python/cpython/blob/3.11/Lib/test/test_peg_generator/test_first_sets.py
  */
 class FirstSetCalculatorTest extends TestCase {
     private ParserTestHelper $testHelper;
@@ -41,7 +41,7 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testOptionals(): void {
         $grammar = <<<OUT
-        start: expr NEWLINE
+        start: expr NewLine
         expr: ['a'] ['b'] 'c'
         OUT;
         $this->checkCalculator(
@@ -55,13 +55,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testRepeatWithSeparator(): void {
         $grammar = <<<OUT
-        start: ','.thing+ NEWLINE
-        thing: NUMBER
+        start: ','.thing+ NewLine
+        thing: Number
         OUT;
         $this->checkCalculator(
             [
-                'thing' => ['NUMBER'],
-                'start' => ['NUMBER'],
+                'thing' => ['Number'],
+                'start' => ['Number'],
             ],
             $grammar
         );
@@ -69,15 +69,15 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testOptionalOperator(): void {
         $grammar = <<<OUT
-        start: sum NEWLINE
+        start: sum NewLine
         sum: (term)? 'b'
-        term: NUMBER
+        term: Number
         OUT;
         $this->checkCalculator(
             [
-                "term"  => ["NUMBER"],
-                "sum"   => ["NUMBER", "'b'"],
-                "start" => ["'b'", "NUMBER"],
+                "term"  => ["Number"],
+                "sum"   => ["Number", "'b'"],
+                "start" => ["'b'", "Number"],
             ],
             $grammar,
         );
@@ -85,15 +85,15 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testOptionalLiteral(): void {
         $grammar = <<<OUT
-        start: sum NEWLINE
+        start: sum NewLine
         sum: '+' ? term
-        term: NUMBER
+        term: Number
         OUT;
         $this->checkCalculator(
             [
-                'term'  => ['NUMBER'],
-                'sum'   => ["'+'", "NUMBER"],
-                "start" => ["'+'", "NUMBER"],
+                'term'  => ['Number'],
+                'sum'   => ["'+'", "Number"],
+                "start" => ["'+'", "Number"],
             ],
             $grammar
         );
@@ -101,13 +101,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testOptionalBefore(): void {
         $grammar = <<<OUT
-        start: term NEWLINE
-        term: ['+'] NUMBER
+        start: term NewLine
+        term: ['+'] Number
         OUT;
         $this->checkCalculator(
             [
-                "term"  => ["NUMBER", "'+'"],
-                "start" => ["NUMBER", "'+'"],
+                "term"  => ["Number", "'+'"],
+                "start" => ["Number", "'+'"],
             ],
             $grammar,
         );
@@ -115,13 +115,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testRepeat0(): void {
         $grammar = <<<OUT
-        start: thing* "+" NEWLINE
-        thing: NUMBER
+        start: thing* "+" NewLine
+        thing: Number
         OUT;
         $this->checkCalculator(
             [
-                "thing" => ["NUMBER"],
-                "start" => ['"+"', "NUMBER"],
+                "thing" => ["Number"],
+                "start" => ['"+"', "Number"],
             ],
             $grammar,
         );
@@ -129,13 +129,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testRepeat0WithGroup(): void {
         $grammar = <<<OUT
-        start: ('+' '-')* term NEWLINE
-        term: NUMBER
+        start: ('+' '-')* term NewLine
+        term: Number
         OUT;
         $this->checkCalculator(
             [
-                "term"  => ["NUMBER"],
-                "start" => ["'+'", "NUMBER"],
+                "term"  => ["Number"],
+                "start" => ["'+'", "Number"],
             ],
             $grammar,
         );
@@ -143,13 +143,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testRepeat1(): void {
         $grammar = <<<OUT
-        start: thing+ '-' NEWLINE
-        thing: NUMBER
+        start: thing+ '-' NewLine
+        thing: Number
         OUT;
         $this->checkCalculator(
             [
-                "thing" => ["NUMBER"],
-                "start" => ["NUMBER"],
+                "thing" => ["Number"],
+                "start" => ["Number"],
             ],
             $grammar,
         );
@@ -157,12 +157,12 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testRepeat1WithGroup(): void {
         $grammar = <<<OUT
-        start: ('+' term)+ term NEWLINE
-        term: NUMBER
+        start: ('+' term)+ term NewLine
+        term: Number
         OUT;
         $this->checkCalculator(
             [
-                "term"  => ["NUMBER"],
+                "term"  => ["Number"],
                 "start" => ["'+'"],
             ],
             $grammar,
@@ -171,13 +171,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testGather(): void {
         $grammar = <<<OUT
-        start: ','.thing+ NEWLINE
-        thing: NUMBER
+        start: ','.thing+ NewLine
+        thing: Number
         OUT;
         $this->checkCalculator(
             [
-                "thing" => ["NUMBER"],
-                "start" => ["NUMBER"],
+                "thing" => ["Number"],
+                "start" => ["Number"],
             ],
             $grammar,
         );
@@ -185,7 +185,7 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testPositiveLookahead(): void {
         $grammar = <<<OUT
-        start: expr NEWLINE
+        start: expr NewLine
         expr: &'a' opt
         opt: 'a' | 'b' | 'c'
         OUT;
@@ -201,7 +201,7 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testNegativeLookahead(): void {
         $grammar = <<<OUT
-        start: expr NEWLINE
+        start: expr NewLine
         expr: !'a' opt
         opt: 'a' | 'b' | 'c'
         OUT;
@@ -217,18 +217,18 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testLeftRecursion(): void {
         $grammar = <<<OUT
-        start: expr NEWLINE
+        start: expr NewLine
         expr: ('-' term | expr '+' term | term)
-        term: NUMBER
+        term: Number
         foo: 'foo'
         bar: 'bar'
         baz: 'baz'
         OUT;
         $this->checkCalculator(
             [
-                "expr"  => ["NUMBER", "'-'"],
-                "term"  => ["NUMBER"],
-                "start" => ["NUMBER", "'-'"],
+                "expr"  => ["Number", "'-'"],
+                "term"  => ["Number"],
+                "start" => ["Number", "'-'"],
                 "foo"   => ["'foo'"],
                 "bar"   => ["'bar'"],
                 "baz"   => ["'baz'"],
@@ -239,13 +239,13 @@ class FirstSetCalculatorTest extends TestCase {
 
     public function testAdvanceLeftRecursion(): void {
         $grammar = <<<OUT
-        start: NUMBER | sign start
+        start: Number | sign start
         sign: ['-']
         OUT;
         $this->checkCalculator(
             [
                 "sign"  => ["'-'", ""],
-                "start" => ["'-'", "NUMBER"],
+                "start" => ["'-'", "Number"],
             ],
             $grammar,
         );
@@ -270,14 +270,14 @@ class FirstSetCalculatorTest extends TestCase {
     public function testNastyLeftRecursion(): void {
         $grammar = <<<OUT
         start: target '='
-        target: maybe '+' | NAME
+        target: maybe '+' | Name
         maybe: maybe '-' | target
         OUT;
         $this->checkCalculator(
             [
                 "maybe"  => [],
-                "target" => ["NAME"],
-                "start"  => ["NAME"],
+                "target" => ["Name"],
+                "start"  => ["Name"],
             ],
             $grammar,
         );
@@ -287,13 +287,13 @@ class FirstSetCalculatorTest extends TestCase {
         $grammar = <<<OUT
         start: sign thing $
         sign: ['-']
-        thing: NUMBER
+        thing: Number
         OUT;
         $this->checkCalculator(
             [
                 "sign"  => ["", "'-'"],
-                "thing" => ["NUMBER"],
-                "start" => ["NUMBER", "'-'"],
+                "thing" => ["Number"],
+                "start" => ["Number", "'-'"],
             ],
             $grammar,
         );
@@ -305,7 +305,7 @@ class FirstSetCalculatorTest extends TestCase {
         OUT;
         $this->checkCalculator(
             [
-                "start" => ["ENDMARKER", "'-'"],
+                "start" => ['EndMarker', "'-'"],
             ],
             $grammar,
         );

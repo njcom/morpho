@@ -73,9 +73,9 @@ namespace Morpho\Tool\Php {
         return $pp->prettyPrint($nodes);
     }
 
-    function ppFile(array $nodes): string {
+    function ppFile(array $nodes, bool $strictTypes = true): string {
         $pp = new PrettyPrinter();
-        return $pp->prettyPrintFile($nodes);
+        return $pp->prettyPrintFile($nodes, $strictTypes);
     }
 
     function process(string $text, array $visitors): string {

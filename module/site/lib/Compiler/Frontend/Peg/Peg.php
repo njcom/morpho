@@ -6,11 +6,8 @@
  */
 namespace Morpho\Compiler\Frontend\Peg;
 
-use Traversable;
-
-use UnexpectedValueException;
-
 use Morpho\Base\NotImplementedException;
+use UnexpectedValueException;
 use function Morpho\Base\enumVals;
 use function Morpho\Tool\Php\parse;
 use function Morpho\Base\mkStream;
@@ -27,52 +24,38 @@ class Peg {
     public const int FORMAT_AS_FRAGMENT = 1;
     public const int FORMAT_AS_FILE = 2;
 
-    public static function prettyPrintTokens(iterable $tokenizer): string {
-        $output = '';
-        foreach ($tokenizer as $token) {
-            $output .= (string) $token . "\n";
-        }
-        return $output;
-    }
-
-    /**
-     * @param string|resource $grammarCode
-     */
-    public static function prettyPrintGrammarTokens($grammarCode): string {
-        return self::prettyPrintTokens(self::mkGrammarTokenizer($grammarCode));
-    }
-
-   /**
-     * @param string|resource $grammarCode
-     * @return \Morpho\Compiler\Frontend\Peg\ITokenizer
-     */
-    public static function mkGrammarTokenizer($grammarCode): ITokenizer {
-        return new Tokenizer(GrammarTokenizer::tokenize($grammarCode));
-    }
-
     /**
      * Creates Grammar AST from grammar code.
      * @param resource|string $grammarCode
      */
     public static function parseGrammar($grammarCode): Grammar {
-        $grammarTokenizer = self::mkGrammarTokenizer($grammarCode);
-        return self::runParser(new GrammarParser($grammarTokenizer));
+        return self::runParser(
+            new GrammarParser(self::tokenizeGrammar($grammarCode))
+        );
     }
 
-    public static function parseProgram(string|Grammar $grammar, ITokenizer $programTokenizer, array|null $parserGeneratorConf = null) {
+    public static function tokenizeGrammar($grammarCode): ITokenizer {
+        return new Tokenizer(new GrammarTokenizer()->__invoke($grammarCode));
+    }
+
+    public static function parseProgram(string|Grammar $grammar, ITokenizer $tokenizer, array|null $parserGeneratorConf = null, $format = self::FORMAT_AS_FRAGMENT): array {
         if (!is_object($grammar)) {
             $grammar = self::parseGrammar($grammar);
         }
-        [$parserClass, $parserCode] = self::generateParserCode($grammar, $parserGeneratorConf);
-        $programParser = self::evalParserCode($parserClass, $parserCode, $programTokenizer);
-        return self::runParser($programParser);
+        [$parserClass, $parserCode] = self::generateParserCode($grammar, $parserGeneratorConf, format: $format);
+        $parser = self::evalParserCode($parserClass, $parserCode, $tokenizer, $format);
+        return [$parser, $parserCode];
     }
 
-    public static function mkParserGenerator(Grammar $grammar, $stream, $ruleChecker = null) {
-        return new ParserGenerator($grammar, $stream, $ruleChecker ?? new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
+    public static function runParser(Parser $parser): mixed {
+        $tree = $parser->start();
+        if (!$tree) {
+            throw $parser->mkSyntaxError('Invalid syntax');
+        }
+        return $tree;
     }
 
-    public static function generateParserCode(Grammar $grammar, $parserGenerator = null, array|null $parserGeneratorConf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
+    public static function generateParserCode(Grammar $grammar, $parserGenerator, array|null $parserGeneratorConf = null, int $format = self::FORMAT_AS_FRAGMENT): array {
         $targetProgramStream = mkStream('');
         if (!$parserGenerator) {
             $parserGenerator = self::mkParserGenerator($grammar, $targetProgramStream);
@@ -83,7 +66,7 @@ class Peg {
             throw new UnexpectedValueException();
         }
         if ($format & self::FORMAT_AS_FILE) {
-            return [$parserClass, ppFile(parse($parserCode))];
+            return [$parserClass, ppFile(parse($parserCode), false)];
         }
         if ($format & self::FORMAT_AS_FRAGMENT) {
             return [$parserClass, pp(parse($parserCode))];
@@ -91,23 +74,31 @@ class Peg {
         return [$parserClass, $parserCode];
     }
 
+    public static function mkParserGenerator(Grammar $grammar, $stream, $ruleChecker = null) {
+        return new ParserGenerator($grammar, $stream, $ruleChecker ?? new RuleCheckingVisitor(array_keys(enumVals(TokenType::class))));
+    }
+
     public static function generateParserFile(Grammar $grammar, string $targetFilePath, array|null $parserGeneratorConf = null): string {
+        throw new NotImplementedException();
+        /*
         [$parserClass, $parserCode] = self::generateParserCode($grammar, parserGeneratorConf: $parserGeneratorConf, format: self::FORMAT_AS_FILE);
         file_put_contents($targetFilePath, $parserCode);
         return $parserClass;
+        */
     }
 
-    public static function evalParserCode(string $parserClass, string $parserCode, ITokenizer $programTokenizer) {
-        eval($parserCode);
-        return new $parserClass($programTokenizer);
-    }
-
-    public static function runParser(Parser $parser): mixed {
-        $tree = $parser->start();
-        if (!$tree) {
-            throw $parser->mkSyntaxError('Invalid syntax');
+    /**
+     * E.g. Peg::prettyPrintTokens(Peg::mkGrammarTokenizer($grammarCode))
+     * 
+     * @param iterable $tokens
+     * @return string
+     */
+    public static function prettyPrintTokens(iterable $tokens): string {
+        $output = '';
+        foreach ($tokens as $token) {
+            $output .= (string) $token . "\n";
         }
-        return $tree;
+        return $output;
     }
 
     /**
@@ -127,5 +118,16 @@ class Peg {
                     d($literal);
                 }*/
         return eval('return ' . $literal . ';');
+    }
+
+    private static function evalParserCode(string $parserClass, string $parserCode, ITokenizer $programTokenizer, $format): Parser {
+        if ($format & self::FORMAT_AS_FILE) {
+            eval('?>' . $parserCode);
+        } elseif ($format & self::FORMAT_AS_FRAGMENT) {
+            eval($parserCode);
+        } else {
+            throw new UnexpectedValueException();
+        }
+        return new $parserClass($programTokenizer);
     }
 }

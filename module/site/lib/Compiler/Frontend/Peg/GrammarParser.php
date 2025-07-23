@@ -23,7 +23,7 @@ class GrammarParser extends Parser {
             __METHOD__,
             function (): ?Grammar {
                 $index = $this->tokenizer->index;
-                if (($grammar = $this->grammar()) && $this->expect(TokenType::EndMarker)) {
+                if (($grammar = $this->grammar()) && $this->expect(TokenType::EndMarker->name)) {
                     return $grammar;
                 }
                 $this->tokenizer->index = $index;
@@ -82,15 +82,15 @@ class GrammarParser extends Parser {
             __METHOD__,
             function (): ?array {
                 $index = $this->tokenizer->index;
-                if ($this->expect('@') && ($name = $this->name()) && $this->expect(TokenType::NewLine)) {
+                if ($this->expect('@') && ($name = $this->name()) && $this->expect(TokenType::NewLine->name)) {
                     return [$name->value, null];
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect('@') && ($a = $this->name()) && ($b = $this->name()) && $this->expect(TokenType::NewLine)) {
+                if ($this->expect('@') && ($a = $this->name()) && ($b = $this->name()) && $this->expect(TokenType::NewLine->name)) {
                     return [$a->value, $b->value];
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect('@') && ($name = $this->name()) && ($string = $this->string()) && $this->expect(TokenType::NewLine)) {
+                if ($this->expect('@') && ($name = $this->name()) && ($string = $this->string()) && $this->expect(TokenType::NewLine->name)) {
                     return [$name->value, Peg::literalEval($string->value)];
                 }
                 $this->tokenizer->index = $index;
@@ -134,10 +134,10 @@ class GrammarParser extends Parser {
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
                     && ($alts = $this->alts())
-                    && ($this->expect(TokenType::NewLine))
-                    && ($this->expect(TokenType::Indent))
+                    && ($this->expect(TokenType::NewLine->name))
+                    && ($this->expect(TokenType::Indent->name))
                     && ($moreAlts = $this->moreAlts())
-                    && ($this->expect(TokenType::Dedent))
+                    && ($this->expect(TokenType::Dedent->name))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], new Rhs(array_merge($alts->alts, $moreAlts->alts)), memo: $opt === true ? null : $opt);
                 }
@@ -147,10 +147,10 @@ class GrammarParser extends Parser {
                     ($ruleName = $this->ruleName())
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
-                    && ($this->expect(TokenType::NewLine))
-                    && ($this->expect(TokenType::Indent))
+                    && ($this->expect(TokenType::NewLine->name))
+                    && ($this->expect(TokenType::Indent->name))
                     && ($moreAlts = $this->moreAlts())
-                    && ($this->expect(TokenType::Dedent))
+                    && ($this->expect(TokenType::Dedent->name))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], $moreAlts, memo: $opt === true ? null : $opt);
                 }
@@ -161,7 +161,7 @@ class GrammarParser extends Parser {
                     && ($opt = ($this->memoFlag() || true))
                     && ($this->expect(":"))
                     && ($alts = $this->alts())
-                    && ($this->expect(TokenType::NewLine))
+                    && ($this->expect(TokenType::NewLine->name))
                 ) {
                     return new Rule($ruleName[0], $ruleName[1], $alts, memo: $opt === true ? null : $opt);
                 }
@@ -241,13 +241,13 @@ class GrammarParser extends Parser {
                 if (
                     ($this->expect("|"))
                     && ($alts = $this->alts())
-                    && $this->expect(TokenType::NewLine)
+                    && $this->expect(TokenType::NewLine->name)
                     && ($moreAlts = $this->moreAlts())
                 ) {
                     return new Rhs(array_merge($alts->alts, $moreAlts->alts));
                 }
                 $this->tokenizer->index = $index;
-                if ($this->expect("|") && ($alts = $this->alts()) && ($this->expect(TokenType::NewLine))) {
+                if ($this->expect("|") && ($alts = $this->alts()) && ($this->expect(TokenType::NewLine->name))) {
                     return new Rhs($alts->alts);
                 }
                 $this->tokenizer->index = $index;
@@ -268,14 +268,14 @@ class GrammarParser extends Parser {
                     return new Alt(
                         array_merge(
                             $items,
-                            [new NamedItem(null, new NameLeaf(TokenType::EndMarker))]
+                            [new NamedItem(null, new NameLeaf(TokenType::EndMarker->name))]
                         ), action: $action
                     );
                 }
                 $this->tokenizer->index = $index;
                 if (($items = $this->items()) && ($this->expect('$'))) {
                     return new Alt(
-                        array_merge($items, [new NamedItem(null, new NameLeaf(TokenType::EndMarker))])
+                        array_merge($items, [new NamedItem(null, new NameLeaf(TokenType::EndMarker->name))])
                         , action: null
                     );
                 }

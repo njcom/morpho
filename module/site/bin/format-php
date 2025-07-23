@@ -1,10 +1,9 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
-require 'cli.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use PhpParser\PrettyPrinter;
-
-use function Morpho\Tech\Php\parse;
+use function Morpho\Tool\Php\parse;
 
 function process($stream): void {
     $contents = stream_get_contents($stream, offset: 0);
