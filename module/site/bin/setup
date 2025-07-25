@@ -22,7 +22,8 @@ declare -r TEST_DB_USER=root
 declare -r TEST_DB_PASSWORD=root
 declare -r TEST_DB_NAME=test
 
-declare ROLLUP_CONF_FILE_PATH="$FRONTEND_DIR_PATH"/rollup.config.mjs
+declare -r ROLLUP_CONF_FILE_PATH="$FRONTEND_DIR_PATH"/rollup.config.mjs
+declare -r GITHUB_ACTIONS="${GITHUB_ACTIONS-}"
 
 ################################################################################
 # Functions
@@ -109,8 +110,12 @@ clean-cache() {
 
 install-npm-packages() {
     echo Installing global NPM packages...
-    npm update -g npm
-    npm install -g typescript sass rollup # yarn
+    declare sudo=''
+    if [[ "$GITHUB_ACTIONS" ]]; then
+        sudo='sudo'
+    fi
+    $sudo npm update -g npm
+    $sudo npm install -g typescript sass rollup # yarn
     # todo: postcss autoprefixer prettier terser
     # todo Install deno using package manager
 
