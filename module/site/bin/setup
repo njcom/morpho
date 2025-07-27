@@ -80,24 +80,6 @@ configure_block_dev() {
     fi
 }
 
-deploy_results() {
-    :
-    ## https://docs.travis-ci.com/user/deployment/pages/
-    ## deploy nightly builds
-    ##deploy:
-    ##  provider: pages
-    ##  skip-cleanup: true
-    ##  github-token: $GITHUB_TOKEN
-    ##  keep-history: true
-    ##  # Directory to push to GitHub Pages, relative to the current directory, defaults to the current directory (example: your_build_folder)
-    ##  local-dir: test/result
-    ##  # Optional, be verbose about internal steps, defaults to false.
-    ##  verbose: false
-    ##  on:
-    ##    repo: morpho-os/morpho-os.github.io
-    ##    branch: master
-}
-
 ################################################################################
 ## Backend
 
@@ -204,7 +186,10 @@ ci-cd-build() {
     configure_nginx
     composer --ignore-platform-reqs --no-ansi --no-interaction install
     configure_db_server
-    # todo
+}
+
+ci-cd-deploy() {
+    :
 }
 
 ################################################################################
