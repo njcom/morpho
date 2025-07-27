@@ -73,11 +73,9 @@ class CompilerTest extends TestCase {
     }
 
     public static function dataStepsAccessors() {
-        yield [
-            'frontend',
-            'midend',
-            'backend',
-        ];
+        yield ['frontend'];
+        yield ['midend'];
+        yield ['backend'];
     }
 
     #[DataProvider('dataStepsAccessors')]

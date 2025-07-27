@@ -59,16 +59,12 @@ class MustTest extends TestCase {
     }
 
     public static function dataBeNotEmpty_Invalid(): iterable {
-        return [
-            [
-                '',
-                false,
-                null,
-                0,
-                0.0,
-                [],
-            ],
-        ];
+        yield [false];
+        yield [''];
+        yield [null];
+        yield [0];
+        yield [0.0];
+        yield [[]];
     }
 
     #[DataProvider('dataBeNotEmpty_Invalid')]

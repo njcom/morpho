@@ -23,6 +23,9 @@ class App implements IFn {
     }
 
     public ?ServiceManager $serviceManager {
+        set(ServiceManager|null $serviceManager) {
+            $this->_serviceManager = $serviceManager;
+        }
         get {
             if (!$this->_serviceManager) {
                 $this->_serviceManager = $this->mkServiceManager();
@@ -30,15 +33,6 @@ class App implements IFn {
             return $this->_serviceManager;
         }
     }
-
-/*
-    public function init(): ServiceManager {
-        if (!$this->serviceManager) {
-            $this->serviceManager = $this->mkServiceManager();
-        }
-        return $this->serviceManager;
-    }
-*/
 
     public function __invoke(mixed $context): mixed {
         try {

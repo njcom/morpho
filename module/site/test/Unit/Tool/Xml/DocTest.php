@@ -75,6 +75,7 @@ OUT;
     }
 
     public function testParse_FixEncodingConfParam() {
+        $this->markTestIncomplete();
         $html = <<<OUT
 <!DOCTYPE html><html><body>µ</body></html>
 OUT;

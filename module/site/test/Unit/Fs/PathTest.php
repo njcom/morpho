@@ -102,14 +102,12 @@ class PathTest extends TestCase {
 
     public static function dataAssertSafe_SafePath() {
         return [
-            [
-                '',
-                '.',
-                'C:/foo/bar',
-                'C:\foo\bar',
-                'foo/bar',
-                '/foo/bar/index.php',
-            ],
+            [''],
+            ['.'],
+            ['C:/foo/bar'],
+            ['C:\foo\bar'],
+            ['foo/bar'],
+            ['/foo/bar/index.php'],
         ];
     }
 

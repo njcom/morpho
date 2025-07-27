@@ -22,23 +22,17 @@ class AppTest extends TestCase {
         $this->assertSame($newConf, $app->conf);
     }
 
-    public function testInitTwice_ReturnsTheSameServiceManagerInstance() {
+    public function testServiceManagerAccessor_ReturnsTheSameServiceManagerInstance() {
         $serviceManager = new ServiceManager();
         $app = new SimpleApp($serviceManager);
-        $this->assertSame($serviceManager, $app->init());
-        $this->assertSame($serviceManager, $app->init());
+        $this->assertSame($serviceManager, $app->serviceManager);
+        $this->assertSame($serviceManager, $app->serviceManager);
     }
 }
 
 class SimpleApp extends App {
-    private ServiceManager $serviceManager;
-
     public function __construct(ServiceManager $serviceManager) {
         parent::__construct();
         $this->serviceManager = $serviceManager;
-    }
-
-    protected function mkServiceManager(): ServiceManager {
-        return $this->serviceManager;
     }
 }

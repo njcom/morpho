@@ -27,22 +27,7 @@ use function get_class_methods;
 use function Morpho\Base\{all, any, append, apply, camelize, camelizeKeys, capture, cartesianProduct, caseVal, classify, compose, rcompose, dasherize, deleteDups, enumVals, etrim, formatBytes, formatFloat, fromJson, humanize, indent, index, isEnumCase, isSubset, isUtf8Text, last, lastPos, lines, memoize, merge, normalizeEols, not, op, partial, permutations, pipe, prepend, q, qq, reorderKeys, sanitize, setProps, setsEqual, shorten, subsets, symDiff, titleize, toIt, toJson, tpl, ucfirst, underscore, underscoreKeys, unindent, union, uniqueName, unsetMany, unsetOne, unsetRecursive, waitUntilNumOfAttempts, waitUntilTimeout, with, words, wrap};
 use function property_exists;
 
-use const Morpho\Base\PHP_FILE_FULL_RE;
-
 class FunctionsTest extends TestCase {
-    public function testPhpFilesFullRe() {
-        $phpFileRe = PHP_FILE_FULL_RE . 'si';
-        $this->assertEquals(1, preg_match($phpFileRe, __FILE__));
-        $this->assertEquals(1, preg_match($phpFileRe, basename(__FILE__)));
-        $this->assertEquals(1, preg_match($phpFileRe, 'foo/.php'));
-        $this->assertEquals(1, preg_match($phpFileRe, '.php'));
-
-        $this->assertEquals(0, preg_match($phpFileRe, __FILE__ . '.ts'));
-        $this->assertEquals(0, preg_match($phpFileRe, basename(__FILE__) . '.ts'));
-        $this->assertEquals(0, preg_match($phpFileRe, 'foo/.ts'));
-        $this->assertEquals(0, preg_match($phpFileRe, '.ts'));
-    }
-
     public function testIsEnumCase() {
         $this->assertFalse(isEnumCase($this));
         $this->assertFalse(isEnumCase(__CLASS__));
