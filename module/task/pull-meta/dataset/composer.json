@@ -59,8 +59,8 @@
         "cycle": "2.8",
         "releaseDate": "2024-10-02",
         "eol": false,
-        "latest": "2.8.8",
-        "latestReleaseDate": "2025-04-04",
+        "latest": "2.8.10",
+        "latestReleaseDate": "2025-07-10",
         "lts": false
     }
 ]

@@ -421,11 +421,11 @@
         "cycle": "23.10",
         "codename": "Mantic Minotaur",
         "releaseDate": "2023-10-12",
-        "eol": "2024-07-11",
+        "eol": "2024-07-12",
         "latest": "23.10",
         "latestReleaseDate": "2023-10-12",
         "lts": false,
-        "support": "2024-07-11",
+        "support": "2024-07-12",
         "extendedSupport": false
     },
     {
@@ -434,20 +434,31 @@
         "lts": true,
         "releaseDate": "2024-04-25",
         "eol": "2029-04-25",
-        "latest": "24.04.2",
-        "latestReleaseDate": "2025-02-20",
+        "latest": "24.04.3",
+        "latestReleaseDate": "2025-08-07",
         "support": "2029-04-25",
         "extendedSupport": "2036-04-25"
     },
     {
         "cycle": "24.10",
         "codename": "Oracular Oriole",
-        "lts": false,
         "releaseDate": "2024-10-10",
-        "eol": "2025-07-11",
+        "eol": "2025-07-10",
         "latest": "24.10",
         "latestReleaseDate": "2024-10-10",
-        "support": "2025-07-11",
+        "lts": false,
+        "support": "2025-07-10",
+        "extendedSupport": false
+    },
+    {
+        "cycle": "25.04",
+        "codename": "Plucky Puffin",
+        "releaseDate": "2025-04-17",
+        "eol": "2026-01-17",
+        "latest": "25.04",
+        "latestReleaseDate": "2025-04-17",
+        "lts": false,
+        "support": "2026-01-17",
         "extendedSupport": false
     }
 ]

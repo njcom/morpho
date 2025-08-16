@@ -197,8 +197,8 @@
         "releaseDate": "2023-04-18",
         "lts": "2023-10-24",
         "eol": "2026-04-30",
-        "latest": "20.19.0",
-        "latestReleaseDate": "2025-03-13",
+        "latest": "20.19.4",
+        "latestReleaseDate": "2025-07-15",
         "support": "2024-10-22",
         "extendedSupport": false
     },
@@ -217,8 +217,8 @@
         "releaseDate": "2024-04-24",
         "lts": "2024-10-29",
         "eol": "2027-04-30",
-        "latest": "22.14.0",
-        "latestReleaseDate": "2025-02-11",
+        "latest": "22.18.0",
+        "latestReleaseDate": "2025-07-31",
         "support": "2025-10-21",
         "extendedSupport": false
     },
@@ -226,10 +226,20 @@
         "cycle": "23",
         "releaseDate": "2024-10-16",
         "eol": "2025-06-01",
-        "latest": "23.11.0",
-        "latestReleaseDate": "2025-04-01",
+        "latest": "23.11.1",
+        "latestReleaseDate": "2025-05-14",
         "lts": false,
         "support": "2025-04-01",
+        "extendedSupport": false
+    },
+    {
+        "cycle": "24",
+        "releaseDate": "2025-05-06",
+        "lts": "2025-10-28",
+        "eol": "2028-04-30",
+        "latest": "24.6.0",
+        "latestReleaseDate": "2025-08-14",
+        "support": "2026-10-20",
         "extendedSupport": false
     }
 ]

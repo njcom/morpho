@@ -61,8 +61,9 @@
         "lts": true,
         "releaseDate": "2020-05-25",
         "eol": "2020-12-08",
-        "latest": "5.15.2",
-        "latestReleaseDate": "2020-11-13",
+        "latest": "5.15.17",
+        "latestReleaseDate": "2025-05-22",
+        "link": "https://www.qt.io/blog/commercial-lts-qt-5.15.17-released",
         "extendedSupport": "2025-05-25"
     },
     {
@@ -151,8 +152,8 @@
         "cycle": "6.9",
         "releaseDate": "2025-04-02",
         "eol": "2025-10-02",
-        "latest": "6.9.0",
-        "latestReleaseDate": "2025-04-02",
+        "latest": "6.9.1",
+        "latestReleaseDate": "2025-06-03",
         "lts": false,
         "extendedSupport": "2026-04-02"
     }

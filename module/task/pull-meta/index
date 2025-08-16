@@ -6,6 +6,7 @@ namespace Morpho\Module\Task;
 use Morpho\Base\Env;
 use function Morpho\App\Cli\{sh, bootstrap, showLine, showSep};
 use function Morpho\Base\{dasherize, fromJson, q};
+use Morpho\Fs\Dir;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -163,10 +164,6 @@ function pullFedoraVers(string $outDirPath): void {
     // https://fedorapeople.org/groups/schedule/
 }
 
-function pullCentosVers(string $outDirPath): void {
-    // todo: https://wiki.centos.org/About/Product
-}
-
 function pullRhelVers(string $outDirPath): void {
     // https://access.redhat.com/support/policy/updates/errata
 }
@@ -188,18 +185,16 @@ function main(): void {
     Env::enableExpectations();
     $tools = [
         //todo'antlr',
-        'centos',
         //todo'cmake',
         'composer',
         'debian',
         'dotnet',
         'drupal',
         'elasticsearch',
-        'fedora',
         //todo'gcc',
         'gitlab',
         'jquery',
-        'kde-plasma' => 'kde',
+        'kde-plasma' => 'kde', // https://archlinux.org/packages/?name=plasma-meta
         'kotlin',
         'kubernetes',
         //todo'linq',

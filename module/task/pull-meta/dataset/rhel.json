@@ -37,7 +37,7 @@
         "latest": "7.9",
         "latestReleaseDate": "2020-09-29",
         "support": "2019-08-06",
-        "extendedSupport": "2028-06-30"
+        "extendedSupport": "2029-05-31"
     },
     {
         "cycle": "8",
@@ -54,9 +54,19 @@
         "releaseDate": "2022-05-18",
         "eol": "2032-05-31",
         "lts": "2032-05-31",
-        "latest": "9.5",
-        "latestReleaseDate": "2024-11-12",
+        "latest": "9.6",
+        "latestReleaseDate": "2025-05-20",
         "support": "2027-05-31",
         "extendedSupport": "2035-05-31"
+    },
+    {
+        "cycle": "10",
+        "releaseDate": "2025-05-20",
+        "eol": "2035-05-31",
+        "lts": "2035-05-31",
+        "latest": "10.0",
+        "latestReleaseDate": "2025-05-20",
+        "support": "2030-05-31",
+        "extendedSupport": "2038-05-31"
     }
 ]
