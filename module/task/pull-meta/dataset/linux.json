@@ -234,7 +234,7 @@
     {
         "cycle": "6.15",
         "releaseDate": "2025-05-25",
-        "eol": false,
+        "eol": "2025-08-20",
         "latest": "6.15.11",
         "latestReleaseDate": "2025-08-20",
         "lts": false
