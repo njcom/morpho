@@ -163,8 +163,8 @@
         "cycle": "10.5",
         "releaseDate": "2025-06-18",
         "eol": false,
-        "latest": "10.5.2",
-        "latestReleaseDate": "2025-08-07",
+        "latest": "10.5.3",
+        "latestReleaseDate": "2025-09-04",
         "lts": false,
         "support": "2025-12-10",
         "extendedSupport": false
@@ -173,8 +173,8 @@
         "cycle": "11.2",
         "releaseDate": "2025-06-18",
         "eol": false,
-        "latest": "11.2.3",
-        "latestReleaseDate": "2025-08-07",
+        "latest": "11.2.4",
+        "latestReleaseDate": "2025-09-04",
         "lts": false,
         "support": "2025-12-10",
         "extendedSupport": false
