@@ -1,6 +1,6 @@
 # njcom/morpho
 
-Cybernetic framework for evolution - self-learning, self-organizing, self-development, recreational-programming, recreational-math.
+Cybernetic live polyglot system for evolution - self-learning, self-organizing, self-development, recreational-programming, recreational-math.
 
 ## Current status
 
