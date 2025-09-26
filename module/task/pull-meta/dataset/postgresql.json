@@ -222,5 +222,13 @@
         "latest": "17.6",
         "latestReleaseDate": "2025-08-11",
         "lts": false
+    },
+    {
+        "cycle": "18",
+        "releaseDate": "2025-09-25",
+        "eol": "2030-11-14",
+        "latest": "18.0",
+        "latestReleaseDate": "2025-09-22",
+        "lts": false
     }
 ]

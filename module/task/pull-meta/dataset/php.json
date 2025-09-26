@@ -147,8 +147,8 @@
         "cycle": "8.4",
         "releaseDate": "2024-11-21",
         "eol": "2028-12-31",
-        "latest": "8.4.12",
-        "latestReleaseDate": "2025-08-28",
+        "latest": "8.4.13",
+        "latestReleaseDate": "2025-09-25",
         "lts": false,
         "support": "2026-12-31"
     }
