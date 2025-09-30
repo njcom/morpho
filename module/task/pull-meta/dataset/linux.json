@@ -246,5 +246,13 @@
         "latest": "6.16.9",
         "latestReleaseDate": "2025-09-25",
         "lts": false
+    },
+    {
+        "cycle": "6.17",
+        "releaseDate": "2025-09-28",
+        "eol": false,
+        "latest": "6.17",
+        "latestReleaseDate": "2025-09-28",
+        "lts": false
     }
 ]
