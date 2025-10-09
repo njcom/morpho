@@ -142,5 +142,14 @@
         "latestReleaseDate": "2025-10-07",
         "lts": false,
         "support": "2026-10-01"
+    },
+    {
+        "cycle": "3.14",
+        "releaseDate": "2025-10-07",
+        "eol": "2030-10-31",
+        "latest": "3.14.0",
+        "latestReleaseDate": "2025-10-07",
+        "lts": false,
+        "support": "2027-10-01"
     }
 ]

@@ -471,8 +471,8 @@
         "cycle": "18.2",
         "releaseDate": "2025-07-16",
         "eol": "2025-10-16",
-        "latest": "18.2.7",
-        "latestReleaseDate": "2025-09-25",
+        "latest": "18.2.8",
+        "latestReleaseDate": "2025-10-08",
         "lts": false,
         "support": "2025-08-21"
     },
@@ -480,8 +480,8 @@
         "cycle": "18.3",
         "releaseDate": "2025-08-21",
         "eol": "2025-11-20",
-        "latest": "18.3.3",
-        "latestReleaseDate": "2025-09-25",
+        "latest": "18.3.4",
+        "latestReleaseDate": "2025-10-08",
         "lts": false,
         "support": "2025-09-18"
     },
@@ -489,8 +489,8 @@
         "cycle": "18.4",
         "releaseDate": "2025-09-18",
         "eol": "2025-12-18",
-        "latest": "18.4.1",
-        "latestReleaseDate": "2025-09-25",
+        "latest": "18.4.2",
+        "latestReleaseDate": "2025-10-08",
         "lts": false,
         "support": "2025-10-16"
     }
