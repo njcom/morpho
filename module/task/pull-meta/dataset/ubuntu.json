@@ -460,5 +460,16 @@
         "lts": false,
         "support": "2026-01-17",
         "extendedSupport": false
+    },
+    {
+        "cycle": "25.10",
+        "codename": "Questing Quokka",
+        "releaseDate": "2025-10-09",
+        "eol": "2026-07-01",
+        "latest": "25.10",
+        "latestReleaseDate": "2025-10-09",
+        "lts": false,
+        "support": "2026-07-01",
+        "extendedSupport": false
     }
 ]
