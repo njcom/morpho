@@ -241,5 +241,15 @@
         "latestReleaseDate": "2025-10-08",
         "support": "2026-10-20",
         "extendedSupport": false
+    },
+    {
+        "cycle": "25",
+        "releaseDate": "2025-10-15",
+        "eol": "2026-06-01",
+        "latest": "25.0.0",
+        "latestReleaseDate": "2025-10-15",
+        "lts": false,
+        "support": "2026-04-01",
+        "extendedSupport": false
     }
 ]
