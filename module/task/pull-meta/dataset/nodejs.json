@@ -200,7 +200,7 @@
         "latest": "20.19.5",
         "latestReleaseDate": "2025-09-03",
         "support": "2024-10-22",
-        "extendedSupport": false
+        "extendedSupport": true
     },
     {
         "cycle": "21",
@@ -220,7 +220,7 @@
         "latest": "22.20.0",
         "latestReleaseDate": "2025-09-24",
         "support": "2025-10-21",
-        "extendedSupport": false
+        "extendedSupport": true
     },
     {
         "cycle": "23",
