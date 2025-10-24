@@ -33,8 +33,8 @@
         "releaseDate": "2018-04-08",
         "lts": "2023-07-18",
         "eol": "2026-04-30",
-        "latest": "8.0.43",
-        "latestReleaseDate": "2025-07-09",
+        "latest": "8.0.44",
+        "latestReleaseDate": "2025-09-24",
         "support": "2025-04-30"
     },
     {
@@ -112,9 +112,18 @@
     {
         "cycle": "9.4",
         "releaseDate": "2025-07-09",
-        "eol": false,
+        "eol": "2025-10-21",
         "latest": "9.4.0",
         "latestReleaseDate": "2025-07-09",
+        "lts": false,
+        "support": "2025-10-21"
+    },
+    {
+        "cycle": "9.5",
+        "releaseDate": "2025-10-21",
+        "eol": false,
+        "latest": "9.5.0",
+        "latestReleaseDate": "2025-09-23",
         "lts": false,
         "support": true
     }
