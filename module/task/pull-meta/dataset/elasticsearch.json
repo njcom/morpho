@@ -37,7 +37,7 @@
         "eol": false,
         "latest": "9.0.8",
         "latestReleaseDate": "2025-10-02",
-        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-9.0.5-release-notes",
+        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-__LATEST__-release-notes",
         "lts": false
     },
     {
@@ -62,7 +62,16 @@
         "eol": false,
         "latest": "9.1.6",
         "latestReleaseDate": "2025-10-21",
-        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-9.1.2-release-notes",
+        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-__LATEST__-release-notes",
+        "lts": false
+    },
+    {
+        "cycle": "9.2",
+        "releaseDate": "2025-10-21",
+        "eol": false,
+        "latest": "9.2.0",
+        "latestReleaseDate": "2025-10-21",
+        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-__LATEST__-release-notes",
         "lts": false
     }
 ]
