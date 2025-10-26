@@ -98,9 +98,18 @@
     {
         "cycle": "6.4",
         "releaseDate": "2025-06-17",
-        "eol": false,
+        "eol": "2025-10-21",
         "latest": "6.4.5",
         "latestReleaseDate": "2025-09-09",
+        "lts": false,
+        "support": "2025-10-21"
+    },
+    {
+        "cycle": "6.5",
+        "releaseDate": "2025-10-21",
+        "eol": false,
+        "latest": "6.5.0",
+        "latestReleaseDate": "2025-10-21",
         "lts": false,
         "support": true
     }
