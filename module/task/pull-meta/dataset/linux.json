@@ -164,8 +164,8 @@
         "lts": true,
         "releaseDate": "2023-10-30",
         "eol": "2026-12-31",
-        "latest": "6.6.115",
-        "latestReleaseDate": "2025-10-29"
+        "latest": "6.6.116",
+        "latestReleaseDate": "2025-11-02"
     },
     {
         "cycle": "6.7",
@@ -212,8 +212,8 @@
         "lts": true,
         "releaseDate": "2024-11-17",
         "eol": "2026-12-31",
-        "latest": "6.12.56",
-        "latestReleaseDate": "2025-10-29"
+        "latest": "6.12.57",
+        "latestReleaseDate": "2025-11-02"
     },
     {
         "cycle": "6.13",
@@ -251,8 +251,8 @@
         "cycle": "6.17",
         "releaseDate": "2025-09-28",
         "eol": false,
-        "latest": "6.17.6",
-        "latestReleaseDate": "2025-10-29",
+        "latest": "6.17.7",
+        "latestReleaseDate": "2025-11-02",
         "lts": false
     }
 ]
