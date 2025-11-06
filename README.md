@@ -1,6 +1,6 @@
 # njcom/morpho
 
-Cybernetic live polyglot system for evolution - self-learning, self-organizing, self-development, recreational-programming, recreational-math.
+Cybernetic live polyglot system with [L language](module/l/) for evolution - self-learning, self-organizing, self-development, recreational-programming, recreational-math. Think about it as new Org mode attempting become AI system.
 
 ## Current status
 
