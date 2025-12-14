@@ -50,6 +50,29 @@ function bootstrap(): void {
     (new ErrorHandler([new DumpListener()]))->register();
 }
 
+/**
+ * @param array    $argv
+ * @param callable $readStdin Callable[[Resource], None], e.g. processStdinOrArgs(array_slice($_SERVER['argv'], 1), function ($stream) { stream_get_contents($stream, offset: 0); });
+ * @return void
+ */
+function processStdinOrArgs(array $argv, callable $readStdin): void {
+    if (count($argv) < 1) {
+        $readStdin(STDIN);
+    } else {
+        foreach ($argv as $arg) {
+            if ($arg == '-') {
+                // `-` means read from stdin
+                $readStdin(STDIN);
+            } else {
+                // List of files as arguments
+                $stream = fopen($arg, 'r');
+                $readStdin($stream);
+                fclose($stream);
+            }
+        }
+    }
+}
+
 function showLine(string|Stringable|iterable|int|float|null $text = null): void {
     if (null === $text) {
         echo "\n";
@@ -289,23 +312,33 @@ function sh(string $command, array|null $conf = null): ICommandResult {
 
 function sudo(string $command, array|null $conf = null): ICommandResult {
     return sh('sudo bash -c "' . str_replace('"', '\\"', $command) . '"', $conf);
+    // @todo: Write tests and try:
+    //return sh('sudo bash -c ' . escapeshellarg($command), $conf);
+    //return sh('sudo ' . escapeshellarg($command), $conf);
 }
 
 /**
  * Taken from https://habr.com/ru/post/135200/
  * @param string $cmd
  */
-function rawSh(string $cmd, $env = null) {
+function exe(string $cmd, array $args, array|null $env = null): never {
     $pid = pcntl_fork();
     if ($pid < 0) {
-        throw new Exception('fork failed');
+        throw new \RuntimeException('fork failed');
     }
-    if ($pid == 0) {
-        pcntl_exec('/bin/bash', ['-c', $cmd], $env ?? []); // @TODO: pass $_ENV?
+    if ($pid == 0) { // child
+        $env = (array) $env;
+        pcntl_exec($cmd, $args, $env);
         exit(127);
     }
+    // parent
     pcntl_waitpid($pid, $status);
-    return pcntl_wexitstatus($status);
+    $status = pcntl_wexitstatus($status);
+    exit(false !== $status ? $status : 1);
+}
+
+function rawSh(string $cmd, $env = null) {
+    return exe('/bin/bash', ['-c', $cmd], $env ?? []); // @TODO: pass $_ENV?
 }
 
 function checkExitCode(int $exitCode, string|null $errMessage = null): int {

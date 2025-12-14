@@ -71,35 +71,32 @@ class HandlerProviderTest extends TestCase {
 
     public function testInterface(): void {
         $serviceManager = $this->createMock(ServiceManager::class);
-        $services = [
-            'backendModuleIndex' => null,
-        ];
-        $serviceManager->expects($this->any())
+        $moduleIndex = $this->createStub(ModuleIndex::class);
+        $serviceManager->expects($this->atLeastOnce())
             ->method('offsetGet')
-            ->willReturnCallback(
-                function ($id) use ($services) {
-                    return $services[$id];
-                }
-            );
-        $this->assertInstanceOf(IFn::class, new HandlerProvider($this->mkServiceManagerMock($this->moduleName)));
+            ->with('backendModuleIndex')
+            ->willReturn($moduleIndex);
+        $this->assertInstanceOf(IFn::class, new HandlerProvider($serviceManager));
     }
 
     private function mkServiceManagerMock(string $moduleName): ServiceManager {
         $serviceManager = $this->createMock(ServiceManager::class);
-        $module = $this->createConfiguredMock(
+
+        $module = $this->createConfiguredStub(
             BackendModule::class,
             ['name' => $moduleName, 'autoloadFilePath' => __FILE__]
         );
 
         $moduleIndex = $this->createMock(ModuleIndex::class);
-        $moduleIndex->expects($this->any())
+        $moduleIndex->expects($this->atLeastOnce())
             ->method('module')
             ->with($moduleName)
             ->willReturn($module);
         $services = [
             'backendModuleIndex' => $moduleIndex,
         ];
-        $serviceManager->expects($this->any())
+
+        $serviceManager->expects($this->atLeastOnce())
             ->method('offsetGet')
             ->willReturnCallback(
                 function ($id) use ($services) {

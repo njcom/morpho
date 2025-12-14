@@ -62,7 +62,7 @@ class AppInitializerTest extends TestCase {
             public function register(): void {
             }
         };
-        $serviceManager->expects($this->any())
+        $serviceManager->expects($this->atLeastOnce())
             ->method('offsetGet')
             ->willReturnCallback(
                 function ($id) use ($siteConf, $errorHandler) {

@@ -8,10 +8,9 @@ namespace Morpho\Tool\Php;
 
 use Morpho\Fs\Dir;
 use Morpho\Fs\File;
-use PhpParser\Lexer;
+use PhpParser\ParserFactory;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser\Php7 as Parser;
 use ReflectionClass;
 use RuntimeException;
 
@@ -28,7 +27,7 @@ class ClassTypeDiscoverer {
     public function fileDependsFromClassTypes(string $filePath, bool $excludeStdClasses = true): array {
         $phpCode = File::read($filePath);
 
-        $parser = new Parser(new Lexer());
+        $parser = new ParserFactory()->createForNewestSupportedVersion();
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new NameResolver());
@@ -295,4 +294,3 @@ class ClassTypeDiscoverer {
         return array_diff($classTypes, $stdClassTypes);
     }
 }
-

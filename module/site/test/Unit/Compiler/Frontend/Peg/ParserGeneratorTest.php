@@ -51,7 +51,8 @@ class ParserGeneratorTest extends TestCase {
                 ]),
             ),
         ], []);
-        $parserGen = new ParserGenerator($grammar, $stream, $this->createMock(RuleCheckingVisitor::class));
+        $ruleChecker = fn ($rules) => null;
+        $parserGen = new ParserGenerator($grammar, $stream, $ruleChecker);
 
         $parserGen->generate();
 

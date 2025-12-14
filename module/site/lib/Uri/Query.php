@@ -22,7 +22,7 @@ class Query extends ArrayObject implements IUriComponent {
         if (is_string($queryStrOrQueryArgs)) {
             $this->initialized = true;
             $query = UriParser::parseOnlyQuery($queryStrOrQueryArgs);
-            $this->exchangeArray($query);
+            $this->exchangeArray($query->getArrayCopy());
         } else {
             parent::__construct($queryStrOrQueryArgs);
         }

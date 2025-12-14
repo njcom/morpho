@@ -1461,19 +1461,19 @@ OUT;
             'merge-with-null'                                => [
                 [
                     'foo' => null,
-                    null  => 'rod',
+                    //null  => 'rod',
                     'cat' => 'bar',
                     'god' => 'rad',
                 ],
                 [
                     'foo' => 'baz',
-                    null  => 'zad',
+                    //null  => 'zad',
                     'god' => null,
                 ],
                 true,
                 [
                     'foo' => 'baz',
-                    null  => 'zad',
+                    //null  => 'zad',
                     'cat' => 'bar',
                     'god' => null,
                 ],

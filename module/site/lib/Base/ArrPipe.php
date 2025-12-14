@@ -56,7 +56,11 @@ class ArrPipe implements IPipe {
     }
 
     public function valid(): bool {
-        return isset($this->steps[$this->key()]);
+        $key = $this->key();
+        if (null === $key) {
+            return false;
+        }
+        return isset($this->steps[$key]);
     }
 
     public function key(): int|string|null {

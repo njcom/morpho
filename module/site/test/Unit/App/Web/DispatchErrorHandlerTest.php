@@ -6,6 +6,8 @@
  */
 namespace Morpho\Test\Unit\App\Web;
 
+use RuntimeException;
+use Throwable;
 use Monolog\Logger;
 use Morpho\App\Web\DispatchErrorHandler;
 use Morpho\App\Web\Request;
@@ -14,13 +16,14 @@ use Morpho\Base\ServiceManager;
 use Morpho\Base\IHasServiceManager;
 use Morpho\Testing\TestCase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
-use RuntimeException;
-use Throwable;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcess;
 
-#[BackupGlobals(enabled: true)]
+#[BackupGlobals(false)]
+#[RunTestsInSeparateProcess(true)]
 class DispatchErrorHandlerTest extends TestCase {
     protected function setUp(): void {
         parent::setUp();
+        $_GET = $_POST = $_REQUEST = $_COOKIE = $_SERVER = [];
         $_SERVER['SCRIPT_NAME'] = '/index.php';
         $_SERVER['REQUEST_URI'] = '/';
     }
@@ -97,7 +100,7 @@ class DispatchErrorHandlerTest extends TestCase {
         }
 
         $serviceManager = $this->createMock(ServiceManager::class);
-        $serviceManager->expects($this->any())
+        $serviceManager->expects($this->atLeastOnce())
             ->method('offsetGet')
             ->with('errorLogger')
             ->willReturn($errorLogger);

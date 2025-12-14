@@ -10,10 +10,17 @@ use Morpho\App\Web\Env;
 use Morpho\App\Web\HttpVersion;
 use Morpho\Testing\TestCase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcess;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-#[BackupGlobals(enabled: true)]
+#[BackupGlobals(false)]
+#[RunTestsInSeparateProcess(true)]
 class EnvTest extends TestCase {
+    protected function setUp(): void {
+        parent::setUp();
+        $_GET = $_POST = $_REQUEST = $_COOKIE = $_SERVER = [];
+    }
+
     public static function dataHttpVersion(): iterable {
         yield [
             'HTTP/1.1',

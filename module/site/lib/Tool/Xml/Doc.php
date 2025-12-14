@@ -27,7 +27,8 @@ use function trim;
  * @method XPathResult select(string $xPath, $contextNode = null)
  */
 class Doc extends DOMDocument {
-    const ENCODING = 'utf-8';
+    public const string ENCODING = 'utf-8';
+
     /**
      * NB: true values are not actual values of the options.
      */

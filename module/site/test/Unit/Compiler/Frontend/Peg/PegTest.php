@@ -15,6 +15,15 @@ use Morpho\Testing\TestCase;
  * https://github.com/python/cpython/blob/3.12/Lib/test/test_peg_generator/test_pegen.py
  */
 class PegTest extends TestCase {
+    public function testCustomTokenizer() {
+        $this->markTestIncomplete();
+        $grammarCode = <<<'OUT'
+        start: StringLiteral
+        OUT;
+        $tokenizer = Peg::tokenizeGrammar($grammarCode);
+        d(Peg::prettyPrintTokens($tokenizer));
+    }
+
     public function testMkGrammarTokenize() {
         $this->assertEquals(
             [

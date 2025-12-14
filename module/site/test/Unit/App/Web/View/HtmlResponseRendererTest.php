@@ -16,7 +16,7 @@ use Morpho\Testing\TestCase;
 
 class HtmlResponseRendererTest extends TestCase {
     public function testInterface() {
-        $this->assertInstanceOf(IFn::class, new HtmlResponseRenderer($this->createMock(TemplateEngine::class), $this->createMock(ModuleIndex::class), ''));
+        $this->assertInstanceOf(IFn::class, new HtmlResponseRenderer($this->createStub(TemplateEngine::class), $this->createStub(ModuleIndex::class), ''));
     }
 
     public function testInvoke() {
@@ -39,7 +39,7 @@ class HtmlResponseRendererTest extends TestCase {
         };
         $request->response = $response;
         $htmlSample = 'This is a <main>This is a body text.</main> page text.';
-        $renderer = new class ($this->createMock(TemplateEngine::class), $this->createMock(ModuleIndex::class), 'foo/bar', $htmlSample) extends HtmlResponseRenderer {
+        $renderer = new class ($this->createStub(TemplateEngine::class), $this->createStub(ModuleIndex::class), 'foo/bar', $htmlSample) extends HtmlResponseRenderer {
             private string $htmlSample;
 
             public function __construct(TemplateEngine $templateEngine, ModuleIndex $moduleIndex, string $pageRenderingModule, string $htmlSample) {

@@ -52,7 +52,7 @@ class ModuleIndexTest extends TestCase {
     }
 
     private function mkModuleIndexer() {
-        $moduleIndexer = $this->createConfiguredMock(
+        $moduleIndexer = $this->createConfiguredStub(
             IModuleIndexer::class,
             [
                 'index' => [

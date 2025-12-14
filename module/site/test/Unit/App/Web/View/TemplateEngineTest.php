@@ -110,7 +110,7 @@ class TemplateEngineTest extends TestCase {
 
         //$request = $this->mkRequestStub();
         $request = $this->createMock(IRequest::class);
-        $request->expects($this->any())
+        $request->expects($this->once())
             ->method('prependWithBasePath')
             ->with($this->identicalTo($uri))
             ->willReturn(new Uri($uri));

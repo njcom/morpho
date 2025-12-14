@@ -282,9 +282,3 @@ class GrammarTokenizer {
         }
     }
 }
-
-enum GrammarActionState {
-    case Unknown;
-    case Initial;
-    case ReadingTokenValue;
-}

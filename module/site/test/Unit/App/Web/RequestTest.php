@@ -12,19 +12,20 @@ use Morpho\App\Web\IRequest;
 use Morpho\App\Web\Request;
 use Morpho\Test\Unit\App\MessageTest;
 use Morpho\Uri\Uri;
-
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcess;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function rawurlencode;
 
-#[BackupGlobals(enabled: true)]
+#[BackupGlobals(false)]
+#[RunTestsInSeparateProcess(true)]
 class RequestTest extends MessageTest {
     private IRequest $request;
 
     protected function setUp(): void {
         parent::setUp();
-        $_GET = $_POST = $_REQUEST = $_COOKIE = [];
+        $_GET = $_POST = $_REQUEST = $_COOKIE = $_SERVER = [];
         foreach (array_keys($_SERVER) as $key) {
             if (str_starts_with($key, 'HTTP_')) {
                 unset($_SERVER[$key]);
@@ -114,6 +115,7 @@ class RequestTest extends MessageTest {
             'REQUEST_URI' => '/top.htm?page=news&skip=10',
             'QUERY_STRING' => 'page=news&skip=10',
             'SCRIPT_NAME' => '/',
+            'HTTPS' => true,
         ]);
         $request = new Request(trustedProxyIps: [$trustedProxyIp]);
         $uri = $request->uri;

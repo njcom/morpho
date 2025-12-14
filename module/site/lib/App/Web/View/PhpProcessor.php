@@ -8,7 +8,7 @@ namespace Morpho\App\Web\View;
 
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
-use PhpParser\Parser\Php7 as Parser;
+use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 
 class PhpProcessor {
@@ -20,7 +20,7 @@ class PhpProcessor {
     }
 
     public function parse(string $code): array {
-        $parser = new Parser(new Lexer());
+        $parser = new ParserFactory()->createForNewestSupportedVersion();
         return $parser->parse($code);
     }
 
