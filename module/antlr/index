@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -eu
+
+SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+declare -r SCRIPT_DIR_PATH
+#SCRIPT_FILE_NAME="$(basename "$0")"
+#declare -r SCRIPT_FILE_NAME
+#declare -r SCRIPT_FILE_PATH="$SCRIPT_DIR_PATH"/"$SCRIPT_FILE_NAME"
+
+declare -r LOCAL_IMAGE='localhost/antlr'
+
+if ! docker image inspect "$LOCAL_IMAGE" &> /dev/null; then
+    docker build -t "$LOCAL_IMAGE" -f "$SCRIPT_DIR_PATH"/Dockerfile "$SCRIPT_DIR_PATH"
+fi
+docker run -it --rm --net none "$LOCAL_IMAGE" "$@"
