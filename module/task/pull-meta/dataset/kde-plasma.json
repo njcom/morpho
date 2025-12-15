@@ -99,8 +99,8 @@
         "cycle": "6.4",
         "releaseDate": "2025-06-17",
         "eol": "2025-10-21",
-        "latest": "6.4.5",
-        "latestReleaseDate": "2025-09-09",
+        "latest": "6.4.6",
+        "latestReleaseDate": "2025-11-11",
         "lts": false,
         "support": "2025-10-21"
     },
@@ -108,8 +108,8 @@
         "cycle": "6.5",
         "releaseDate": "2025-10-21",
         "eol": false,
-        "latest": "6.5.2",
-        "latestReleaseDate": "2025-11-04",
+        "latest": "6.5.4",
+        "latestReleaseDate": "2025-12-09",
         "lts": false,
         "support": true
     }

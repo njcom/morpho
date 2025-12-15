@@ -104,8 +104,8 @@
         "lts": true,
         "releaseDate": "2021-07-06",
         "eol": "2026-07-06",
-        "latest": "10.6.23",
-        "latestReleaseDate": "2025-08-06",
+        "latest": "10.6.24",
+        "latestReleaseDate": "2025-11-06",
         "extendedSupport": "2029-08-23"
     },
     {
@@ -153,8 +153,8 @@
         "lts": true,
         "releaseDate": "2023-02-16",
         "eol": "2028-02-16",
-        "latest": "10.11.14",
-        "latestReleaseDate": "2025-08-06",
+        "latest": "10.11.15",
+        "latestReleaseDate": "2025-11-06",
         "extendedSupport": "2028-02-16"
     },
     {
@@ -202,8 +202,8 @@
         "lts": true,
         "releaseDate": "2024-05-29",
         "eol": "2029-05-29",
-        "latest": "11.4.8",
-        "latestReleaseDate": "2025-08-06",
+        "latest": "11.4.9",
+        "latestReleaseDate": "2025-11-06",
         "extendedSupport": "2033-01-16"
     },
     {
@@ -241,16 +241,26 @@
         "lts": true,
         "releaseDate": "2025-06-04",
         "eol": "2028-06-04",
-        "latest": "11.8.3",
-        "latestReleaseDate": "2025-08-06",
+        "latest": "11.8.5",
+        "latestReleaseDate": "2025-11-14",
         "extendedSupport": "2033-10-15"
     },
     {
         "cycle": "12.0",
-        "releaseDate": "2025-06-05",
-        "eol": "2025-11-07",
+        "releaseDate": "2025-08-07",
+        "eol": "2025-11-18",
         "latest": "12.0.2",
         "latestReleaseDate": "2025-08-07",
+        "link": "https://mariadb.com/docs/release-notes/community-server/release-notes-mariadb-__RELEASE_CYCLE__-rolling-releases/mariadb-__LATEST__-release-notes",
+        "lts": false,
+        "extendedSupport": false
+    },
+    {
+        "cycle": "12.1",
+        "releaseDate": "2025-11-18",
+        "eol": "2026-02-18",
+        "latest": "12.1.2",
+        "latestReleaseDate": "2025-11-18",
         "link": "https://mariadb.com/docs/release-notes/community-server/release-notes-mariadb-__RELEASE_CYCLE__-rolling-releases/mariadb-__LATEST__-release-notes",
         "lts": false,
         "extendedSupport": false

@@ -21,6 +21,7 @@
     },
     {
         "cycle": "3",
+        "staleReleaseThresholdDays": 1095,
         "releaseDate": "2016-06-09",
         "eol": false,
         "latest": "3.7.1",

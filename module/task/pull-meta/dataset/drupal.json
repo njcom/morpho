@@ -143,8 +143,8 @@
         "cycle": "11.1",
         "releaseDate": "2024-12-16",
         "eol": "2025-12-10",
-        "latest": "11.1.8",
-        "latestReleaseDate": "2025-06-05",
+        "latest": "11.1.9",
+        "latestReleaseDate": "2025-11-12",
         "lts": false,
         "support": "2025-06-18",
         "extendedSupport": false
@@ -153,8 +153,8 @@
         "cycle": "10.4",
         "releaseDate": "2024-12-17",
         "eol": "2025-12-10",
-        "latest": "10.4.8",
-        "latestReleaseDate": "2025-06-05",
+        "latest": "10.4.9",
+        "latestReleaseDate": "2025-11-12",
         "lts": false,
         "support": "2025-06-18",
         "extendedSupport": false
@@ -163,8 +163,8 @@
         "cycle": "10.5",
         "releaseDate": "2025-06-18",
         "eol": false,
-        "latest": "10.5.4",
-        "latestReleaseDate": "2025-10-02",
+        "latest": "10.5.8",
+        "latestReleaseDate": "2025-12-09",
         "lts": false,
         "support": "2025-12-10",
         "extendedSupport": false
@@ -173,8 +173,8 @@
         "cycle": "11.2",
         "releaseDate": "2025-06-18",
         "eol": false,
-        "latest": "11.2.5",
-        "latestReleaseDate": "2025-10-02",
+        "latest": "11.2.10",
+        "latestReleaseDate": "2025-12-10",
         "lts": false,
         "support": "2025-12-10",
         "extendedSupport": false
