@@ -511,5 +511,14 @@
         "latestReleaseDate": "2025-12-10",
         "lts": false,
         "support": "2025-12-18"
+    },
+    {
+        "cycle": "18.7",
+        "releaseDate": "2025-12-18",
+        "eol": "2026-03-19",
+        "latest": "18.7.0",
+        "latestReleaseDate": "2025-12-17",
+        "lts": false,
+        "support": "2026-01-15"
     }
 ]
