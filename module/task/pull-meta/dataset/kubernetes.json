@@ -169,5 +169,14 @@
         "latestReleaseDate": "2025-12-09",
         "lts": false,
         "support": "2026-08-27"
+    },
+    {
+        "cycle": "1.35",
+        "releaseDate": "2025-12-17",
+        "eol": "2027-02-28",
+        "latest": "1.35.0",
+        "latestReleaseDate": "2025-12-17",
+        "lts": false,
+        "support": "2026-12-28"
     }
 ]
