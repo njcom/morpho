@@ -18,7 +18,7 @@
         "compiler"
     ],
     "require": {
-        "php-64bit": ">=8.4",
+        "php-64bit": ">=8.5",
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-dom": "*",
