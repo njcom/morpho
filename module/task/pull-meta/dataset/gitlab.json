@@ -520,5 +520,14 @@
         "latestReleaseDate": "2026-01-07",
         "lts": false,
         "support": "2026-01-15"
+    },
+    {
+        "cycle": "18.8",
+        "releaseDate": "2026-01-15",
+        "eol": "2026-04-16",
+        "latest": "18.8.0",
+        "latestReleaseDate": "2026-01-14",
+        "lts": false,
+        "support": "2026-02-19"
     }
 ]
