@@ -28,5 +28,14 @@
         "latestReleaseDate": "2023-08-28",
         "lts": false,
         "extendedSupport": false
+    },
+    {
+        "cycle": "4",
+        "releaseDate": "2026-01-17",
+        "eol": false,
+        "latest": "4.0.0",
+        "latestReleaseDate": "2026-01-17",
+        "lts": false,
+        "extendedSupport": false
     }
 ]
