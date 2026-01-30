@@ -161,8 +161,8 @@
         "cycle": "6.10",
         "releaseDate": "2025-10-07",
         "eol": "2026-04-07",
-        "latest": "6.10.1",
-        "latestReleaseDate": "2025-11-20",
+        "latest": "6.10.2",
+        "latestReleaseDate": "2026-01-29",
         "lts": false,
         "extendedSupport": "2026-10-07"
     }
