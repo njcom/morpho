@@ -1,5 +1,7 @@
 # L Language Definition
 
+Human - AI interop language.
+
 ## Core Concepts
 
 L Language: a polyglotic language blending formal and natural modes for AI-human collaboration.
