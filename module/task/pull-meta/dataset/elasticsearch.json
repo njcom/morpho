@@ -73,5 +73,14 @@
         "latestReleaseDate": "2026-01-28",
         "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-__LATEST__-release-notes",
         "lts": false
+    },
+    {
+        "cycle": "9.3",
+        "releaseDate": "2026-02-03",
+        "eol": false,
+        "latest": "9.3.0",
+        "latestReleaseDate": "2026-01-28",
+        "link": "https://www.elastic.co/docs/release-notes/elasticsearch#elasticsearch-__LATEST__-release-notes",
+        "lts": false
     }
 ]
