@@ -1,6 +1,6 @@
 # njcom/morpho
 
-Cybernetic human - AI interop system with [L human - AI interop language](module/l/) language for evolution: self-learning, self-organizing, self-development, recreational-programming, recreational-math. Inspired by Emacs Org mode and other systems.
+Morpho is cybernetic system with [L human - AI interop language](module/l/) language for evolution: self-learning, self-organizing, self-development, recreational-programming, recreational-math. Inspired by Emacs Org mode and other systems.
 
 ## Current status
 
