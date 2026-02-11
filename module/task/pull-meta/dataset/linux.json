@@ -262,5 +262,13 @@
         "eol": "2027-12-01",
         "latest": "6.18.9",
         "latestReleaseDate": "2026-02-06"
+    },
+    {
+        "cycle": "6.19",
+        "releaseDate": "2026-02-08",
+        "eol": false,
+        "latest": "6.19",
+        "latestReleaseDate": "2026-02-08",
+        "lts": false
     }
 ]
