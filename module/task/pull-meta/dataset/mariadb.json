@@ -257,9 +257,18 @@
     {
         "cycle": "12.1",
         "releaseDate": "2025-11-18",
-        "eol": "2026-02-18",
+        "eol": "2026-02-13",
         "latest": "12.1.2",
         "latestReleaseDate": "2025-11-18",
+        "lts": false,
+        "extendedSupport": false
+    },
+    {
+        "cycle": "12.2",
+        "releaseDate": "2026-02-13",
+        "eol": "2026-05-13",
+        "latest": "12.2.2",
+        "latestReleaseDate": "2026-02-13",
         "lts": false,
         "extendedSupport": false
     }
