@@ -51,6 +51,7 @@
     },
     {
         "cycle": "5.27",
+        "staleReleaseThresholdDays": 730,
         "lts": true,
         "releaseDate": "2023-02-14",
         "eol": false,
@@ -107,9 +108,18 @@
     {
         "cycle": "6.5",
         "releaseDate": "2025-10-21",
-        "eol": false,
+        "eol": "2026-02-17",
         "latest": "6.5.5",
         "latestReleaseDate": "2026-01-13",
+        "lts": false,
+        "support": "2026-02-17"
+    },
+    {
+        "cycle": "6.6",
+        "releaseDate": "2026-02-17",
+        "eol": false,
+        "latest": "6.6.0",
+        "latestReleaseDate": "2026-02-17",
         "lts": false,
         "support": true
     }
