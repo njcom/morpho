@@ -260,15 +260,15 @@
         "lts": true,
         "releaseDate": "2025-11-30",
         "eol": "2028-12-31",
-        "latest": "6.18.14",
-        "latestReleaseDate": "2026-02-26"
+        "latest": "6.18.15",
+        "latestReleaseDate": "2026-02-27"
     },
     {
         "cycle": "6.19",
         "releaseDate": "2026-02-08",
         "eol": false,
-        "latest": "6.19.4",
-        "latestReleaseDate": "2026-02-26",
+        "latest": "6.19.5",
+        "latestReleaseDate": "2026-02-27",
         "lts": false
     }
 ]
