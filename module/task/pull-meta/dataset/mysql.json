@@ -121,9 +121,18 @@
     {
         "cycle": "9.5",
         "releaseDate": "2025-10-21",
-        "eol": false,
+        "eol": "2026-01-20",
         "latest": "9.5.2",
         "latestReleaseDate": "2025-11-20",
+        "lts": false,
+        "support": "2026-01-20"
+    },
+    {
+        "cycle": "9.6",
+        "releaseDate": "2026-01-20",
+        "eol": false,
+        "latest": "9.6.0",
+        "latestReleaseDate": "2025-12-23",
         "lts": false,
         "support": true
     }
