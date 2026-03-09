@@ -75,8 +75,8 @@
         "cycle": "5.42",
         "releaseDate": "2025-07-03",
         "eol": "2028-07-03",
-        "latest": "5.42.0",
-        "latestReleaseDate": "2025-07-03",
+        "latest": "5.42.1",
+        "latestReleaseDate": "2026-03-08",
         "lts": false,
         "support": true
     }
