@@ -212,8 +212,8 @@
         "lts": true,
         "releaseDate": "2024-11-17",
         "eol": "2028-12-31",
-        "latest": "6.12.78",
-        "latestReleaseDate": "2026-03-25"
+        "latest": "6.12.79",
+        "latestReleaseDate": "2026-03-27"
     },
     {
         "cycle": "6.13",
