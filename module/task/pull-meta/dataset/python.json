@@ -153,8 +153,8 @@
         "cycle": "3.13",
         "releaseDate": "2024-10-07",
         "eol": "2029-10-31",
-        "latest": "3.13.12",
-        "latestReleaseDate": "2026-02-03",
+        "latest": "3.13.13",
+        "latestReleaseDate": "2026-04-07",
         "pep": "PEP-0719",
         "lts": false,
         "support": "2026-10-01"
