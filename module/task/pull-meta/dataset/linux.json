@@ -270,5 +270,13 @@
         "latest": "6.19.12",
         "latestReleaseDate": "2026-04-11",
         "lts": false
+    },
+    {
+        "cycle": "7.0",
+        "releaseDate": "2026-04-12",
+        "eol": false,
+        "latest": "7.0",
+        "latestReleaseDate": "2026-04-12",
+        "lts": false
     }
 ]
