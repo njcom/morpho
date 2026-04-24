@@ -266,7 +266,7 @@
     {
         "cycle": "6.19",
         "releaseDate": "2026-02-08",
-        "eol": false,
+        "eol": "2026-04-22",
         "latest": "6.19.14",
         "latestReleaseDate": "2026-04-22",
         "lts": false
