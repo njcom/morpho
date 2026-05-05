@@ -485,10 +485,10 @@
         "codename": "Resolute Raccoon",
         "lts": true,
         "releaseDate": "2026-04-23",
-        "eol": "2031-05-31",
+        "eol": "2031-04-30",
         "latest": "26.04",
         "latestReleaseDate": "2026-04-23",
-        "support": "2031-05-31",
-        "extendedSupport": "2031-05-31"
+        "support": "2031-04-30",
+        "extendedSupport": "2036-04-30"
     }
 ]
