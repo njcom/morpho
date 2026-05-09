@@ -251,5 +251,15 @@
         "lts": false,
         "support": "2026-04-01",
         "extendedSupport": false
+    },
+    {
+        "cycle": "26",
+        "releaseDate": "2026-05-05",
+        "lts": "2026-10-01",
+        "eol": false,
+        "latest": "26.1.0",
+        "latestReleaseDate": "2026-05-07",
+        "support": true,
+        "extendedSupport": false
     }
 ]
