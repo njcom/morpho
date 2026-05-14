@@ -170,8 +170,8 @@
         "cycle": "6.11",
         "releaseDate": "2026-03-23",
         "eol": "2026-09-22",
-        "latest": "6.11",
-        "latestReleaseDate": "2026-03-23",
+        "latest": "6.11.1",
+        "latestReleaseDate": "2026-05-13",
         "lts": false,
         "extendedSupport": "2027-03-23"
     }
