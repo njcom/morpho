@@ -36,8 +36,8 @@
         "lts": true,
         "releaseDate": "2020-12-13",
         "eol": "2026-12-31",
-        "latest": "5.10.255",
-        "latestReleaseDate": "2026-05-08"
+        "latest": "5.10.256",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "5.11",
@@ -76,8 +76,8 @@
         "lts": true,
         "releaseDate": "2021-10-31",
         "eol": "2026-12-31",
-        "latest": "5.15.206",
-        "latestReleaseDate": "2026-05-08"
+        "latest": "5.15.207",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "5.16",
@@ -124,8 +124,8 @@
         "lts": true,
         "releaseDate": "2022-12-11",
         "eol": "2027-12-31",
-        "latest": "6.1.172",
-        "latestReleaseDate": "2026-05-08"
+        "latest": "6.1.173",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "6.2",
@@ -164,8 +164,8 @@
         "lts": true,
         "releaseDate": "2023-10-30",
         "eol": "2027-12-31",
-        "latest": "6.6.138",
-        "latestReleaseDate": "2026-05-08"
+        "latest": "6.6.139",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "6.7",
@@ -212,8 +212,8 @@
         "lts": true,
         "releaseDate": "2024-11-17",
         "eol": "2028-12-31",
-        "latest": "6.12.88",
-        "latestReleaseDate": "2026-05-14"
+        "latest": "6.12.89",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "6.13",
@@ -260,8 +260,8 @@
         "lts": true,
         "releaseDate": "2025-11-30",
         "eol": "2028-12-31",
-        "latest": "6.18.30",
-        "latestReleaseDate": "2026-05-14"
+        "latest": "6.18.31",
+        "latestReleaseDate": "2026-05-15"
     },
     {
         "cycle": "6.19",
@@ -275,8 +275,8 @@
         "cycle": "7.0",
         "releaseDate": "2026-04-12",
         "eol": false,
-        "latest": "7.0.7",
-        "latestReleaseDate": "2026-05-14",
+        "latest": "7.0.8",
+        "latestReleaseDate": "2026-05-15",
         "lts": false
     }
 ]
