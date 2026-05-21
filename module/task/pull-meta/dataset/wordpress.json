@@ -300,9 +300,18 @@
         "cycle": "6.9",
         "supportedPHPVersions": "7.2 - 8.5",
         "releaseDate": "2025-12-02",
-        "eol": false,
+        "eol": "2026-05-20",
         "latest": "6.9.4",
         "latestReleaseDate": "2026-03-11",
+        "lts": false
+    },
+    {
+        "cycle": "7.0",
+        "supportedPHPVersions": "7.4 - 8.5",
+        "releaseDate": "2026-05-20",
+        "eol": false,
+        "latest": "7.0.0",
+        "latestReleaseDate": "2026-05-20",
         "lts": false
     }
 ]
