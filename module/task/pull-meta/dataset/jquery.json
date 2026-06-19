@@ -27,7 +27,7 @@
         "latest": "3.7.1",
         "latestReleaseDate": "2023-08-28",
         "lts": false,
-        "extendedSupport": false
+        "extendedSupport": true
     },
     {
         "cycle": "4",
