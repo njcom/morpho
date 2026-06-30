@@ -1,6 +1,6 @@
 # njcom/morpho
 
-Morpho is evolving cybernetic agent for [human - AI interop language L](https://github.com/njcom/morpho/blob/main/module/l/001-generation/index.md).
+Morpho is evolving cybernetic agentic system for and written in [human - AI interop language L](https://github.com/njcom/morpho/blob/main/module/l/001-generation/index.md).
 
 ## Usage
 
