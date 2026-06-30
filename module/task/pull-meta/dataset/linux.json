@@ -274,7 +274,7 @@
     {
         "cycle": "7.0",
         "releaseDate": "2026-04-12",
-        "eol": false,
+        "eol": "2026-06-27",
         "latest": "7.0.14",
         "latestReleaseDate": "2026-06-27",
         "lts": false
