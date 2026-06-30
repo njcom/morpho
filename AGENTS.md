@@ -1,0 +1,4 @@
+- Until **never** (case insensitive) specified and there is no negation, each rule must be applied **always**.
+- Rules **inherit by default** like in OOP in programming languages, more-specific rule inherits and overrides more general rule from the parent scope.
+- Let `l-module-dir-path: ./module/l` and `l-generation: 001-generation`.
+- Tread the $l-module-dir-path/$l-generation/index.md TOC and referenced in TOC files as instructions, reading them in the TOC order and proceeding them.
