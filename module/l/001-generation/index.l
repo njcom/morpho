@@ -1,0 +1,200 @@
+## L #human #l
+
+_The L spec is defined here: this `## L` section and every section after it in `/start` constitute the L specification._
+
+- Semi-formal language for human-AI interop. Interpreted by the agent contextually, not machine-parsed (yet). Like Lisp or Clojure but: no `()` by default, Python-style indent (2 spaces), `:` instead of `=`. Dependent types (like Lean).
+
+### Hierarchy
+
+```
+Plain Markdown (standard)
+    ↓ (+ L rules)
+L-Markdown (Markdown + L rules, contains ```l blocks)
+    ↓ (+ more L rules)
+L-file: natural L + formal L
+    ↓ (+ more L rules)
+L-code: formal L, machine-parseable as goal
+```
+
+### L-names
+
+**L-name (l-name)**: lowercase hyphen-separated identifiers, format of symbols in L. Must match the regular expression: `^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$`, (RFC 1123 compatible). E.g. `my-name`, `foo-bar-baz-123`, `some-123-thing`. NB: l-name may start with numbers.
+    - CLI: `/usr/local/bin/lname <input>` - generate or validate L-name. Use it to generate L-names or verify a name matches expected output.
+
+### Formal L syntax and semantics
+
+Formal L rules, which may be used in natural languages (Markdown, L-Markdown, .l):
+- Encoding: UTF-8 everywhere for any text.
+- Lexically scoped by default.
+- `eol: \n`: EOL is "\n".
+- Case-sensitive, L code is always lowercase. Anything from the first uppercase letter to end of line is a comment. One exception is the `term-definition` (defined below), which may start with lowercase.
+    - Parse failure => fallback to natural language, and handle as comment (prose)
+    - Prose must start with uppercase unless it is code (#prose-uppercase).
+- Indentation-sensitive, always 2 spaces.
+- Comments:
+    - Single-line: starts either with uppercase letter or with `{$whitespace};`. E.g. `This is a comment` or `foo ; This is comment for foo`.
+    - E.g. `a: 1; b: 2` = two commands; `a: 1 ; note` = `a: 1` with comment `note`.
+    - Multi-line: TBD
+- `var` or `$var` or `{$var}`: symbol reference, the `$` may be used for clarity when needed, optionally may be wrapped with `{}`, e.g. `{$foo-bar}` is the same as `$foo-bar` and the same as `foo-bar`.
+- Command separator: `$eol or {$non-whitespace};`, e.g. `foo; bar` - two commands foo, then bar, but `foo ; bar` - foo command and bar comment.
+- `term: definition`: `=` in L is `:`.
+- `?` - the unknown value AND the bottom type. Marks "to be determined": no value yet, no inhabitants, no constraint satisfied. Reading `x: ?` means "x exists but its value and type is not yet known"; reading `f -> ?` means "the relation lands in the unknown". Use `?` only as a placeholder; replace with a concrete type or value as soon as the design fixes it.
+- `v?`: optional value v.
+- All operations vectorized (like R, numpy)
+- No assignment, only definitions: `cell-name: description` for natural L, `cell-name: type` for formal L.
+- `->` any relation, morphism. May then be refined to:
+    - Composition:
+        - `(f << g) x = f(g(x))` ; f after g
+        - `(f >> g) x = g(f(x))` ; f before g
+    - `~`: equivalence.
+    - Implication: `a => b` = `if a then b`. Use the `=>` for implication, not the `→`, or `->`. E.g. condition => result.
+    - Pipeline: `x -> f -> g` = `(g (f x))`
+    - Hierarchy: `parent/child` = parent contains child (like directories). The tight `/` (no spaces) is hierarchy only - never semantic OR; for OR use the word `or` or a spaced ` / ` (the formal alternative operator is `|`).
+    - `a in b`: subset - `a` is a subset of `b`. Also membership of a single element: `3 in int`.
+    - Bitwise: `<<<` (left shift), `>>>` (right shift)
+    - Alternative: `a | b`, read "a or b".
+- `~>`: evaluation. E.g. `e ~> v` means `e` evaluates to `v`.
+- `predicate: any -> bool`. Anything which may be evaluated to bool. May contain nested predicates which must be logically ANDed and short-circuited by default.
+- `...`: the same as `pass`, borrowed from Python and preserves its semantics.
+- `...val`: variadic parameter.
+    - **Variadic (plural Variadics, also Variadic functions)**: a function accepting a variadic parameter.
+- Tags `#foo #bar` - add rules and values to a cell.
+
+### L-markdown
+
+- Markdown nested lists and sub-points indent 4 spaces per level; L stays 2 spaces (fenced ``` L blocks).
+- Term definition
+    ```l
+    prose: text
+      Natural language text, human readable.
+
+    term-definition-list: list term-definition
+      Rendered as a markdown list of term-definitions. By default sorted alphabetically.
+
+    term-definition: term definition
+      term: prose
+      definition: prose
+      Works like an assignment in a programming language: a definition is bound to a term. Syntax: `My term: definition of the term`. NB: term starts with uppercase (ref #uppercase-prose) and definition starts with lowercase letter.
+    ```
+
+### Keywords and semantics
+
+```l
+`ref`: go by reference and use it as is (if unknown), equivalent to copy-paste. The meaning is "defined there".
+```
+
+### Types
+
+Notation:
+- t?: optional type `t`.
+- t: required type `t`.
+- `v: t`: value `v` has type `t`.
+
+Everything is an executable (callable) **cell**:
+- Values are cells
+    - All values are immutable (RO) => there is no assignment.
+- Types are values and cells => L has dependent types.
+- Programs are cells.
+- Any cell is:
+    - Morphism (Category Theory)
+    - Iterable
+    - Has length (like R: scalar=1, vector=n)
+    - May have ports TBD
+    - May have additional rules attached with tags
+- Takes exactly 1 argument, which is also a cell
+- `organism`: network of cells, and cell too.
+- Numbers:
+    - Domain: `(((((bool in nat) in int) in rat) in real) in complex)`.
+    - Arbitrary precision: `nat` | `int` | `rat`.
+    - Fixed-width:
+        - int: `(((uint8 in uint16) in uint32) in uint64)` | `(((int8 in int16) in int32) in int64)`
+        - float (exponent, mantissa):
+            ```l
+            float16: float (5, 10)      ; IEEE binary16 (half), 16-bit
+            bfloat16: float (8, 7)      ; Brain float, 16-bit (float32 range)
+            float32: float (8, 23)      ; IEEE binary32 (single), 32-bit
+            float64: float (11, 52)     ; IEEE binary64 (double), 64-bit
+            float8-e4m3: float (4, 3)   ; 8-bit
+            float8-e5m2: float (5, 2)   ; 8-bit
+            ```
+- `char: uint32`: Unicode code point (scalar value); UTF-8 encodes it in 1-4 bytes.
+- `byte: uint8`: raw byte, 8 bits.
+- Universes:
+    ```l
+    sort u: sort (u + 1). Type of types.
+    prop: sort 0. Universe of proofs.
+    type u: sort (u + 1). Universe of types.
+    ```
+- Pi types (Π): dependent function (x: a) -> b x
+    - `set`: e.g. `{foo, bar}`, order is not important.
+    - `stream t`: infinite stream of t values. E.g. `stream char`, `stream byte`.
+- Inductive types:
+    - Sigma (Σ): dependent pair
+        - Product (*, all-of): non-dependent Σ, carry multiple values
+            - Tuple: e.g. `(foo, bar)`, order is important.
+            - Structure
+        - Sum (+, one-of): carry single value
+    - `list t` (self-ref)
+        - `text: list char`
+    - `tensor t (shape: list nat)`: n-dim array indexed by shape. E.g. `vector t n: tensor t [n]`, `matrix: tensor t [m, n]`.
+- Quotient types: `quot (a, r)` - identify elements of `a` related by `r: a -> a -> bool`.
+- io t: a `t` produced by a side-effecting computation, e.g. reads or writes; like Haskell's `IO t`.
+- `t-<name>`: type identifier - `t-` is the type prefix; the suffix after the first hyphen is the type's name. Built-in primitives (`cell`, `text`, `nat`, `float`, `bool`) skip the prefix, as may any case where the type intent is 100% unambiguous.
+- Null: no null, no nullable types. Absence is a value of an explicit `option v`, and non-exhaustive matches are rejected.
+
+#### Intervals and indexes types
+
+1. Intervals: left-inclusive, right-exclusive `[left, right)`.
+2. Indexes: 0 based.
+
+#### Date-time types
+
+```l
+duration: cell
+  ; Time units, each defined in terms of smaller units
+  decade (dec): 10 year
+  year (yr): 4 quarter
+  quarter (q): 3 month
+  month (mo): 30 day
+  week (wk): 7 day
+  day (d): 24 hour
+  hour (h): 60 minute
+  minute (min): 60 second
+  second (s): nat, 10^0 ; Base unit
+  millisecond (ms): 10^-3 s
+  microsecond (µs, us): 10^-6 s
+  nanosecond (ns): 10^-9 s
+
+date: YYYY-MM-DD
+
+date-time: cell
+  By default in UTC timezone.
+
+  absolute: YYYY-MM-DD HH:MM:SS
+  relative: nat "-" duration  ; E.g. 1-day, 2-week, 3-month - resolved from current time.
+```
+
+### URIs, paths, location types
+
+```l
+uri: ref RFC 3986
+  path: ref https://www.rfc-editor.org/info/rfc3986/#section-3.3
+    fs-entry: Linux FS entry, mirrors as enums the values (defined in /usr/include/x86_64-linux-gnu/sys/stat.h (Ubuntu) or /usr/include/bits/stat.h (Arch Linux)):
+      directory: __S_IFDIR, 0040000. In prose often ended with `/` like foo/ as syntactic sugar for `foo directory`. This sugar must not be used in code.
+      character-device: __S_IFCHR, 0020000
+      block-device: __S_IFBLK, 0060000
+      regular-file (file): __S_IFREG, 0100000. In L the term `file` means regular-file and `fs-entry` is sum-type over its values.
+      fifo (named-pipe): __S_IFIFO, 0010000
+      symlink: __S_IFLNK, 0120000
+      socket: __S_IFSOCK, 0140000
+
+    Any path /foo/bar/my-file.ext in L has the components
+      file-path: /foo/bar/my-file.ext; file path.
+      dir-path: /foo/bar; directory path.
+      file-name: my-file.ext; file name with extension.
+      base-name (stem): my-file; file name without extension.
+      extension (suffix): .ext; file name extension
+
+text-location: (file-path: text, file-line?: int, file-column?: int, file-offset?: int)
+  Location of text in the file. E.g. usage in prose: "file /foo/bar/my-file.ext, line 22" which translates to (file-path: /foo/bar/my-file.ext, file-line: 22, none, none)
+```
