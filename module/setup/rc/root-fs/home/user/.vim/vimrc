@@ -1,3 +1,10 @@
+" This file may be sourced from ~/.config/nvim/init.lua
+
+" let s:this_file_dir_path=expand("<sfile>:p:h")
+"fu! Include(script_path)
+"    :exec ":source " . s:this_file_dir_path . "/" . a:script_path . ".vim"
+"endf
+
 fu! SetupPlugins()
     " netrw
     fu! OpenNetrw()
@@ -18,19 +25,23 @@ fu! SetupPlugins()
 endf
 
 fu! SetupBehavior()
+    " https://vim.fandom.com/wiki/Have_Vim_check_automatically_if_the_file_has_changed_externally
+    au FocusGained,BufEnter * :silent! !
+
     set nocompatible
 "    set autochdir
     set backspace=indent,eol,start
     set confirm
-    set foldlevelstart=99
-    set foldmethod=indent
 
-"    set backup
-"    if !isdirectory($HOME."/.vim/bak")
-"        silent! execute "!mkdir ~/.vim/bak"
-"    endif
-"    set backupdir=~/.vim/bak
+    " Disable reading .editorconfig files
+    let g:editorconfig = 0
+
+    " Unfold by default
+    set foldlevelstart=99
+"    set foldmethod=indent
+
     set nobackup
+    "set nowritebackup
 
     " Swap file related settings
     "  set noswapfile
@@ -69,42 +80,39 @@ fu! SetupBehavior()
         " https://stackoverflow.com/a/27387138/13393715
         "autocmd! TextChanged,TextChangedI <buffer> silent write
 
-        fu! ApplySettingsForJs()
-            set filetype=javascript
-            call SetupIndent()
+        fu! SetIndent(size)
+            let &l:sw = a:size
+            let &l:ts = a:size
+            setlocal expandtab
         endf
 
-        " Default filetype
-        autocmd BufNewFile,BufRead * if &filetype == "" | setlocal ft=sh | endif
+        fu! YamlLikeIndent()
+            let prev = getline(v:lnum - 1)
+            let prev_indent = indent(v:lnum - 1)
 
-    "    autocmd! BufWritePost .vimrc source %
+            " Only indent deeper after a line ending with ':'
+            if prev =~# ':\s*$'
+                return prev_indent + &l:sw
+            endif
 
-        autocmd! BufNewFile,BufRead *.php,*.module,*.inc,*.test,*.install,*.profile,*.phar set filetype=php
-        autocmd! BufNewFile,BufRead *.phtml set filetype=phtml autoindent
-        autocmd! BufNewFile,BufRead *.ts set filetype=typescript
-        autocmd! BufNewFile,BufRead *.l set filetype=l sw=2 ts=2
-        autocmd! BufNewFile,BufRead *.markdown,*.md,*.mdown,*.mkd,*.mkdn,*.txt set filetype=markdown syntax=unknown shiftwidth=4
-        autocmd! BufNewFile,BufRead *.stg set filetype=stg
-        autocmd! BufNewFile,BufRead *.flex set filetype=lex
-        autocmd! BufNewFile,BufRead *.jsm call ApplySettingsForJs
-        autocmd! BufNewFile,BufRead *.sc set filetype=scala
-        autocmd! BufNewFile,BufRead tsconfig.json set filetype=javascript
-        autocmd! BufNewFile,BufRead tsconfig.json set filetype=javascript
-        autocmd! BufNewFile,BufRead CMakeLists.txt set filetype=cmake
+            return prev_indent
+        endf
 
-        autocmd! Filetype vim set shiftwidth=4 tabstop=4 textwidth=0
-        autocmd! Filetype sml set shiftwidth=4 tabstop=4
-        autocmd! Filetype cabal set shiftwidth=4 tabstop=4
-        autocmd! Filetype haskell set shiftwidth=4 tabstop=4
+        fu! SetLLVMBehavior()
+            " https://github.com/llvm/llvm-project/blob/main/llvm/utils/vim/ftplugin/llvm.vim
+            set filetype=llvm
+            setlocal softtabstop=2 shiftwidth=2
+            setlocal comments+=:;
+        endf
 
-        " Start in Insert mode.
-        "autocmd! BufNewFile * startinsert
-        "autocmd! VimEnter * if empty(expand("%")) | startinsert | endif
+        fu! SetTableGenBehaviour()
+            " https://github.com/llvm/llvm-project/blob/main/llvm/utils/vim/ftplugin/tablegen.vim
+            set filetype=tablegen
+            setlocal matchpairs+=<:>
+            setlocal softtabstop=2 shiftwidth=2
+        endf
 
-        autocmd! BufEnter * silent! lcd %:p:h
-
-        " slimv
-        fu! InitLispBehaviour()
+        fu! SetLispBehaviour()
             "au BufNewFile,BufRead *.scm call PareditInitBuffer()
             "    imap <c-h> <Plug>snipMateNextOrTrigger
             "    smap <c-h> <Plug>snipMateNextOrTrigger
@@ -115,16 +123,104 @@ fu! SetupBehavior()
 
             set shiftwidth=4
             set tabstop=4
+            let g:scheme_builtin_swank=1
+            let g:slimv_impl = 'sbcl'
+            let g:slimv_balloon=1
+            let g:paredit_mode=0
+            let g:paredit_electric_return=1
+            let g:lisp_rainbow=0
         endf
-        let g:scheme_builtin_swank=1
-        let g:paredit_mode=0
-        let g:paredit_electric_return=1
-        let g:lisp_rainbow=0
-        " Can we use filetype autocmd?
-        autocmd BufNewFile,BufRead *.lisp call InitLispBehaviour()
-        autocmd Filetype lisp call InitLispBehaviour()
 
+        autocmd! BufNewFile,BufRead *.bt set filetype=unknown syntax=unknown shiftwidth=4
+        autocmd! BufNewFile,BufRead *.g4 set filetype=antlr
+        autocmd! BufNewFile,BufRead *.jsm setlocal ft=javascript
+        "autocmd! BufNewFile,BufRead *.stg set filetype=stg
+        autocmd! BufNewFile,BufRead *.wl,*.wls set filetype=wl
+        autocmd! BufNewFile,BufRead *.pem set filetype=text
+
+        " Default filetype
+        "autocmd BufNewFile,BufRead * if &filetype == "" | setlocal ft=sh | endif
+        "autocmd! BufWritePost .vimrc source %
+
+        "Example of multiple commands: autocmd BufNewFile,BufRead *.l setlocal ft=l sw=4 ts=4 | setlocal spell | normal! G$a-- End of File --<Esc>
+        "autocmd! BufNewFile,BufRead *.flex set filetype=lex
+        "todo: setlocal vs set
+
+        " Start in Insert mode.
+        "autocmd! BufNewFile * startinsert
+        "autocmd! VimEnter * if empty(expand("%")) | startinsert | endif
+
+        " CMake
+        autocmd! BufNewFile,BufRead CMakeLists.txt set filetype=cmake
+
+        " GDB
+        autocmd! BufNewFile,BufRead *.gdb set filetype=gdb
+
+        " Go
+        autocmd! BufNewFile,BufRead *.go set noet
+
+        " Haskell
+        autocmd! Filetype haskell set shiftwidth=4 tabstop=4
+        autocmd! Filetype cabal set shiftwidth=4 tabstop=4
+
+        " L (https://github.com/njcom/morpho/tree/main/module/l)
+        autocmd! BufNewFile,BufRead *.l setlocal ft=l
+        autocmd! Filetype l call SetIndent(2) | setlocal indentexpr=YamlLikeIndent()
+
+        " LLVM
+        autocmd! BufNewFile,BufRead *.td call SetTableGenBehaviour()
+        autocmd! BufNewFile,BufRead *.ll call SetLLVMBehavior()
+
+        " Lisp
+        autocmd! BufNewFile,BufRead *.lisp set filetype=lisp
+        autocmd! Filetype lisp call SetLispBehaviour()
+
+        " Lua
+        autocmd! BufNewFile,BufRead *.lua set filetype=lua ts=2 sw=2
+
+        " Make
+        autocmd! BufNewFile,BufRead Makefile,*.mk set noexpandtab
+
+        " Markdown
+        autocmd! BufNewFile,BufRead *.markdown,*.md,*.mdown,*.mkd,*.mkdn,*.txt setlocal filetype=markdown
+        autocmd! Filetype markdown call SetIndent(2)
+
+        " PHP
+        autocmd! BufNewFile,BufRead *.php,*.module,*.inc,*.test,*.install,*.profile,*.phar set filetype=php autoindent
+        autocmd! BufNewFile,BufRead *.phtml set filetype=phtml autoindent
+
+        " Python
+        autocmd! BufNewFile,BufRead *.py set indentexpr=
+
+        " SML
+        autocmd! Filetype sml set shiftwidth=4 tabstop=4
+
+        " Scala
+        autocmd! BufNewFile,BufRead *.sc set filetype=scala
+
+        " Terraform
+        autocmd! BufNewFile,BufRead *.tf,*.tfvars set sw=2 ts=2 filetype=terraform
+
+        " TypeScript, JavaScript
+        autocmd! BufNewFile,BufRead *.ts set filetype=typescript
+        autocmd! BufNewFile,BufRead tsconfig.json set filetype=javascript
+
+        " Vim
+        autocmd! Filetype vim set shiftwidth=4 tabstop=4 textwidth=0
+
+        autocmd! BufEnter * silent! lcd %:p:h
     endf
+
+    fu! SetupCommands()
+        " Fount at https://github.com/llvm/llvm-project/blob/main/llvm/utils/vim/vimrc
+        " Delete trailing whitespace and tabs at the end of each line
+        command! DeleteTrailingWs :%s/\s\+$//
+
+        " Convert all tab characters to 4 spaces
+        command! TabsToSpaces :%s/\t/    /g
+    endf
+
+    call SetupCommands()
     call SetupAutoCommands()
 
     " Open windows to right and bottom
@@ -132,6 +228,8 @@ fu! SetupBehavior()
     set splitright
 
     set timeout timeoutlen=500
+
+    let g:ruby_path="/usr/bin/ruby"
 endf
 
 fu! SetupIndent()
@@ -145,6 +243,8 @@ fu! SetupIndent()
     set tabstop=4 " ts
     set expandtab " et
     set copyindent " ci
+    " <$key> means indent, $key means don't indent
+    "set indentkeys=!^F,<o>,<O>,0#,0},0],<:>,0-
 endf
 
 fu! SetupFileFormat()
@@ -175,8 +275,8 @@ endf
 fu! SetupColors()
     syntax on
     set t_Co=256
-    colorscheme industry
-    "colorscheme desert
+    "colorscheme industry
+    colorscheme desert
     "colorscheme tango-dark
     "colorscheme monochrome
     "colorscheme xoria256
@@ -188,10 +288,29 @@ endf
 
 fu! SetupView()
     set mousehide
-    set nocursorline
+    set cursorline
     set number relativenumber
     set ruler
     set list listchars=tab:»»,trail:·
+    ",precedes:↲
+
+    " Colorschemes are here: ~/.vim/bundle/lightline/autoload/lightline/colorscheme/
+"    let g:lightline = {
+"        \ 'colorscheme': 'my',
+"        \ }
+
+    "highlight MyCursor guibg=lightgreen
+    "set selection=exclusive
+    "set guicursor=a:ver25-MyCursor,a:blinkon0
+    " Не менять форму курсора при входе в Insert mode.
+    set guicursor=
+"    set guifont=Consolas\ 10
+    "set guifont=Source\ Code\ Pro\ 9
+
+    " Fix empty space at the bottom for XMonad and Gvim
+"    set guiheadroom=0
+
+    " Keep 5 lines visible at bottom/top
     set scrolloff=5
 endf
 
@@ -201,11 +320,23 @@ fu! SetupSearch()
     set incsearch
     set hlsearch
 
-    " Show number of matches
+    " Show number of matches. On loop shows the `W`
     set shortmess-=S
 
     " Options for `grep` which will be called with for the :grep and :lgrep
     set grepprg=grep\ -rnIiP\ --exclude-dir={.bzr,CVS,.git,.hg,.svn}
+
+    " Search selected text with * and # in Visual mode, taken from http://vim.wikia.com/wiki/Search_for_visually_selected_text
+"    vnoremap <silent> * :<C-U>
+"        \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+"        \gvy/<C-R><C-R>=substitute(
+"        \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+"        \gV:call setreg('"', old_reg, old_regtype)<CR>
+"    vnoremap <silent> # :<C-U>
+"        \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+"        \gvy?<C-R><C-R>=substitute(
+"        \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+"        \gV:call setreg('"', old_reg, old_regtype)<CR>
 endf
 
 " Zoom / Restore window.
@@ -226,6 +357,7 @@ fu! SetupKeys()
     " :help map-modes
     " :help key-codes
 
+    " Zoom current window: Ctrl+w z
     command! ZoomToggle call s:ZoomToggle()
     nnoremap <silent> <C-w>z :ZoomToggle<CR>
 
@@ -249,16 +381,6 @@ fu! SetupKeys()
     "vnoremap J :m '>+1<CR>gv=gv
     "vnoremap K :m '<-2<CR>gv=gv
 
-    " Move through windows: Alt+(j|k|l|;)
-"    noremap j <C-w>h
-"    inoremap j <C-o><C-w>h
-"    noremap k <C-w>j
-"    inoremap k <C-o><C-w>j
-"    noremap l <C-w>k
-"    inoremap l <C-o><C-w>k
-"    noremap ; <C-w>l
-"    inoremap ; <C-o><C-w>l
-
     " To left window
     noremap <C-w>j <C-w>h
     noremap <C-w><C-j> <C-w>h
@@ -277,8 +399,8 @@ fu! SetupKeys()
 
     " Leader key: Space
     nnoremap <Space> <nop>
-    let mapleader = "\<Space>"
-    let maplocalleader="\<Space>"
+    let g:mapleader = "\<Space>"
+    let g:maplocalleader = "\<Space>"
     map <Space> <leader>
 
     " Put line up: p
@@ -286,36 +408,13 @@ fu! SetupKeys()
     " Put line down: P
     noremap <leader>P :put!<cr>
 
-    " :find: Space f
-    noremap <leader>F <Esc>:find<Space>
-   " Commands provided by fzf
-    noremap <leader>f <Esc>:Files<cr>
-    noremap <leader>m <Esc>:Marks<cr>
-    noremap <leader>h <Esc>:History<cr>
-    "noremap <leader>b :Buffers<cr>
-    noremap <Space><Space> :Buffers<cr>
-
-    noremap <Leader>e :e<Space>
-
     " To begin of line: Ctrl+a
     inoremap <C-a> <C-o>I
     " To end of line: Ctrl+e
     inoremap <C-e> <C-o>A
     " Delete right char: Ctrl+d
     inoremap <C-d> <C-o>x
-    " Delete end of word: Alt+d
-    "inoremap d <C-o>dw
 
-   " Left
-    inoremap <C-j> <C-o>h
-    " Down
-    inoremap <C-k> <C-o>gj
-    " Up
-    inoremap <C-l> <C-o>gk
-    " Right
-    inoremap <C-semicolon> <C-o>l
-
-    "set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
 
     " Find next char for `f` or `t`: '
     noremap ' ;
@@ -324,6 +423,8 @@ fu! SetupKeys()
     if has("unix") || has("gui_gtk") || has("gui_gtk2") || has("gui_gnome")
         nnoremap <leader>c :let @+=expand("%:p")<CR>
     endif
+
+    " Print full file path
     nnoremap <leader>C :echo expand("%:p")<CR>
 
     " Save session: Space s s
@@ -338,6 +439,14 @@ fu! SetupKeys()
 "   " Split horizontally and open file manager: Space v
     noremap <silent> <leader>s :split .<cr>
 
+"    noremap <silent> <leader>i I$key<Esc>
+
+    " https://www.youtube.com/watch?v=Q5eDxR7bU2k
+    " Don't loose the pasted text
+    "vnoremap <leader>p "_dP
+
+    "--------------------------------------------------------------------------
+
     " Unbind Ctrl-l for the file manager
     augroup netrw_maps
         autocmd!
@@ -347,6 +456,10 @@ fu! SetupKeys()
         if hasmapto('<Plug>NetrwRefresh')
             unmap <buffer> <C-l>
         endif
+        "todo: copy full path with <leader>c
+        "nnoremap <buffer> <nowait> <leader>c :let @+=get(b:, 'current_dir', getcwd()). '/'. <SID>NetrwGetWord())<cr>
+"        nnoremap <buffer> <C-l> :wincmd k<cr>
+        "nnoremap <buffer> <s-down> :wincmd j<cr>
     endfunction
 
     " Disable search highlight: Esc.
@@ -358,10 +471,24 @@ fu! SetupKeys()
     " Fix Backspace for `find ... | xargs vim`
     noremap! <C-?> <C-h>
 
-    tnoremap <C-w>j <C-w>h
-    tnoremap <C-w>k <C-w>j
-    tnoremap <C-w>l <C-w>k
-    tnoremap <C-w>; <C-w>l
+    if has('terminal')
+        tnoremap <C-w>j <C-w>h
+        tnoremap <C-w>k <C-w>j
+        tnoremap <C-w>l <C-w>k
+        tnoremap <C-w>; <C-w>l
+    endif
+
+    "todo set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
+    "todo set keymap=russian-jcukenwin
+
+    function! s:ToggleQF()
+        if !empty(filter(getwininfo(), 'v:val.quickfix'))
+            cclose
+        elseif !empty(getqflist())
+            copen
+        endif
+    endfunction
+    nnoremap <C-q> <Cmd>call <SID>ToggleQF()<CR>
 endf
 
 fu! Main()
